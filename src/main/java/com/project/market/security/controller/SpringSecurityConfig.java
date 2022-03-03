@@ -28,13 +28,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.authorizeHttpRequests()
-//				.antMatchers("/위치")
-				.anyRequest()
-				.authenticated()
+				.authorizeRequests()
+				.anyRequest().authenticated()
 			.and()
 				.formLogin()
-				.loginPage("/login")
 				.defaultSuccessUrl("/", true)
 				.usernameParameter("username")
 				.passwordParameter("password")
