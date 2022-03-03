@@ -199,3 +199,5 @@ $RECYCLE.BIN/
 *.lnk
 
 *.properties
+*.sql
+
