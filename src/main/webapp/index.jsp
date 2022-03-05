@@ -14,5 +14,9 @@
 		<button type="submit">로그아웃</button>
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	</form>
+	
+	<br />
+	<br />
+	<input type="button" value="한태우" onclick="location.href='${pageContext.request.contextPath}/purchase/tarr4hMain'"/>
 </body>
 </html>
