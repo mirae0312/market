@@ -313,3 +313,8 @@ a {
   right : 15%;
 
 } */
+
+.contentWrapper {
+	width : 70%;
+	margin : 30px auto;
+}
