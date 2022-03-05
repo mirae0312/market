@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+	
+	
+	<select id="selectProductListByCategory" parameterType="product" resultType="product">
+		select
+		    p.*,
+		    i.*,
+		    b.title "brandTitle",
+		    b.sub_title "brandSubTitle",
+		    b.content "brandContent",
+		    d.discount_rate,
+		    pp.price
+		from
+		    mk_product p inner join mk_product_info i
+		    on p.p_code = i.p_code
+		    inner join mk_brand b
+		    on p.brand_code = b.code
+		    left join product_discount d
+		    on p.p_code = d.p_code
+		    left join mk_product_price pp
+		    on p.p_code = pp.p_code
+		where
+			p.large_category = #{largeCategory}
+			and
+			p.small_category = #{smallCategory}
+			 
+	</select>
+	
+	<select id="selectProductDetail" parameterType="string" resultType="product">
+		select
+		    pp.price,
+		    d.discount_rate,
+		    p.*,
+		    i.*,
+		    b.title "brandTitle",
+		    b.sub_title "brandSubTitle",
+		    b.content "brandContent"
+		from
+		    mk_product p inner join mk_product_info i
+		    on p.p_code = i.p_code
+		    inner join mk_brand b
+		    on p.brand_code = b.code
+		    left join product_discount d
+		    on p.p_code = d.p_code
+		    left join mk_product_price pp
+		    on p.p_code = pp.p_code
+		where
+		    p.p_code = #{pcode}
+	</select>
+</mapper>
+
