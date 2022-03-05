@@ -3,6 +3,7 @@ package com.project.market.security.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -25,11 +26,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception{
+		return super.authenticationManagerBean();
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.anyRequest().authenticated()
+				.antMatchers("/market").hasRole("USER")
 			.and()
 				.formLogin()
 				.loginPage("/login/login")
@@ -42,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/")
+				.logoutSuccessUrl("/login/login")
 				.invalidateHttpSession(true);
 	}
 	
@@ -52,11 +59,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * 예외
+	 * 항상 예외
 	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers();
+		web.ignoring().antMatchers("/login/kakaoLogin").antMatchers("/login/snsEnroll");
 	}
 	
 	
