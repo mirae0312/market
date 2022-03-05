@@ -27,7 +27,7 @@
 	
 	
 	<p>카테고리별 상품 리스트 화면</p>
-	<input type="button" id="productList" value="상품 리스트 화면" />
+	<a href="${pageContext.request.contextPath }/product/productList?largeCategory=카테고리1&smallCategory=소분류1">상품 리스트 화면</a>
 	
 <script>
 	$("#createCoupon").click((e) => {
@@ -44,25 +44,7 @@
 			error: console.log
 		});
 	});
-	
-	$("#productList").click((e) => {
-		
-		const category = '카테고리1';
-		const smallCategory = '소분류1';
-		
-		$.ajax({
-			url : '${pageContext.request.contextPath}/product/productList',
-			data:{
-				category,
-				smallCategory
-			},
-			success(res){
-				console.log(res)
-			},
-			error: console.log
-		})
-		
-	});
+
 
 </script>
 </body>

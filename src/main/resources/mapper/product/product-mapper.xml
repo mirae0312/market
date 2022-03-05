@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+	
+	
+	<select id="selectProductListByCategory" parameterType="product" resultType="product">
+		select
+		    p.*,
+		    i.*,
+		    b.title "brandTitle",
+		    b.sub_title "brandSubTitle",
+		    b.content "brandContent"
+		from
+		    mk_product p inner join mk_product_info i
+		    on p.p_code = i.p_code
+		    inner join mk_brand b
+		    on p.brand_code = b.code
+		where
+			p.large_category = #{largeCategory}
+			and
+			p.small_category = #{smallCategory}
+			 
+	</select>
+	
+	<resultMap id="productListMap" type="product">
+		<id column="pCode" property="p_code"/>
+		<result column="brandCode" property="brand_code"/>
+		<result column="largeCategory" property="large_category"/>
+		<result column="smallCategory" property="small_category"/>
+		<result column="title" property="title"/>
+		<result column="subTitle" property="sub_title"/>
+		<result column="salesUnit" property="sales_unit"/>
+		<result column="weightCapacity" property="weight_capacity"/>
+		<result column="deliveryDiv" property="delivery_div"/>
+		<result column="origin" property="origin"/>
+		<result column="packType" property="pack_type"/>
+		<result column="packTypeSub" property="pack_type_sub"/>
+		<result column="expiration" property="expiration"/>
+		<result column="allergyInfo" property="allergy_info"/>
+		<result column="sugar" property="sugar"/>
+		<result column="livestockInfo" property="livestock_info"/>
+		<result column="commonInfo" property="common_info"/>
+		
+		<association property="brand">
+			<result column="title" property="brandTitle"/>
+			<result column="subTitle" property="brandSubTitle"/>
+			<result column="content" property="brandContent"/>
+		</association>
+	</resultMap>
+	
+</mapper>
+
