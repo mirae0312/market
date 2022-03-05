@@ -21,6 +21,11 @@ public class ProductDaoImpl implements ProductDao {
 	public List<Product> selectProductListByCategory(Product product) {
 		return session.selectList("product.selectProductListByCategory", product);
 	}
+
+	@Override
+	public Product selectProductDetail(String pcode) {
+		return session.selectOne("product.selectProductDetail", pcode);
+	}
 	
 	
 }

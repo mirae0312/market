@@ -21,6 +21,11 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> selectProductListByCategory(Product product) {
 		return productDao.selectProductListByCategory(product);
 	}
+
+	@Override
+	public Product selectProductDetail(String pcode) {
+		return productDao.selectProductDetail(pcode);
+	}
 	
 	
 }

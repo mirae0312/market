@@ -11,12 +11,18 @@
 		    i.*,
 		    b.title "brandTitle",
 		    b.sub_title "brandSubTitle",
-		    b.content "brandContent"
+		    b.content "brandContent",
+		    d.discount_rate,
+		    pp.price
 		from
 		    mk_product p inner join mk_product_info i
 		    on p.p_code = i.p_code
 		    inner join mk_brand b
 		    on p.brand_code = b.code
+		    left join product_discount d
+		    on p.p_code = d.p_code
+		    left join mk_product_price pp
+		    on p.p_code = pp.p_code
 		where
 			p.large_category = #{largeCategory}
 			and
@@ -24,31 +30,26 @@
 			 
 	</select>
 	
-	<resultMap id="productListMap" type="product">
-		<id column="pCode" property="p_code"/>
-		<result column="brandCode" property="brand_code"/>
-		<result column="largeCategory" property="large_category"/>
-		<result column="smallCategory" property="small_category"/>
-		<result column="title" property="title"/>
-		<result column="subTitle" property="sub_title"/>
-		<result column="salesUnit" property="sales_unit"/>
-		<result column="weightCapacity" property="weight_capacity"/>
-		<result column="deliveryDiv" property="delivery_div"/>
-		<result column="origin" property="origin"/>
-		<result column="packType" property="pack_type"/>
-		<result column="packTypeSub" property="pack_type_sub"/>
-		<result column="expiration" property="expiration"/>
-		<result column="allergyInfo" property="allergy_info"/>
-		<result column="sugar" property="sugar"/>
-		<result column="livestockInfo" property="livestock_info"/>
-		<result column="commonInfo" property="common_info"/>
-		
-		<association property="brand">
-			<result column="title" property="brandTitle"/>
-			<result column="subTitle" property="brandSubTitle"/>
-			<result column="content" property="brandContent"/>
-		</association>
-	</resultMap>
-	
+	<select id="selectProductDetail" parameterType="string" resultType="product">
+		select
+		    pp.price,
+		    d.discount_rate,
+		    p.*,
+		    i.*,
+		    b.title "brandTitle",
+		    b.sub_title "brandSubTitle",
+		    b.content "brandContent"
+		from
+		    mk_product p inner join mk_product_info i
+		    on p.p_code = i.p_code
+		    inner join mk_brand b
+		    on p.brand_code = b.code
+		    left join product_discount d
+		    on p.p_code = d.p_code
+		    left join mk_product_price pp
+		    on p.p_code = pp.p_code
+		where
+		    p.p_code = #{pcode}
+	</select>
 </mapper>
 
