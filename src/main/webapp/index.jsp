@@ -10,13 +10,9 @@
 	<jsp:param value="마켓" name="title"/>
 </jsp:include>
 	<h1>우왕 인덱스다~</h1>
-	<form method="post" action="${pageContext.request.contextPath}/logout">
-		<button type="submit">로그아웃</button>
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-	</form>
 	
 	<br />
 	<br />
-	<input type="button" value="한태우" onclick="location.href='${pageContext.request.contextPath}/purchase/tarr4hMain'"/>
+	<input type="button" value="태우님 기능 테스트 연결 버튼" onclick="location.href='${pageContext.request.contextPath}/purchase/tarr4hMain'"/>
 </body>
 </html>
