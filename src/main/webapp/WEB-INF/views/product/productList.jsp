@@ -20,18 +20,30 @@
 				<th>사진</th>
 				<th>브랜드</th>
 				<th>title</th>
-				<th>가격</th>
+				<th>원가격</th>
 				<th>할인율</th>
+				<th>판매가(할인적용)</th>
 				<th>subTitle</th>
 			</tr>
 		</thead>
 		<tbody>
-			<%-- <c:forEach items="${pdtList }" var="product" varStatus="vs">
+			<c:forEach items="${pdtList }" var="product" varStatus="vs">
 				<tr>
 					<td></td>
-					<td>${product. }</td>
+					<td>
+						${product.brandTitle }
+					</td>
+					<td>
+						<a href="${pageContext.request.contextPath }/product/productDetail?pcode=${product.pcode}">
+							${product.title }
+						</a>
+					</td>
+					<td><fmt:formatNumber type="number" pattern="###,###,###" value="${product.price }"/>원</td>
+					<td>${product.discountRate }%</td>
+					<td><fmt:formatNumber type="number" pattern="###,###,###" value="${product.price/100 * (100 - product.discountRate)} "/>원</td>
+					<td>${product.subTitle }</td>
 				</tr>
-			</c:forEach> --%>
+			</c:forEach>
 		</tbody>
 	
 	</table>

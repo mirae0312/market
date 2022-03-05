@@ -31,7 +31,10 @@ public class Product extends ProductEntity implements Serializable {
 	private String livestockInfo;
 	private String commonInfo;
 	
-	private Brand brand;
+	private String brandTitle;
+	private String brandSubTitle;
+	private String brandcontent;
 	
-	
+	private int discountRate;
+	private int price;
 }

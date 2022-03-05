@@ -8,4 +8,6 @@ public interface ProductService {
 
 	List<Product> selectProductListByCategory(Product product);
 
+	Product selectProductDetail(String pcode);
+
 }
