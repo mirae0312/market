@@ -93,7 +93,9 @@
 	<script>
 		$("#countMinus").click((e) => {
 			let num = $("#pdtCount").val() * 1;
-			$("#pdtCount").val(num-1);
+			if(num != 1){
+				$("#pdtCount").val(num-1);				
+			}
 		});
 		$("#countPlus").click((e) => {
 			let num = $("#pdtCount").val() * 1;
