@@ -18,12 +18,13 @@
 	
 	
 	<p>쿠폰 생성 테스트</p>
-	<input type="text" name="" id="discountRate" />
+	<span>할인율</span><input type="text" name="" id="discountRate" />
 	<br />
-	<input type="date" name="" id="expiration" />
+	<span>만료일자</span><input type="date" name="" id="expiration" />
 	<br />
-	<input type="button" value="createCoupon" id="createCoupon"/>
-	<input type="text" name="" id="couponCode" />
+	<span>생성하기</span><input type="button" value="createCoupon" id="createCoupon"/>
+	<br />
+	<span>발급된쿠폰번호</span><input type="text" name="" id="couponCode" />
 	
 	
 	<p>카테고리별 상품 리스트 화면</p>
