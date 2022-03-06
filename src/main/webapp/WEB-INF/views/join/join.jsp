@@ -223,16 +223,8 @@
             </div>
         </div>
     </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+    
 <script src="https://kit.fontawesome.com/4123702f4b.js" crossorigin="anonymous"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
@@ -284,6 +276,7 @@
         }).open();
     }
 </script>
+
 </body>
 
 </html>
