@@ -28,10 +28,10 @@ locationIcon.onclick = (() => {
 });
 
 //로고 클릭시 메인
-document.querySelector('.mainLogo').onclick = (() => {
+/*document.querySelector('.mainLogo').onclick = (() => {
   location.href = '';
 })
-
+*/
 //검색어 미입력시 전송 막음
 const searchFrm = document.searchFrm;
 searchFrm.addEventListener('submit', ((e) => {
