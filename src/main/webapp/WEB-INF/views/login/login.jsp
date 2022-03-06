@@ -1,8 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-<html>
-<head>
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<fmt:requestEncoding value="utf-8" />
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="마켓" name="title"/>
+</jsp:include>
     <meta charset="UTF-8">
     <title>Login</title>
     
@@ -106,9 +112,6 @@
    }
 
     </style>
-</head>
-
-<body>
     <div id="main">
         <div id="content">
             <div class="section_login">
@@ -147,7 +150,7 @@
 					       <img src="${pageContext.request.contextPath}/resources/images/login/kakao.png" />
 					        카카오 로그인
 					    </a>
-                        <a class="btn_type2 btn_member">
+                        <a class="btn_type2 btn_member" href="${pageContext.request.contextPath}/join/join">
                             <span class="txt_type">회원가입</span>
                         </a>
                     </div>
