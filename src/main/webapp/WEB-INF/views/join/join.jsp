@@ -324,12 +324,6 @@
                                         <div class="phone_num">
                                             <input type="text" value="" pattern="[0-9]*" name="mobileInp"
                                                 placeholder="숫자만 입력해주세요" class="inp">
-                                            <input type="hidden" name="mobile[]" id="mobile0" value="" required=""
-                                                fld_esssential="" option="regNum" label="휴대폰">
-                                            <input type="hidden" name="mobile[]" id="mobile1" value="" required=""
-                                                fld_esssential="" option="regNum" label="휴대폰">
-                                            <input type="hidden" name="mobile[]" id="mobile2" value="" required=""
-                                                fld_esssential="" option="regNum" label="휴대폰">
                                             <button class="white-btn">인증번호 받기</button>
                                         </div>
                                         <p class="txt_guide">
@@ -346,22 +340,21 @@
 										<input type="text" id="sample6_detailAddress" placeholder="상세주소">
 										<input type="text" id="sample6_extraAddress" placeholder="참고항목">
 										
-										<p>배송지에 따라 상품 정보가 달라질 수 있습니다.</p>
                                     </td>
                                 </tr>
-                                <tr class="select_sex">
+                                <tr class="select_gender">
                                     <th>성별</th>
                                     <td>
                                         <label class="">
-                                            <input type="radio" name="sex" value="m">
+                                            <input type="radio" name="gender" value="m">
                                             <span class="ico"></span>남자
                                         </label>
                                         <label class="">
-                                            <input type="radio" name="sex" value="w">
+                                            <input type="radio" name="gender" value="w">
                                             <span class="ico"></span>여자
                                         </label>
                                         <label class="checked">
-                                            <input type="radio" name="sex" value="n" checked="checked">
+                                            <input type="radio" name="gender" value="n" checked="checked">
                                             <span class="ico"></span>선택안함
                                         </label>
                                     </td>
