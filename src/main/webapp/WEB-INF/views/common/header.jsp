@@ -77,7 +77,9 @@ crossorigin="anonymous"></script>
       </div>
       <!-- 로고 -->
       <div class="mainLogo">
+      <a href="${pageContext.request.contextPath}">
         <h1>마켓</h1>
+      </a>
       </div>
    	</header>
     <!-- 카테고리 -->
