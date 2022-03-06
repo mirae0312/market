@@ -245,6 +245,106 @@
     background-position-x: 10px;
 }
 
+	/*radio 보라색*/
+	
+.type_form input[type=radio] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.type_form input[type=radio]+.ico {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 100%;
+    vertical-align: -7px;
+}
+
+.type_form input[type=radio]:checked+.ico {
+    border: 1px solid #5f0081;
+    background-color: #5f0080;
+}
+.type_form input[type=radio]:checked+.ico:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 100%;
+    background-color: #fff;
+}
+/*padding*/
+.member_join .select_gender label {
+    display: inline-block;
+    padding: 10px 52px 10px 0;
+    vertical-align: top;
+}
+.type_form label {
+    font-size: 14px;
+    line-height: 22px;
+}
+.member_join .route .group_radio {
+    padding: 10px 0 20px;
+}
+
+/*checkbox*/
+.member_join .reg_agree .label_all_check .ico {
+    vertical-align: -6px;
+}
+.type_form input[type=checkbox]+.ico {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border: 0;
+    background: url(https://res.kurly.com/pc/service/common/2006/ico_checkbox.svg) no-repeat 50% 50%;
+    background-size: 24px 24px;
+    vertical-align: -7px;
+}
+.type_form input[type=checkbox] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.type_form input[type=checkbox]:checked+.ico {
+    background: url(https://res.kurly.com/pc/service/common/2006/ico_checkbox_checked.svg) no-repeat 50% 50%;
+    background-size: 24px 24px;
+}
+
+.member_join .reg_agree .label_all_check .ico {
+    vertical-align: -6px;
+}
+.member_join .check_view .check_agree {
+    padding: 8px 0;
+}
+.type_form label.label_block {
+    display: block;
+    padding: 15px 0 13px;
+}
+.type_form label {
+    font-size: 14px;
+    line-height: 22px;
+}
+.member_join .btn_link {
+    position: absolute;
+    right: 22px;
+    top: 0;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #5f0080;
+    line-height: 18px;
+    letter-spacing: 0;
+}
+.member_join .check_view {
+    position: relative;
+}
     </style>
 </head>
 
