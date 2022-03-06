@@ -12,6 +12,7 @@
 <meta charset="UTF-8">
 <!-- 사용자css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/header.css" /> 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/footer.css" /> 
 <!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 <!-- 제이쿼리 -->
@@ -40,7 +41,7 @@ crossorigin="anonymous"></script>
         <sec:authorize access="isAnonymous()">
         <!-- 비회원/비로그인 -->
           <ul>
-            <li class="division-point-line"><a href="#"><span>회원가입</span></a></li>
+            <li class="division-point-line"><a href="${pageContext.request.contextPath}/join/join"><span>회원가입</span></a></li>
             <li class="division-point-line"><a href="${pageContext.request.contextPath}/login/login"><span>로그인</span></a></li>
          </sec:authorize>
         <sec:authorize access="isAuthenticated()">
