@@ -136,6 +136,8 @@
 .member_join input[type=text], .member_join input[type=password] {
     width: 332px;
 }
+
+/*생년월일*/
 .member_join .birth .birth_day {
     overflow: hidden;
     width: 332px;
@@ -160,7 +162,7 @@
     line-height: 42px;
     text-align: center;
 }
-/**/
+/*약관*/
 .member_join .txt_guide {
     width: 332px;
 }
@@ -245,8 +247,8 @@
     background-position-x: 10px;
 }
 
-	/*radio 보라색*/
-	
+/*radio*/
+/*원래꺼 안보이게*/
 .type_form input[type=radio] {
     position: absolute;
     z-index: -1;
@@ -308,11 +310,13 @@
     background-size: 24px 24px;
     vertical-align: -7px;
 }
+/*원래있던거 안보이게*/
 .type_form input[type=checkbox] {
     position: absolute;
     z-index: -1;
     opacity: 0;
 }
+
 .type_form input[type=checkbox]:checked+.ico {
     background: url(https://res.kurly.com/pc/service/common/2006/ico_checkbox_checked.svg) no-repeat 50% 50%;
     background-size: 24px 24px;
@@ -321,6 +325,7 @@
 .member_join .reg_agree .label_all_check .ico {
     vertical-align: -6px;
 }
+/*padding값 조절*/
 .member_join .check_view .check_agree {
     padding: 8px 0;
 }
@@ -342,6 +347,7 @@
     line-height: 18px;
     letter-spacing: 0;
 }
+/*약관보기 보이도록 조절*/
 .member_join .check_view {
     position: relative;
 }
