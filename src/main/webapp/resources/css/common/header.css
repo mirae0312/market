@@ -157,7 +157,11 @@ a {
   text-align: center;
   font-size : large;
   color : var(--purple);
+}
+
+.mainLogo h1 {
   cursor: pointer;
+  display : inline-block;
 }
 
 .category {
@@ -167,6 +171,7 @@ a {
   z-index : 2;
   top : 0;
   box-shadow:  0 6px 4px var(--white), 0 4px 4px rgb(218, 214, 214);
+  background-color : var(--white);
 }
 
 .product-category {
@@ -253,6 +258,7 @@ a {
   font-size : 17px;
   padding : 20px;
   border : 1px solid var(--gray);
+  background-color : var(--white);
   visibility: hidden;
 }
 
