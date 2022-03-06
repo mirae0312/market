@@ -147,7 +147,6 @@
                         </form>
                         
                         <a href="https://kauth.kakao.com/oauth/authorize?client_id=2ae5bd0deaf271ba341cbf761624570d&redirect_uri=http://localhost:10000/market/login/kakaoLogin&response_type=code">
-					       <img src="${pageContext.request.contextPath}/resources/images/login/kakao.png" />
 					        카카오 로그인
 					    </a>
                         <a class="btn_type2 btn_member" href="${pageContext.request.contextPath}/join/join">
