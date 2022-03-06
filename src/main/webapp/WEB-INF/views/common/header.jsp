@@ -12,6 +12,7 @@
 <title>마켓</title>
 <!-- 사용자css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/header.css" /> 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/footer.css" /> 
 <!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 <!-- 제이쿼리 -->

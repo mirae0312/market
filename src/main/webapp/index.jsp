@@ -16,3 +16,4 @@
 	<input type="button" value="태우님 기능 테스트 연결 버튼" onclick="location.href='${pageContext.request.contextPath}/purchase/tarr4hMain'"/>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
