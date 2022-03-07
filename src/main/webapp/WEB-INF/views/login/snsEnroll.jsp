@@ -7,6 +7,16 @@
     <title>Insert title here</title>
 </head>
 <body>
-<h1>${type}회원가입</h1>
+<h1>${userInfo.type}회원가입</h1>
+<br>
+id = ${userInfo.id}
+<br>
+pw = ${userInfo.password}
+<br>
+type = ${userInfo.type}
+<br>
+all = ${userInfo}
+<br>
+sms = ${sms}
 </body>
 </html>
