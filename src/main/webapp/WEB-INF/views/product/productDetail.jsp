@@ -92,6 +92,7 @@
 	<input type="button" value="장바구니 담기" id="addCart" />
 	
 	<script>
+		/* 구매수량 -> 상품금액 반영 script */
 		$("#countMinus").click((e) => {
 			let price = ${product.price/100 * (100 - product.discountRate)} * 1;
 			let num = $("#pdtCount").val() * 1;
@@ -105,6 +106,24 @@
 			let num = $("#pdtCount").val() * 1;
 			$("#pdtCount").val(num+1);
 			$("#finalPrice").text(price * $("#pdtCount").val()+ '원');
+		});
+		
+		/* 장바구니 담기 스크립트 */
+		$("#addCart").click((e) => {
+			const pcode = '${product.pcode}';
+			const count = $("#pdtCount").val();
+			$.ajax({
+				url: '${pageContext.request.contextPath}/product/addCart?${_csrf.parameterName}=${_csrf.token}',
+				method: 'POST',
+				data:{
+					pcode,
+					count
+				},
+				success(res){
+					alert(res);
+				},
+				error: console.log
+			})
 		});
 	
 	</script>
