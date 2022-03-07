@@ -156,7 +156,10 @@ a {
   width : 100%;
   text-align: center;
   font-size : large;
-  color : var(--purple);
+}
+
+.mainLogo a {
+  color : var(--purple);	
 }
 
 .mainLogo h1 {
