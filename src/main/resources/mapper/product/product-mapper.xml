@@ -51,5 +51,47 @@
 		where
 		    p.p_code = #{pcode}
 	</select>
+	
+	<insert id="insertCart" parameterType="map">
+		insert into cart
+		values(#{userId}, #{pcode}, #{count})
+	</insert>
+	
+	<update id="updateCart" parameterType="map">
+		update cart
+		set
+			count = count + #{count}
+		where
+			user_id = #{userId}
+			and
+			p_code = #{pcode}
+	</update>
+	
+	<select id="selectUserCartList" parameterType="string" resultType="map">
+		select
+		    c.*,
+		    i.title,
+		    b.title "BRANDTITLE",
+		    p.price,
+		    d.discount_rate,
+		    s.tem_code,
+		    s.tem_name
+		from
+		    cart c inner join mk_product m
+		    on c.p_code = m.p_code
+		    inner join mk_product_info i
+		    on c.p_code = i.p_code
+		    inner join mk_product_price p
+		    on c.p_code = p.p_code
+		    left join product_discount d
+		    on c.p_code = d.p_code
+		    left join mk_brand b
+		    on m.brand_code = b.code
+		    left join mk_product_st_temperature s
+		    on c.p_code = s.p_code
+		where
+			user_id = #{userId}
+	</select>
+	
 </mapper>
 
