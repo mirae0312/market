@@ -106,15 +106,14 @@ crossorigin="anonymous"></script>
             <i class="fas fa-map-marker-alt"></i>
           </div>
           <div class="location-alert">
-          <sec:authorize access="isAnonymous()">
+          <sec:authorize access="isAnonymous()"> 
           <!-- 비회원/비로그인 -->
               <p><span class="point-text">배송지를 등록</span>하고<br>구매 가능한 상품을 확인하세요!</p>
               <div class="location-alert-btn">
                 <div><button class="login-btn" onclick="location.href=`${pageContext.request.contextPath}/login/login`">로그인</button></div>
                 <div><button class="search-address-btn"><i class="fas fa-search"></i>주소 검색</button></div>
               </div>
-            </div>
-          </sec:authorize>
+          </sec:authorize> 
           <sec:authorize access="isAuthenticated()">
 		  <sec:authentication property="principal" var="loginMember"/>
           <!-- 로그인 -->
@@ -122,8 +121,8 @@ crossorigin="anonymous"></script>
               <div class="location-alert-btn">
                 <div><button class="address-change-btn">배송지 변경</button></div>
               </div>
-            </div>
           </sec:authorize>
+          </div>
           <div class="icon"><a href="#"><i class="far fa-heart"></i></a></div>
           <div class="icon cart-icon"><a href="#"><i class="fas fa-shopping-cart"></i></a></div>
         </div>
