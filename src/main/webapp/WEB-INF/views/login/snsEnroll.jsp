@@ -16,5 +16,7 @@ pw = ${userInfo.password}
 type = ${userInfo.type}
 <br>
 all = ${userInfo}
+<br>
+sms = ${sms}
 </body>
 </html>
