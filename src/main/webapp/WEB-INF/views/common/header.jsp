@@ -8,10 +8,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>${param.title}</title>
 <meta charset="UTF-8">
-<title>마켓</title>
 <!-- 사용자css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/header.css" /> 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/footer.css" /> 
 <!-- 폰트어썸 -->
 <script src="https://kit.fontawesome.com/cd5e4bcf92.js" crossorigin="anonymous"></script>
 <!-- 제이쿼리 -->
@@ -40,7 +41,7 @@ crossorigin="anonymous"></script>
         <sec:authorize access="isAnonymous()">
         <!-- 비회원/비로그인 -->
           <ul>
-            <li class="division-point-line"><a href="#"><span>회원가입</span></a></li>
+            <li class="division-point-line"><a href="${pageContext.request.contextPath}/join/join"><span>회원가입</span></a></li>
             <li class="division-point-line"><a href="${pageContext.request.contextPath}/login/login"><span>로그인</span></a></li>
          </sec:authorize>
         <sec:authorize access="isAuthenticated()">
@@ -76,9 +77,11 @@ crossorigin="anonymous"></script>
       </div>
       <!-- 로고 -->
       <div class="mainLogo">
+      <a href="${pageContext.request.contextPath}">
         <h1>마켓</h1>
+      </a>
       </div>
-    </header>
+   	</header>
     <!-- 카테고리 -->
     <nav class="category">
       <div class="product-category">
@@ -102,9 +105,9 @@ crossorigin="anonymous"></script>
           <div class="icon location-icon">
             <i class="fas fa-map-marker-alt"></i>
           </div>
+          <div class="location-alert">
           <sec:authorize access="isAnonymous()">
           <!-- 비회원/비로그인 -->
-            <div class="location-alert">
               <p><span class="point-text">배송지를 등록</span>하고<br>구매 가능한 상품을 확인하세요!</p>
               <div class="location-alert-btn">
                 <div><button class="login-btn" onclick="location.href=`${pageContext.request.contextPath}/login/login`">로그인</button></div>
@@ -115,8 +118,7 @@ crossorigin="anonymous"></script>
           <sec:authorize access="isAuthenticated()">
 		  <sec:authentication property="principal" var="loginMember"/>
           <!-- 로그인 -->
-          	<div class="location-alert">
-              <p><span class="point-text">여기 회원 주소지 나옴</p>
+              <p><span class="point-text">여기 회원 주소지 나옴</span></p>
               <div class="location-alert-btn">
                 <div><button class="address-change-btn">배송지 변경</button></div>
               </div>
@@ -129,4 +131,6 @@ crossorigin="anonymous"></script>
     </nav>
 <script src='${pageContext.request.contextPath}/resources/js/common/header.js'></script>
 
-<!-- footer에 </div> 하나 추가해야됨~~ (전체 wrap div 닫는 태그)-->
+<!-- 페이지 영역 -->
+<section class="contentWrapper">
+<!-- footer에 </section>이랑 </div> 하나 추가해야됨~~ (페이지 영역 닫는 section태그랑 전체 wrap div 닫는 태그)-->
