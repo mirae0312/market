@@ -16,8 +16,8 @@
 	<span>${product.subTitle }</span>
 	<hr />
 	<br />
-	<span><fmt:formatNumber type="number" pattern="###,###,###" value="${product.price/100 * (100 - product.discountRate)} "/>원</span>
-	<span>${product.discountRate }</span>
+	<span><fmt:formatNumber type="number" pattern="#########" value="${product.price/100 * (100 - product.discountRate)} "/>원</span>
+	<span>할인율 : ${product.discountRate }%</span>
 	<br />
 	<span>${product.price }</span>
 	<hr />
@@ -78,7 +78,13 @@
 	<br />
 	<br />
 	<hr />
-	<span>총 상품금액 : <fmt:formatNumber type="number" pattern="###,###,###" value="${product.price/100 * (100 - product.discountRate)} "/>원</span>
+	<span>
+		총 상품금액 : 
+		<span id="finalPrice">
+		<fmt:formatNumber type="number" pattern="########" value="${product.price/100 * (100 - product.discountRate)} "/>
+		원
+		</span>
+	</span>
 	<br />
 	<br />
 	<input type="button" value="addWishList" id="addWishList" />
@@ -87,14 +93,18 @@
 	
 	<script>
 		$("#countMinus").click((e) => {
+			let price = ${product.price/100 * (100 - product.discountRate)} * 1;
 			let num = $("#pdtCount").val() * 1;
 			if(num != 1){
-				$("#pdtCount").val(num-1);				
+				$("#pdtCount").val(num-1);	
+				$("#finalPrice").text(price * $("#pdtCount").val()+ '원');
 			}
 		});
 		$("#countPlus").click((e) => {
+			let price = ${product.price/100 * (100 - product.discountRate)} * 1;
 			let num = $("#pdtCount").val() * 1;
 			$("#pdtCount").val(num+1);
+			$("#finalPrice").text(price * $("#pdtCount").val()+ '원');
 		});
 	
 	</script>
