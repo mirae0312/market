@@ -137,9 +137,8 @@
                        
                             
                             <div class="checkbox_save">
-                            <input type="checkbox" id="chk_security" name="chk_security" value="y">
                                 <label class="label_checkbox">
-                                    
+                            		<input type="checkbox" id="chk_security" name="chk_security" value="y">
                                     보안접속
                                 </label>
 

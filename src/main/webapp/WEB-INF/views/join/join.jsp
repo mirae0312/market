@@ -12,6 +12,48 @@
 <!-- join css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/join/join.css" /> 
  <style>
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 3; /* Sit on top */
+  padding-top: 250px;
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+border-radius: 12px;
+    width: 440px;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn_agreement{
+	cursor: pointer;
+}
  </style>
  
 <body>
@@ -88,8 +130,8 @@
                                     <th>휴대폰<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
                                         <div class="phone_num">
-                                            <input type="text" value="" pattern="[0-9]*" name="mobileInp"
-                                                placeholder="숫자만 입력해주세요" class="inp">
+                                            <input type="text" value="01012341234" pattern="[0-9]*" name="mobileInp"
+                                                placeholder="숫자만 입력해주세요" >
                                             <button class="white-btn">인증번호 받기</button>
                                         </div>
                                         <p class="txt_guide">
@@ -100,11 +142,11 @@
                                 <tr>
                                     <th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td class="field_address">
-                                        <input type="text" id="sample6_postcode" placeholder="우편번호">
+                                        <input type="text" id="sample6_postcode" placeholder="우편번호" value="06234">
                                         <input type="button" id="addressNo" class="white-btn" onclick="sample6_execDaumPostcode()" value="주소검색"><br>
-										<input type="text" id="sample6_address" placeholder="주소"><br>
-										<input type="text" id="sample6_detailAddress" placeholder="상세주소">
-										<input type="text" id="sample6_extraAddress" placeholder="참고항목">
+										<input type="text" id="sample6_address" placeholder="주소" value="서울 강남구 논현로85길 58"><br>
+										<input type="text" id="sample6_detailAddress" placeholder="상세주소" value="5층">
+										<input type="text" id="sample6_extraAddress" placeholder="참고항목" value="(역삼동)">
 										
                                     </td>
                                 </tr>
@@ -116,11 +158,11 @@
                                             <span class="ico"></span>남자
                                         </label>
                                         <label class="">
-                                            <input type="radio" name="gender" value="w">
+                                            <input type="radio" name="gender" value="w" checked>
                                             <span class="ico"></span>여자
                                         </label>
                                         <label class="checked">
-                                            <input type="radio" name="gender" value="n" checked="checked">
+                                            <input type="radio" name="gender" value="n" >
                                             <span class="ico"></span>선택안함
                                         </label>
                                     </td>
@@ -173,7 +215,7 @@
                                         <div class="bg_dim"></div>
                                         <div class="check">
                                             <label class="check_agree label_all_check label_block">
-                                                <input type="checkbox" name="agree_allcheck">
+                                                <input type="checkbox" name="agree_allcheck" onclick='selectAll(this)'>
                                                 <span class="ico"></span>전체 동의합니다.
                                             </label>
                                             <p class="sub">선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</p>
@@ -183,11 +225,27 @@
                                                 <input type="checkbox" value="" name="agree" required="" label="이용약관">
                                                 <span class="ico"></span>이용약관 동의 <span class="sub">(필수)</span>
                                             </label>
-                                            <a href="#none" class="link btn_link btn_agreement">약관보기 </a>
-                                        </div>
+                                            <a onclick="open_modal();" class="link btn_link btn_agreement">약관보기 </a>
+                                        </div> 
+                                        <!-- The Modal -->
+										<div id="modal_1" class="modal">
+										  <div class="modal-content">
+										    <div class="modal-header">
+										      <span class="close">&times;</span>
+										      <h2>개인정보 수집 이용 동의</h2>
+										    </div>
+										    <div class="modal-body">
+										      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab quod alias at perspiciatis consequatur cupiditate non veniam illo voluptatum ratione ex dolor inventore voluptas odit consequuntur a commodi quos sequi.</p>
+										      
+										    </div>
+										    <div class="modal-footer">
+										      <h3>확인</h3>
+										    </div>
+										  </div>
+										</div>
 
 
-                                        <div class="check_view">
+										<div class="check_view">
                                             <label class="check_agree label_block">
                                                 <input type="checkbox" id="private1" name="private1" value=""
                                                     required="" label="개인정보 수집·이용">
@@ -199,7 +257,7 @@
                                         <div class="check_view">
                                             <input type="hidden" id="consentHidden" name="consent[1]" value="">
                                             <label class=" check_agree label_block">
-                                                <input type="checkbox" name="hiddenCheck">
+                                                <input type="checkbox" name="hiddenCheck" >
                                                 <span class="ico"></span>개인정보 수집·이용 동의 <span class="sub">(선택)</span>
                                             </label>
                                             <a href="#none" class="link btn_link btn_choice">약관보기 </a>
@@ -224,7 +282,40 @@
         </div>
     </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-    
+<script>
+function selectAll(selectAll)  {
+	  const checkboxes 
+	     = document.querySelectorAll('input[type="checkbox"]');
+	  
+	  checkboxes.forEach((checkbox) => {
+	    checkbox.checked = selectAll.checked
+	  })
+}
+</script>
+<script>
+
+//Get the modal
+var modal = document.getElementById("modal_1");
+
+//Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+//When the user clicks the button, open the modal 
+function open_modal(){
+	modal.style.display = "block";
+}
+//When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+modal.style.display = "none";
+}
+
+//When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+if (event.target == modal) {
+ modal.style.display = "none";
+}
+}
+</script>
 <script src="https://kit.fontawesome.com/4123702f4b.js" crossorigin="anonymous"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
