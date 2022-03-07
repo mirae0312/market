@@ -36,7 +36,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/market").hasRole("USER")
+				.antMatchers("/market").permitAll()
 			.and()
 				.formLogin()
 				.loginPage("/login/login")
@@ -46,6 +46,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 			.and()
 				.csrf()
+			.and()
+				.cors()
 			.and()
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
@@ -63,7 +65,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/login/kakaoLogin").antMatchers("/login/snsEnroll");
+		web.ignoring().antMatchers("/login/snsLogin");
 	}
 	
 	

@@ -5,15 +5,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>상품상세화면</title>
-<!-- jquery -->
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-</head>
-<body>
+<fmt:requestEncoding value="utf-8" />
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="상세페이지" name="title"/>
+</jsp:include>
 	<h1>상품상세화면입니다.</h1>
 	
 	<span>${product.title }</span>
