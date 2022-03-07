@@ -19,19 +19,18 @@ serviceTab.onclick = (() => {
   serviceTabSub.classList.toggle('show');
 });
 
-memberTab.onclick = (() => {
-  memberTabSub.classList.toggle('show');
-});
+//로그인해서 memberTab이 존재하는 경우에만 동작하도록
+if(memberTab != null) {	
+	memberTab.onclick = (() => {
+	  memberTabSub.classList.toggle('show');
+	});
+};
 
 locationIcon.onclick = (() => {
   locationAlert.classList.toggle('show');
 });
 
-//로고 클릭시 메인
-/*document.querySelector('.mainLogo').onclick = (() => {
-  location.href = '';
-})
-*/
+
 //검색어 미입력시 전송 막음
 const searchFrm = document.searchFrm;
 searchFrm.addEventListener('submit', ((e) => {
