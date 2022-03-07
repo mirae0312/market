@@ -63,7 +63,7 @@
 	</tbody>
 </table>
 
-<table id=rTable">
+<table id="rTable">
 	<thead>
 		<tr>
 			<th colspan="6">냉장 상품</th>
@@ -166,6 +166,7 @@
 <span>배송비</span>
 <br />
 <input type="text" name="" id="deliveryAmount" />
+<br />
 <span>결제예정금액</span>
 <br />
 <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"/>
