@@ -93,5 +93,24 @@
 			user_id = #{userId}
 	</select>
 	
+	<select id="selectOneProductInCart" parameterType="map" resultType="map">
+		select
+		    c.user_id,
+		    c.p_code,
+		    c.count,
+		    p.price,
+		    d.discount_rate
+		from
+		    cart c left join mk_product_price p
+		    on c.p_code = p.p_code
+		    left join product_discount d
+		    on c.p_code = d.p_code
+		where
+		    c.p_code = #{pcode}
+		    and
+		    c.user_id = #{userId}
+	
+	</select>
+	
 </mapper>
 

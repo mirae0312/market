@@ -27,6 +27,7 @@
 	<p>장바구니 화면</p>
 	<a href="${pageContext.request.contextPath }/product/cart/myCart">장바구니화면</a>
 	
+	
 <script>
 	$("#createCoupon").click((e) => {
 		console.log("쿠폰 생성");
