@@ -120,7 +120,9 @@
 					count
 				},
 				success(res){
-					alert(res);
+					if(res == 1){
+						alert('상품을 장바구니에 담았습니다.');
+					}
 				},
 				error: console.log
 			})

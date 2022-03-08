@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +70,20 @@ public class ProductController {
 		cartInfo.put("userId", member.getId());
 		
 		int result = productService.insertCart(cartInfo);
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	@DeleteMapping("/cart/deleteCart")
+	public ResponseEntity<?> deleteCart(@RequestParam(value="deleteArr[]") List<String> deleteArr, @AuthenticationPrincipal Member member){
+		log.debug("deletePcode = {}", deleteArr);
+		String userId = member.getId();
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("deleteArr", deleteArr);
+		param.put("userId", userId);
+		
+		int result = productService.deleteCart(param);
 		
 		return ResponseEntity.ok(result);
 	}
