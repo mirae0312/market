@@ -11,4 +11,8 @@ import java.util.Map;
 public interface JoinDao {
 
     Member selectDuplicate(Map<String, Object> param);
+
+    void insertMember(Member member);
+
+    void insertRole(Member member);
 }

@@ -24,6 +24,10 @@
 	<p>카테고리별 상품 리스트 화면</p>
 	<a href="${pageContext.request.contextPath }/product/productList?largeCategory=카테고리1&smallCategory=소분류1">상품 리스트 화면</a>
 	
+	<p>장바구니 화면</p>
+	<a href="${pageContext.request.contextPath }/product/cart/myCart">장바구니화면</a>
+	
+	
 <script>
 	$("#createCoupon").click((e) => {
 		console.log("쿠폰 생성");

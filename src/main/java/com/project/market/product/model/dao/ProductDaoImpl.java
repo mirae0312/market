@@ -1,6 +1,7 @@
 package com.project.market.product.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,33 @@ public class ProductDaoImpl implements ProductDao {
 	public Product selectProductDetail(String pcode) {
 		return session.selectOne("product.selectProductDetail", pcode);
 	}
+
+	@Override
+	public int insertCart(Map<String, Object> cartInfo) {
+		return session.insert("product.insertCart", cartInfo);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectUserCartList(String userId) {
+		return session.selectList("product.selectUserCartList", userId);
+	}
+
+	@Override
+	public int updateCart(Map<String, Object> cartInfo) {
+		return session.update("product.updateCart", cartInfo);
+	}
+
+	@Override
+	public Map<String, Object> selectOneProductInCart(Map<String, Object> param) {
+		return session.selectOne("product.selectOneProductInCart", param);
+	}
+
+	@Override
+	public int deleteCart(Map<String, Object> param) {
+		return session.delete("product.deleteCart", param);
+	}
+
+	
 	
 	
 }
