@@ -54,6 +54,15 @@ border-radius: 12px;
 .btn_agreement{
 	cursor: pointer;
 }
+.modal-header{
+    padding: 25px 25px 8px 30px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 40px;
+    color: #333;
+    letter-spacing: -1px;
+}
+
  </style>
  
 <body>
@@ -232,7 +241,7 @@ border-radius: 12px;
 										  <div class="modal-content">
 										    <div class="modal-header">
 										      <span class="close">&times;</span>
-										      <h2>개인정보 수집 이용 동의</h2>
+										      <h4>개인정보 수집 이용 동의</h4>
 										    </div>
 										    <div class="modal-body">
 										      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab quod alias at perspiciatis consequatur cupiditate non veniam illo voluptatum ratione ex dolor inventore voluptas odit consequuntur a commodi quos sequi.</p>
