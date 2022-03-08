@@ -21,5 +21,14 @@
             </if>
     </select>
 
+    <insert id="insertMember">
+        insert into mk_member(id, password, name, email, phone, gender, birthday, recommender, login_type)
+        values(#{id}, #{password}, #{name}, #{email}, #{phone}, #{gender}, #{birthday}, #{recommender}, #{loginType})
+    </insert>
+
+    <insert id="insertRole">
+        insert into mk_authority values('ROLE_USER', #{id})
+    </insert>
+
 </mapper>
 
