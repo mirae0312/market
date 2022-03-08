@@ -52,7 +52,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/")
-				.invalidateHttpSession(true);
+				.invalidateHttpSession(true)
+			.and()
+				.rememberMe()
+				.key("uniqueAndSecret")
+				.rememberMeParameter("remember-me")
+				.tokenValiditySeconds(86400 * 14);
 	}
 	
 	@Override
