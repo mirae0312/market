@@ -19,4 +19,10 @@ public class JoinServiceImpl implements JoinService {
     public Member selectDuplicate(Map<String, Object> param) {
         return joinDao.selectDuplicate(param);
     }
+
+    @Override
+    public void insertMember(Member member) {
+        joinDao.insertMember(member);
+        joinDao.insertRole(member);
+    }
 }

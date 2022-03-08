@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.market.customerService.model.dao.CustomerServiceDao">
+
+    <insert id="insertAnnouncement">
+        insert into mk_announcement values(concat('anno-',seq_mk_announcement_no.nextval), #{title}, #{writer}, default, default, #{content})
+        <selectKey order="AFTER" resultType="string" keyProperty="an_code">
+            select concat('anno-',seq_mk_announcement_no.currval) from dual
+        </selectKey>
+    </insert>
+
+    <insert id="insertAttachment">
+        insert into mk_attachment values(seq_mk_attachment_no.nextval, #{code}, #{originalFilename}, #{renamedFilename})
+    </insert>
+
+    <update id="updateAnnouncementReadCount">
+        update mk_announcement set read_count = read_count + 1 where an_code = #{code}
+    </update>
+
+    <select id="selectOneAnnouncement" resultType="announcement">
+        select * from mk_announcement where an_code = #{code}
+    </select>
+
+    <select id="selectAllAttachments" resultType="attachment">
+        select * from mk_attachment where code = #{code}
+    </select>
+
+    <select id="selectAllAnnouncement" resultType="announcement">
+        select * from mk_announcement order by reg_date desc
+    </select>
+
+    <select id="countAllAnnouncement" resultType="_int">
+        select count(*) from mk_announcement
+    </select>
+</mapper>
+
