@@ -42,6 +42,13 @@ public class ProductDaoImpl implements ProductDao {
 	public int updateCart(Map<String, Object> cartInfo) {
 		return session.update("product.updateCart", cartInfo);
 	}
+
+	@Override
+	public Map<String, Object> selectOneProductInCart(Map<String, Object> param) {
+		return session.selectOne("product.selectOneProductInCart", param);
+	}
+
+	
 	
 	
 }
