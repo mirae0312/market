@@ -16,11 +16,12 @@
 </head>
 <body>
 <h1>장바구니</h1>
-
+<input type="checkbox" name="checkBoxController" id="" /><label for="checkBoxController">전체 선택(<span id="checkBoxNoti"></span>)</label>
+<input type="button" value="선택삭제" id="deleteMultiCart"/>
 <table id="fTable">
 	<thead>
 		<tr>
-			<th colspan="6">냉동 상품</th>
+			<th colspan="6"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -28,7 +29,7 @@
 			<c:if test="${product.TEM_CODE.equals('F') }">
 				<tr>
 					<td>
-						<input type="checkbox" name="" id="" />
+						<input type="checkbox" name="pdtChkBox" id="" data-check-val="${product.P_CODE }"/>
 					</td>
 					<td>
 						<span>image</span>
@@ -38,9 +39,9 @@
 						${product.TITLE }
 					</td>
 					<td>
-						<input type="button" value="-" class="minusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
+						<input type="button" value="-" class="minusBtn" data-pdt-id="${product.P_CODE }"/>
 						<input type="text" name="" id="${product.P_CODE }" value="${product.COUNT }"/>
-						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
+						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }"/>
 					</td>
 					<td>
 						<c:if test="${product.DISCOUNT_RATE != null }">
@@ -56,7 +57,7 @@
 						</span>
 					</td>
 					<td>
-						<input type="button" value="x" class="deleteBtn" />
+						<input type="button" value="x" class="deleteBtn" data-delete-code="${product.P_CODE }"/>
 					</td>
 				</tr>
 			</c:if>
@@ -67,7 +68,7 @@
 <table id="rTable">
 	<thead>
 		<tr>
-			<th colspan="6">냉장 상품</th>
+			<th colspan="6"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -75,7 +76,7 @@
 			<c:if test="${product.TEM_CODE.equals('R') }">
 				<tr>
 					<td>
-						<input type="checkbox" name="" id="" />
+						<input type="checkbox" name="pdtChkBox" id="" data-check-val="${product.P_CODE }"/>
 					</td>
 					<td>
 						<span>image</span>
@@ -85,9 +86,9 @@
 						${product.TITLE }
 					</td>
 					<td>
-						<input type="button" value="-" class="minusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
+						<input type="button" value="-" class="minusBtn" data-pdt-id="${product.P_CODE }"/>
 						<input type="text" name="" id="${product.P_CODE }" value="${product.COUNT }"/>
-						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
+						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }"/>
 					</td>
 					<td>
 						<c:if test="${product.DISCOUNT_RATE != null }">
@@ -103,7 +104,7 @@
 						</span>
 					</td>
 					<td>
-						<input type="button" value="x" class="deleteBtn" />
+						<input type="button" value="x" class="deleteBtn" data-delete-code="${product.P_CODE }"/>
 					</td>
 				</tr>
 			</c:if>
@@ -114,7 +115,7 @@
 <table id="iTable">
 	<thead>
 		<tr>
-			<th colspan="6">상온 상품</th>
+			<th colspan="6"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -122,7 +123,7 @@
 			<c:if test="${product.TEM_CODE.equals('I') }">
 				<tr>
 					<td>
-						<input type="checkbox" name="" id="" />
+						<input type="checkbox" name="pdtChkBox" id="" data-check-val="${product.P_CODE }"/>
 					</td>
 					<td>
 						<span>image</span>
@@ -132,9 +133,9 @@
 						${product.TITLE }
 					</td>
 					<td>
-						<input type="button" value="-" class="minusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
+						<input type="button" value="-" class="minusBtn" data-pdt-id="${product.P_CODE }"/>
 						<input type="text" name="" id="${product.P_CODE }" value="${product.COUNT }"/>
-						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
+						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }"/>
 					</td>
 					<td>
 						<c:if test="${product.DISCOUNT_RATE != null }">
@@ -150,7 +151,7 @@
 						</span>
 					</td>
 					<td>
-						<input type="button" value="x" class="deleteBtn" />
+						<input type="button" value="x" class="deleteBtn" data-delete-code="${product.P_CODE }"/>
 					</td>
 				</tr>
 			</c:if>
@@ -175,7 +176,111 @@
 <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"/>
 
 
+<br /><br />
+<input type="button" value="주문하기" id="reqOrder" />
+
 <script>
+	/* 다중삭제 */
+	$("#deleteMultiCart").click((e) => {
+		let deleteArr = [];
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			deleteArr.push($(e).data('check-val'));
+		});
+		
+		deleteCart(deleteArr);
+	});
+	
+	$(() => {
+		let bool = $("#fTable tbody").find('tr').length;
+		let bool2 = $("#rTable tbody").find('tr').length;
+		let bool3 = $("#iTable tbody").find('tr').length;
+		
+		if(bool != 0){
+			$("#fTable thead th").append('냉동상품');
+		}
+		if(bool2 != 0){
+			$("#rTable thead th").append('냉장상품');
+		}
+		if(bool3 != 0){
+			$("#iTable thead th").append('상온상품');
+		}
+		
+		countCheckBoxs();
+	});
+	
+	
+	/* 장바구니 삭제하기 */
+	$(".deleteBtn").click((e) => {
+		if(!confirm('삭제하시겠습니까?')){
+			return false;
+		}
+		
+		let pcode = []; 
+		pcode.push($(e.target).data('delete-code'));
+		
+		deleteCart(pcode);
+	});
+	
+	/* 장바구니 삭제 ajax */
+	function deleteCart(deleteArr){
+		$.ajax({
+			url : '${pageContext.request.contextPath}/product/cart/deleteCart?${_csrf.parameterName}=${_csrf.token}',
+			data : {
+				deleteArr
+			},
+			method : 'DELETE',
+			success(res){
+				if(res != 0){
+					alert("삭제되었습니다.");
+					location.reload();
+				}
+			},
+			error: console.log
+		})
+	}
+
+	/* 주문하기 클릭 시 */
+	$("#reqOrder").click((e) => {
+		const pdtArr = [];
+		
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			pdtArr.push($(e).data('check-val'));
+		});
+		
+		console.log(pdtArr);
+	});
+	
+	/* 체크박스 전체선택 / 해제 */
+	$("[name = checkBoxController]").change((e) => {
+		if($(e.target).prop('checked') == true){
+			$("[name = pdtChkBox]").prop('checked', true);
+		} else {
+			$("[name = pdtChkBox]").prop('checked', false);
+		}
+		
+		countCheckBoxs();
+	});
+	
+	$("[name = pdtChkBox]").click((e) => {
+		countCheckBoxs();
+	});
+	
+	/* checkbox count */
+	function countCheckBoxs(){
+		let countBoxs = 0;
+		$("[name = pdtChkBox]").each(function(i, e) {
+			countBoxs += 1;
+		});
+		
+		let checkedBoxs = 0;
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			checkedBoxs += 1;
+		});
+		
+		$("#checkBoxNoti").text(`\${checkedBoxs}/\${countBoxs}`);
+	};
+	
+	
 	/* 장바구니 - + 시 DB 반영 */
 	function applyCartUpdate(pcode, count){
 		$.ajax({

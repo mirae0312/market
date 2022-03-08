@@ -64,6 +64,11 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.selectOneProductInCart(param);
 	}
 
+	@Override
+	public int deleteCart(Map<String, Object> param) {
+		return productDao.deleteCart(param);
+	}
+
 
 	
 	
