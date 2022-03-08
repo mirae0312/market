@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.project.market.product.model.vo.Product;
+import com.project.market.security.model.vo.Member;
 
 public interface ProductService {
 
@@ -14,5 +15,8 @@ public interface ProductService {
 	int insertCart(Map<String, Object> cartInfo);
 
 	List<Map<String, Object>> selectProductInCart(String userId);
+
+	Map<String, Object> selectOneProductInCart(Map<String, Object> param);
+
 
 }

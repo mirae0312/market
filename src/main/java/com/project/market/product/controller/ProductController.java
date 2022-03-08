@@ -51,9 +51,77 @@ public class ProductController {
 		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
 		log.debug("cartList = {}", productInCartList);
 		
+		Map<String, Integer> returnMap = calculateAmount(productInCartList);
+		int ogp = returnMap.get("ogp");
+		int dcp = returnMap.get("dcp");
+		
+		model.addAttribute("cartList", productInCartList);
+		model.addAttribute("ogp", ogp);
+		model.addAttribute("dcp", dcp);
+	}
+	
+	@PostMapping("/addCart")
+	public ResponseEntity<?> addCart(@RequestParam String pcode, @RequestParam int count, @AuthenticationPrincipal Member member){
+		log.debug("addCart pcode, count = {}, {}", pcode, count);
+		Map<String, Object> cartInfo = new HashMap<>();
+		cartInfo.put("pcode", pcode);
+		cartInfo.put("count", count);
+		cartInfo.put("userId", member.getId());
+		
+		int result = productService.insertCart(cartInfo);
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/cart/getPurchaseAmount")
+	public ResponseEntity<?> getPurchaseAmount(@AuthenticationPrincipal Member member){
+		String userId = member.getId();
+		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
+		
+		Map<String, Integer> returnMap = calculateAmount(productInCartList);
+		
+		log.debug("returnMap = {}", returnMap);
+		
+		return ResponseEntity.ok(returnMap);
+	}
+	
+	@GetMapping("/cart/getProductAmount")
+	public ResponseEntity<?> getProductAmount(@RequestParam String pcode, @AuthenticationPrincipal Member member){
+		String userId = member.getId();
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("pcode", pcode);
+		param.put("userId", userId);
+		
+		Map<String, Object> cart = productService.selectOneProductInCart(param);
+		
+		log.debug("cart = {}", cart);
+		
+		int dcp = 0;
+		int ogp = 0;
+		
+		int price = Integer.parseInt(String.valueOf(cart.get("PRICE")));
+		int count = Integer.parseInt(String.valueOf(cart.get("COUNT")));
+		
+		if(cart.get("DISCOUNT_RATE") != null) {
+			int dcRate = Integer.parseInt(String.valueOf(cart.get("DISCOUNT_RATE")));
+			ogp = price * count;
+			dcp = ogp - ((price - (price/100 * (100 - dcRate))) * count);
+			
+		} else {
+			ogp = price * count;
+		}
+		
+		cart.put("ogp", ogp);
+		cart.put("dcp", dcp);
+		
+		return ResponseEntity.ok(cart); 
+	}
+	
+	public Map<String, Integer> calculateAmount(List<Map<String, Object>> list){
 		int ogp = 0;
 		int dcp = 0;
-		for(Map<String, Object> pdt : productInCartList) {
+		for(Map<String, Object> pdt : list) {
 			int count = Integer.parseInt(String.valueOf(pdt.get("COUNT")));
 			int og = Integer.parseInt(String.valueOf(pdt.get("PRICE")));
 			ogp += og * count;
@@ -63,23 +131,11 @@ public class ProductController {
 				dcp += (og - (og / 100 * (100 - dc)))*count;
 			}
 		}
-		log.debug("ogp, dcp = {}, {}", ogp, dcp);
 		
-		model.addAttribute("cartList", productInCartList);
-		model.addAttribute("ogp", ogp);
-		model.addAttribute("dcp", dcp);
-	}
-	
-	@PostMapping("/addCart")
-	public ResponseEntity<?> addCart(@RequestParam String pcode, @RequestParam int count, @AuthenticationPrincipal Member member){
-		Map<String, Object> cartInfo = new HashMap<>();
-		cartInfo.put("pcode", pcode);
-		cartInfo.put("count", count);
-		cartInfo.put("userId", member.getId());
+		Map<String, Integer> map = new HashMap<>();
+		map.put("ogp", ogp);
+		map.put("dcp", dcp);
 		
-		int result = productService.insertCart(cartInfo);
-		
-		String msg = result == 1 ? "장바구니에 추가되었습니다." : "장바구니에 추가되지 않았습니다.";
-		return ResponseEntity.ok(msg);
+		return map;
 	}
 }

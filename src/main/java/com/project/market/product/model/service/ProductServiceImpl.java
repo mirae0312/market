@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.market.product.model.dao.ProductDao;
 import com.project.market.product.model.vo.Product;
+import com.project.market.security.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,6 +58,13 @@ public class ProductServiceImpl implements ProductService {
 	public List<Map<String, Object>> selectProductInCart(String userId) {
 		return productDao.selectUserCartList(userId);
 	}
+
+	@Override
+	public Map<String, Object> selectOneProductInCart(Map<String, Object> param) {
+		return productDao.selectOneProductInCart(param);
+	}
+
+
 	
 	
 	

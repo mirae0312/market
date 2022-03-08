@@ -43,16 +43,15 @@
 						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
 					</td>
 					<td>
-						<c:if test="${product.DISCOUNT_RATE != null }">
-							<span id="${product.P_CODE }_amount">
+						<span id="${product.P_CODE }_amount">
+							<c:if test="${product.DISCOUNT_RATE != null }">
 								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} "/>
-								원
-							</span>
-							<br />
-						</c:if>
-						<span id="${product.P_CODE }_ogp">
-							<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }"/>
-							원
+								<br />
+								정가 : ${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }
+							</c:if>
+							<c:if test="${product.DISCOUNT_RATE == null }">
+								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }"/>
+							</c:if>
 						</span>
 					</td>
 					<td>
@@ -90,16 +89,15 @@
 						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
 					</td>
 					<td>
-						<c:if test="${product.DISCOUNT_RATE != null }">
-							<span id="${product.P_CODE }_amount">
+						<span id="${product.P_CODE }_amount">
+							<c:if test="${product.DISCOUNT_RATE != null }">
 								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} "/>
-								원
-							</span>
-							<br />
-						</c:if>
-						<span id="${product.P_CODE }_ogp">
-							<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }"/>
-							원
+								<br />
+								정가 : ${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }
+							</c:if>
+							<c:if test="${product.DISCOUNT_RATE == null }">
+								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }"/>
+							</c:if>
 						</span>
 					</td>
 					<td>
@@ -137,16 +135,15 @@
 						<input type="button" value="+" class="plusBtn" data-pdt-id="${product.P_CODE }" data-ogp="${product.PRICE }" data-dcr="${product.DISCOUNT_RATE }"/>
 					</td>
 					<td>
-						<c:if test="${product.DISCOUNT_RATE != null }">
-							<span id="${product.P_CODE }_amount">
-								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} "/>
-								원
-							</span>
-							<br />
-						</c:if>
-						<span id="${product.P_CODE }_ogp">
-							<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }"/>
-							원
+						<span id="${product.P_CODE }_amount">
+							<c:if test="${product.DISCOUNT_RATE != null }">
+								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE))} "/>
+								<br />
+								정가 : ${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }
+							</c:if>
+							<c:if test="${product.DISCOUNT_RATE == null }">
+								<fmt:formatNumber type="number" pattern="#########" value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }"/>
+							</c:if>
 						</span>
 					</td>
 					<td>
@@ -174,65 +171,7 @@
 <br />
 <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"/>
 
-
 <script>
-	/* 장바구니 - + 시 DB 반영 */
-	function applyCartUpdate(pcode, count){
-		$.ajax({
-			url : '${pageContext.request.contextPath}/product/addCart?${_csrf.parameterName}=${_csrf.token}',
-			method : 'POST',
-			data : {
-				pcode,
-				count
-			},
-			success(res){
-				if(res == 1){
-					alert("변경되었습니다.");
-					getProductAmount(pcode);
-				} else {
-					alert("변경되지 않았습니다.");
-				}
-			},
-			complete(){
-				getAmount()
-			},
-			error: console.log
-		});
-	};
-
-	/* 전체 금액/할인금액 불러오는 함수 */
-	function getAmount(){
-		$.ajax({
-			url : '${pageContext.request.contextPath}/product/cart/getPurchaseAmount',
-			success(res){
-				$("#allAmount").val(res.ogp);
-				$("#dcAmount").val(res.dcp);
-				$("#purchaseAmount").val(res.ogp - res.dcp);
-			},
-			error: console.log
-		});		
-	};
-	
-	/* 개별 상품 금액 불러오는 함수 */
-	function getProductAmount(pcode){
-		$.ajax({
-			url : '${pageContext.request.contextPath}/product/cart/getProductAmount',
-			data:{
-				pcode
-			},
-			success(res){
-				if(res.dcp != 0){
-					$(`#\${pcode}_amount`).text(`\${res.dcp} 원`);
-					$(`#\${pcode}_ogp`).text(`\${res.ogp} 원`);					
-				} else {
-					$(`#\${pcode}_ogp`).text(`\${res.ogp} 원`);
-				}
-			},
-			error: console.log
-		});
-	};
-
-
 	$(".minusBtn").click((e) => {
 		let targetId = $(e.target).data('pdt-id');
 		let targetVal = $(`#\${targetId}`).val();
@@ -242,7 +181,41 @@
 			$(`#\${targetId}`).val(changeCount);
 		};
 		
-		applyCartUpdate(targetId, -1);
+		let ogp = $(e.target).data('ogp');
+		let dcr = $(e.target).data('dcr');
+		
+		let changeAmount = (ogp/100) * (100 - dcr) * changeCount;
+		let changeOgAmount = ogp * changeCount;
+		
+		let inputText = `
+			\${changeAmount}
+			<br/>
+			정가 : \${changeOgAmount}
+		`;
+		
+		if(targetVal != 1){
+			if(dcr != ''){
+				$(`#\${targetId}_amount`).text('');
+				$(`#\${targetId}_amount`).append(inputText);						
+			} else {
+				$(`#\${targetId}_amount`).text('');
+				$(`#\${targetId}_amount`).append(changeOgAmount);
+			}		
+		}
+		
+		let ogpVal = $("#allAmount").val();
+		let dcpVal = $("#dcAmount").val();
+		let pcsVal = $("#purchaseAmount").val();
+		
+		let changeDcVal = ogp - ((ogp/100) * (100 - dcr));
+		
+		if(targetVal != 1){
+			$("#allAmount").val(ogpVal - ogp);
+			$("#dcAmount").val(dcpVal - changeDcVal);			
+			$("#purchaseAmount").val($("#allAmount").val() - $("#dcAmount").val());
+		}
+		
+		
 	});
 	$(".plusBtn").click((e) => {
 		let targetId = $(e.target).data('pdt-id');
@@ -252,7 +225,37 @@
 		
 		$(`#\${targetId}`).val(changeCount);		
 		
-		applyCartUpdate(targetId, 1);
+		let ogp = $(e.target).data('ogp');
+		let dcr = $(e.target).data('dcr');
+		
+		let changeAmount = (ogp/100) * (100 - dcr) * changeCount;
+		let changeOgAmount = ogp * changeCount;
+		
+		let inputText = `
+			\${changeAmount}
+			<br/>
+			정가 : \${changeOgAmount}
+		`;
+		
+		if(dcr != ''){
+			$(`#\${targetId}_amount`).text('');
+			$(`#\${targetId}_amount`).append(inputText);						
+		} else {
+			$(`#\${targetId}_amount`).text('');
+			$(`#\${targetId}_amount`).append(changeOgAmount);
+		}
+	
+		
+		let ogpVal = $("#allAmount").val() * 1;
+		let dcpVal = $("#dcAmount").val() * 1;
+		let pcsVal = $("#purchaseAmount").val() * 1;
+		
+		let changeDcVal = ogp - ((ogp/100) * (100 - dcr));
+		
+		$("#allAmount").val(ogpVal + ogp);
+		$("#dcAmount").val(dcpVal + changeDcVal);			
+		$("#purchaseAmount").val($("#allAmount").val() - $("#dcAmount").val());
+		
 	});
 
 </script>

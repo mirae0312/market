@@ -17,4 +17,8 @@ public interface ProductDao {
 
 	int updateCart(Map<String, Object> cartInfo);
 
+	Map<String, Object> selectOneProductInCart(Map<String, Object> param);
+
+
+
 }
