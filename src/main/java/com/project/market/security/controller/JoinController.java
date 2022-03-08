@@ -4,15 +4,18 @@ import com.project.market.security.model.service.JoinService;
 import com.project.market.security.model.service.SmsService;
 import com.project.market.security.model.vo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.beans.PropertyEditor;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,10 +36,35 @@ public class JoinController {
     @Autowired
     private SmsService smsService;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @PostMapping("/join")
     public String join(Member member){
+        try{
+            log.debug("member = {}", member);
+            String encodedPassword = bCryptPasswordEncoder.encode(member.getPassword());
+            member.setPassword(encodedPassword);
 
-        return null;
+            joinService.insertMember(member);
+
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return "redirect:/login/login";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            PropertyEditor editor = new CustomDateEditor(sdf, true);
+            binder.registerCustomEditor(Date.class, editor);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
     @GetMapping("/checkDuplicate")
