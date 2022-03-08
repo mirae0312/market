@@ -109,8 +109,17 @@
 		    c.p_code = #{pcode}
 		    and
 		    c.user_id = #{userId}
-	
 	</select>
+	
+	<delete id="deleteCart" parameterType="map">
+		delete from cart
+		where
+			user_id = #{userId}
+			and
+			<foreach collection="deleteArr" item="cart" separator="OR">
+			p_code = #{cart}			
+			</foreach>
+	</delete>
 	
 </mapper>
 

@@ -48,6 +48,11 @@ public class ProductDaoImpl implements ProductDao {
 		return session.selectOne("product.selectOneProductInCart", param);
 	}
 
+	@Override
+	public int deleteCart(Map<String, Object> param) {
+		return session.delete("product.deleteCart", param);
+	}
+
 	
 	
 	
