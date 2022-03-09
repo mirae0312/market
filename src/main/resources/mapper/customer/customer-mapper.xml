@@ -24,7 +24,7 @@
     </select>
 
     <select id="selectAllAttachments" resultType="attachment">
-        select * from mk_attachment where code = #{code}
+        select * from mk_attachment where code = #{code} order by no asc
     </select>
 
     <select id="selectAllAnnouncement" resultType="announcement">
@@ -34,5 +34,17 @@
     <select id="countAllAnnouncement" resultType="_int">
         select count(*) from mk_announcement
     </select>
+
+    <delete id="deleteAnnouncement">
+        delete from mk_announcement where an_code = #{code}
+    </delete>
+
+    <delete id="deleteAttachments">
+        delete from mk_attachment where code = #{code}
+    </delete>
+
+    <update id="updateAnnouncement">
+        update mk_announcement set title = #{title}, writer = #{writer}, content = #{content} where an_code = #{anCode}
+    </update>
 </mapper>
 
