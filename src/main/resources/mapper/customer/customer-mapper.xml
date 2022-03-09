@@ -5,7 +5,7 @@
 <mapper namespace="com.project.market.customerService.model.dao.CustomerServiceDao">
 
     <insert id="insertAnnouncement">
-        insert into mk_announcement values(concat('anno-',seq_mk_announcement_no.nextval), #{title}, #{writer}, default, default, #{content})
+        insert into mk_announcement values(concat('anno-',seq_mk_announcement_no.nextval), #{title}, #{writer}, default, default, #{content}, #{announce})
         <selectKey order="AFTER" resultType="string" keyProperty="an_code">
             select concat('anno-',seq_mk_announcement_no.currval) from dual
         </selectKey>
@@ -44,7 +44,7 @@
     </delete>
 
     <update id="updateAnnouncement">
-        update mk_announcement set title = #{title}, writer = #{writer}, content = #{content} where an_code = #{anCode}
+        update mk_announcement set title = #{title}, writer = #{writer}, content = #{content}, announce = #{announce} where an_code = #{anCode}
     </update>
 </mapper>
 
