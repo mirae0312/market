@@ -19,4 +19,12 @@ public interface CustomerServiceService {
     List<Announcement> selectAllAnnouncement(RowBounds rowBounds);
 
     int countAllAnnouncement();
+
+    List<Attachment> selectAllAttachments(Map<String, Object> boardCode);
+
+    void deleteAnnouncement(Map<String, Object> boardCode);
+
+    void modifyAnnouncement(Announcement announcement);
+
+    void deleteAttachments(Map<String, Object> boardCode);
 }
