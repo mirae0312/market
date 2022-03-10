@@ -121,7 +121,9 @@
     	margin-top: 30px;
 	}
 	
-	
+	.btn_type1{
+		cursor: pointer;
+	}
     </style>
     <div id="main">
         <div id="content">
@@ -143,11 +145,11 @@
                                 </label>
 
                                 <div class="login_search">
-                                    <a class="link">
+                                    <a class="link" href="${pageContext.request.contextPath}/login/findId">
                                         아이디 찾기
                                     </a>
                                     <span class="bar"></span>
-                                    <a class="link">
+                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd">
                                         비밀번호 찾기
                                     </a>
                                 </div>
