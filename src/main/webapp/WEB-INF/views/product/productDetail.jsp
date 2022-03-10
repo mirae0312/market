@@ -19,7 +19,19 @@
 	<span><fmt:formatNumber type="number" pattern="#########" value="${product.price/100 * (100 - product.discountRate)} "/>원</span>
 	<span>할인율 : ${product.discountRate }%</span>
 	<br />
-	<span>${product.price }</span>
+	<span>원 금액 : ${product.price }</span>
+	<br />
+	<span>
+		<c:if test="${product.accumulationStatus.equals('Y') }">
+			적립 ${acRate }% 
+			<span> 
+				개당 ${accAmount }원 적립
+			</span>
+		</c:if>
+		<c:if test="${product.accumulationStatus.equals('N') }">
+			적립불가
+		</c:if>
+	</span>
 	<hr />
 	<br />
 	<c:if test="${product.salesUnit != null }">

@@ -29,4 +29,6 @@ public interface CustomerServiceService {
     void deleteAttachments(Map<String, Object> boardCode);
 
 	Map<String, Object> selectUserDefaultAddress(String userId);
+
+	int selectUserAccumulationRate(String userId);
 }

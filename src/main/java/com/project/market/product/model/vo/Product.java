@@ -37,4 +37,5 @@ public class Product extends ProductEntity implements Serializable {
 	
 	private int discountRate;
 	private int price;
+	private String accumulationStatus;
 }
