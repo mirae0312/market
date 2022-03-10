@@ -40,7 +40,6 @@
 /*title*/
 .tit_page {
     overflow: hidden;
-    width: 1050px;
     margin: 0 auto;
     padding: 50px 0 51px;
 }
@@ -157,8 +156,6 @@
     width: 332px;
 }
 .type_form .txt_guide {
-    display: none;
-    padding: 10px 0 9px;
     font-size: 12px;
     color: #666;
     line-height: 18px;

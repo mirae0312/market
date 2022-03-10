@@ -39,6 +39,12 @@ public class LoginController {
 
     @GetMapping("/login")
     public void login(){}
+    
+    @GetMapping("/findId")
+    public void findId(){}
+    
+    @GetMapping("/findPwd")
+    public void findPwd(){}
 
     @Value("${kakao.login.url}")
     private String kakaoLoginUrl;
