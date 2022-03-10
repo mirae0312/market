@@ -3,6 +3,7 @@ package com.project.market.purchase.controller;
 import java.beans.PropertyEditor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.market.purchase.model.service.PurchaseService;
 import com.project.market.purchase.model.vo.Coupon;
@@ -38,6 +40,15 @@ public class PurchaseController {
 		log.debug("insertCouponResult = {}", result);
 		
 		return ResponseEntity.ok(coupon.getCode());
+	}
+	
+	@GetMapping("/orderPage")
+	public void orderPage(@RequestParam List<String> orderArr) {
+		for(String pdt : orderArr) {
+			log.debug("pdt = {}", pdt);
+		}
+		
+		
 	}
 	
 	
