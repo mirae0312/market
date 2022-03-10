@@ -163,15 +163,26 @@
 <span>배송지</span>
 <br />
 <span>
-	${address.ADDRESS },
-	${address.DETAIL_ADDRESS }
+	<c:if test="${address != null }">	
+		${address.ADDRESS },
+		${address.DETAIL_ADDRESS }
+	</c:if>	
+	<c:if test="${address == null }">
+		배송지를 입력하고<br />
+		배송유형을 확인해 보세요!
+	</c:if>
 </span>
 <br />
 <span>
 	${address.DELIVERY_TYPE }
 </span>
 <br />
-<input type="button" value="배송지 변경" id="changeAddress" />
+	<sec:authorize access="isAuthenticated()">
+		<input type="button" value="배송지 변경" id="changeAddress" />
+	</sec:authorize>
+	<sec:authorize access="isAnonymous()">
+		<input type="button" value="주소 검색" id="searchAddress" />
+	</sec:authorize>
 <br /><br />
 
 <span>상품금액</span>
@@ -190,10 +201,16 @@
 <br />
 <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"/>
 <br />
+<sec:authorize access="isAuthenticated()">
 <span>구매 시 ${acp } 원 적립</span>
-
+</sec:authorize>
 <br /><br />
+<c:if test="${cartList != null }">
 <input type="button" value="주문하기" id="reqOrder" />
+</c:if>
+<c:if test="${cartList == null }">
+<input type="button" value="상품을 담아주세요" disabled />
+</c:if>
 
 <script>
 	
