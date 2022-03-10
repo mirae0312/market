@@ -46,5 +46,16 @@
     <update id="updateAnnouncement">
         update mk_announcement set title = #{title}, writer = #{writer}, content = #{content}, announce = #{announce} where an_code = #{anCode}
     </update>
+    
+    <select id="selectUserDefaultAddress" parameterType="string" resultType="map">
+    	select
+    		*
+    	from
+    		mk_address
+    	where
+    		id = #{userId}
+    		and
+    		default_address = 'D'
+    </select>
 </mapper>
 

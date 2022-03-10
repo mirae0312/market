@@ -92,4 +92,11 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         customerServiceDao.deleteAttachments(boardCode);
     }
 
+	@Override
+	public Map<String, Object> selectUserDefaultAddress(String userId) {
+		return customerServiceDao.selectUserDefaultAddress(userId);
+	}
+
+    
+    
 }

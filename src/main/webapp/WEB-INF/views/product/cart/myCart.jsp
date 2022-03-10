@@ -159,6 +159,21 @@
 	</tbody>
 </table>
 
+<br /><br />
+<span>배송지</span>
+<br />
+<span>
+	${address.ADDRESS },
+	${address.DETAIL_ADDRESS }
+</span>
+<br />
+<span>
+	${address.DELIVERY_TYPE }
+</span>
+<br />
+<input type="button" value="배송지 변경" id="changeAddress" />
+<br /><br />
+
 <span>상품금액</span>
 <br />
 <input type="text" name="" id="allAmount" value="${ogp }"/>
