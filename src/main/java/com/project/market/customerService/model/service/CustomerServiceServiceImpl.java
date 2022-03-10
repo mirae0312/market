@@ -97,6 +97,11 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 		return customerServiceDao.selectUserDefaultAddress(userId);
 	}
 
+	@Override
+	public int selectUserAccumulationRate(String userId) {
+		return customerServiceDao.selectUserAccumulationRate(userId);
+	}
+
     
     
 }

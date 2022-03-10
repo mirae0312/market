@@ -57,5 +57,15 @@
     		and
     		default_address = 'D'
     </select>
+    
+    <select id="selectUserAccumulationRate" parameterType="string" resultType="int">
+    	select
+    		a.accumulate_rate
+    	from
+    		mk_grade g inner join accumulation_rate a
+    		on g.grade = a.grade
+    	where
+    		id = #{userId}
+    </select>
 </mapper>
 

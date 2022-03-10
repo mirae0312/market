@@ -31,4 +31,6 @@ public interface CustomerServiceDao {
     void updateAnnouncement(Announcement announcement);
 
 	Map<String, Object> selectUserDefaultAddress(String userId);
+
+	int selectUserAccumulationRate(String userId);
 }
