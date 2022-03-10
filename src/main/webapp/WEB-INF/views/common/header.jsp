@@ -124,7 +124,8 @@ crossorigin="anonymous"></script>
           </sec:authorize>
           </div>
           <div class="icon"><a href="#"><i class="far fa-heart"></i></a></div>
-           </div>
+          <div class="icon cart-icon"><a href="${pageContext.request.contextPath }/product/cart/myCart"><i class="fas fa-shopping-cart"></i></a></div>
+        </div>
       </div>
     </nav>
 <script src='${pageContext.request.contextPath}/resources/js/common/header.js'></script>
