@@ -46,6 +46,9 @@ public class ProductController {
 		model.addAttribute("product", pdt);
 	}
 	
+	@GetMapping("/cart/cart")
+	public void cart() {}
+	
 	@GetMapping("/cart/myCart")
 	public void myCart(@AuthenticationPrincipal Member member, Model model) {
 		String userId = member.getId();
