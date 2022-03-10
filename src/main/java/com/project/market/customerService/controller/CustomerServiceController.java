@@ -47,9 +47,11 @@ public class CustomerServiceController {
             int totalContent = customerServiceService.countAllAnnouncement();
             log.debug("totalContent = {}", totalContent);
 
-            String category = "all";
             String url = request.getRequestURI();
-            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url, category);
+            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
+
+            model.addAttribute("pagebar", pagebar);
+            model.addAttribute("announceList", announceList);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
@@ -57,7 +59,71 @@ public class CustomerServiceController {
     }
 
     @GetMapping("/announceEnrollForm")
-    public void announceEnrollForm(){}
+    public void announceEnrollForm(@RequestParam Map<String, Object> map, Model model){
+        try{
+            log.debug("map = {}", map);
+            if("modify".equals((String) map.get("type"))){
+                Announcement announce = customerServiceService.selectOneAnnouncement(map);
+                model.addAttribute("announce", announce);
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @PostMapping("/modifyAnnouncement")
+    public String modifyAnnouncement(Announcement announcement, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
+                                     RedirectAttributes redirectAttr) throws IOException {
+        try{
+            log.debug("announcement = {}", announcement);
+            Map<String, Object> boardCode = new HashMap<>();
+            boardCode.put("code", announcement.getAnCode());
+            String directory = "";
+            Announcement oldAnnounce = customerServiceService.selectOneAnnouncement(boardCode);
+            List<Attachment> newAttachments = new ArrayList<>();
+            if(upFiles.length > 0){
+                if(!oldAnnounce.getAttachments().isEmpty()){
+                    for(Attachment attach : oldAnnounce.getAttachments()){
+                        directory = application.getRealPath("/resources/upload/announce/" + attach.getRenamedFilename());
+                        File deleteFile = new File(directory);
+                        boolean deleteBool = deleteFile.delete();
+                        log.debug("deleteFile = {}", deleteBool);
+                    }
+                    customerServiceService.deleteAttachments(boardCode);
+                }
+
+
+                for(int i = 0; i < upFiles.length; i++){
+                    MultipartFile upFile = upFiles[i];
+                    if(!upFile.isEmpty()){
+                        directory = application.getRealPath("/resources/upload/announce");
+                        String originalFilename = upFile.getOriginalFilename();
+                        String renamedFilename = MarketUtils.renamePolicy(originalFilename);
+                        File dest = new File(directory, renamedFilename);
+                        upFile.transferTo(dest);
+
+                        Attachment attach = new Attachment();
+                        attach.setOriginalFilename(originalFilename);
+                        attach.setRenamedFilename(renamedFilename);
+                        newAttachments.add(attach);
+                    }
+                }
+            }
+
+            if(!newAttachments.isEmpty())
+                announcement.setAttachments(newAttachments);
+
+            customerServiceService.modifyAnnouncement(announcement);
+
+            redirectAttr.addFlashAttribute("msg", "공지 수정 완료!");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+
+        return "redirect:/service/announcement";
+    }
 
     @PostMapping("/enrollAnnouncement")
     public String enrollAnnouncement(Announcement announcement, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
@@ -97,18 +163,18 @@ public class CustomerServiceController {
     }
 
     @GetMapping("/announcementDetail")
-    public String announcementDetail(@RequestParam String board, Model model, @CookieValue(value="announceCount", required = false, defaultValue = "0") String value,
+    public void announcementDetail(@RequestParam String code, Model model, @CookieValue(value="announceCount", required = false, defaultValue = "0") String value,
                                      HttpServletRequest request, HttpServletResponse response){
         try{
             Map<String, Object> boardCode = new HashMap<>();
-            boardCode.put("code", board);
+            boardCode.put("code", code);
             log.debug("value = {}", value);
             if("0".equals(value)){
                 customerServiceService.updateAnnouncementReadCount(boardCode);
-                value = "[" + board + "]";
-            }else if(!value.contains("[" + board + "]")){
+                value = "[" + code + "]";
+            }else if(!value.contains("[" + code + "]")){
                 customerServiceService.updateAnnouncementReadCount(boardCode);
-                value += "[" + board + "]";
+                value += "[" + code + "]";
             }
             Cookie cookie = new Cookie("announceCount", value);
             cookie.setMaxAge(60 * 60 * 24 * 30);
@@ -122,7 +188,34 @@ public class CustomerServiceController {
             log.error(e.getMessage(), e);
             throw e;
         }
-        return "service/announcementDetail";
+    }
+
+    @PostMapping("/deleteAnnouncement")
+    public String deleteAnnouncement(@RequestParam String code, RedirectAttributes redirectAttr){
+        try{
+            String directory = "";
+            log.debug("code = {}", code);
+            Map<String, Object> boardCode = new HashMap<>();
+            boardCode.put("code", code);
+            List<Attachment> attachments = customerServiceService.selectAllAttachments(boardCode);
+            if(attachments != null && !attachments.isEmpty()){
+                for(Attachment attachment : attachments){
+                    directory = application.getRealPath("/resources/upload/announce/" + attachment.getRenamedFilename());
+                    File file = new File(directory);
+                    boolean deleteFile = file.delete();
+                    log.debug("deleteFile = {}", deleteFile);
+                }
+            }
+
+            customerServiceService.deleteAnnouncement(boardCode);
+
+            redirectAttr.addFlashAttribute("msg", "공지사항 삭제 성공");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+
+        return "redirect:/service/announcement";
     }
 
 }
