@@ -47,44 +47,48 @@ public class ProductController {
 		Product pdt = productService.selectProductDetail(pcode);
 		log.debug("product = {}", pdt);
 		
-		String userId = member.getId();
-		
-		int accumulationRate = customerService.selectUserAccumulationRate(userId);
-		
-		int dcPrice = pdt.getPrice()/100 * (100 - pdt.getDiscountRate());
-		int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);
+		if(member != null) {
+			String userId = member.getId();
+			
+			int accumulationRate = customerService.selectUserAccumulationRate(userId);
+			
+			int dcPrice = pdt.getPrice()/100 * (100 - pdt.getDiscountRate());
+			int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);			
+			model.addAttribute("acRate", accumulationRate);
+			model.addAttribute("dcPrice", dcPrice);
+			model.addAttribute("accAmount", accAmount);
+		}
 		
 		model.addAttribute("product", pdt);
-		model.addAttribute("acRate", accumulationRate);
-		model.addAttribute("dcPrice", dcPrice);
-		model.addAttribute("accAmount", accAmount);
 	}
 	
 	@GetMapping("/cart/myCart")
 	public void myCart(@AuthenticationPrincipal Member member, Model model) {
-		String userId = member.getId();
-		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
-		log.debug("cartList = {}", productInCartList);
-		
-		int accumulationRate = customerService.selectUserAccumulationRate(userId);
-
-		int accAmountAll = calculateAccumulateAmount(productInCartList, accumulationRate);
-		
-		log.debug("accAmountAll = {}", accAmountAll);
-		
-		
-		Map<String, Integer> returnMap = calculateAmount(productInCartList);
-		int ogp = returnMap.get("ogp");
-		int dcp = returnMap.get("dcp");
-		
-		Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
-		log.debug("userAddress = {}", addressMap);
-		
-		model.addAttribute("cartList", productInCartList);
-		model.addAttribute("ogp", ogp);
-		model.addAttribute("dcp", dcp);
-		model.addAttribute("acp", accAmountAll);
-		model.addAttribute("address", addressMap);
+		if(member != null) {
+			String userId = member.getId();
+			List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
+			log.debug("cartList = {}", productInCartList);
+			
+			int accumulationRate = customerService.selectUserAccumulationRate(userId);
+			
+			int accAmountAll = calculateAccumulateAmount(productInCartList, accumulationRate);
+			
+			log.debug("accAmountAll = {}", accAmountAll);
+			
+			
+			Map<String, Integer> returnMap = calculateAmount(productInCartList);
+			int ogp = returnMap.get("ogp");
+			int dcp = returnMap.get("dcp");
+			
+			Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
+			log.debug("userAddress = {}", addressMap);
+			
+			model.addAttribute("cartList", productInCartList);
+			model.addAttribute("ogp", ogp);
+			model.addAttribute("dcp", dcp);
+			model.addAttribute("acp", accAmountAll);
+			model.addAttribute("address", addressMap);			
+		}
 		
 	}
 	

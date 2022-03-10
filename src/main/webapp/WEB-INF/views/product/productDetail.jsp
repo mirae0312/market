@@ -9,6 +9,8 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="상세페이지" name="title"/>
 </jsp:include>
+
+<sec:authentication property="principal" var="loginMember"/>
 	<h1>상품상세화면입니다.</h1>
 	
 	<span>${product.title }</span>
@@ -16,22 +18,31 @@
 	<span>${product.subTitle }</span>
 	<hr />
 	<br />
-	<span><fmt:formatNumber type="number" pattern="#########" value="${product.price/100 * (100 - product.discountRate)} "/>원</span>
-	<span>할인율 : ${product.discountRate }%</span>
-	<br />
+	<sec:authorize access="isAuthenticated()">
+		<span><fmt:formatNumber type="number" pattern="#########" value="${product.price/100 * (100 - product.discountRate)} "/>원</span>
+		<span>할인율 : ${product.discountRate }%</span>
+		<br />
+	</sec:authorize>
 	<span>원 금액 : ${product.price }</span>
 	<br />
-	<span>
-		<c:if test="${product.accumulationStatus.equals('Y') }">
-			적립 ${acRate }% 
-			<span> 
-				개당 ${accAmount }원 적립
-			</span>
-		</c:if>
-		<c:if test="${product.accumulationStatus.equals('N') }">
-			적립불가
-		</c:if>
-	</span>
+	<sec:authorize access="isAuthenticated()">
+		<span>
+			<c:if test="${product.accumulationStatus.equals('Y') }">
+				적립 ${acRate }% 
+				<span> 
+					개당 ${accAmount }원 적립
+				</span>
+			</c:if>
+			<c:if test="${product.accumulationStatus.equals('N') }">
+				적립불가
+			</c:if>
+		</span>
+	</sec:authorize>
+	<sec:authorize access="isAnonymous()">
+		<span>
+			로그인 후, 적립혜택이 제공됩니다.
+		</span>
+	</sec:authorize>
 	<hr />
 	<br />
 	<c:if test="${product.salesUnit != null }">
@@ -92,10 +103,18 @@
 	<hr />
 	<span>
 		총 상품금액 : 
-		<span id="finalPrice">
-		<fmt:formatNumber type="number" pattern="########" value="${product.price/100 * (100 - product.discountRate)} "/>
-		원
-		</span>
+		<sec:authorize access="isAuthenticated()">
+			<span id="finalPrice">
+			<fmt:formatNumber type="number" pattern="########" value="${product.price/100 * (100 - product.discountRate)} "/>
+			원
+			</span>
+		</sec:authorize>
+		<sec:authorize access="isAnonymous()">
+			<span id="finalPrice">
+			<fmt:formatNumber type="number" pattern="########" value="${product.price/1} "/>
+			원
+			</span>
+		</sec:authorize>
 	</span>
 	<br />
 	<br />
@@ -122,6 +141,11 @@
 		
 		/* 장바구니 담기 스크립트 */
 		$("#addCart").click((e) => {
+			<sec:authorize access="isAnonymous()">
+				alert("로그인 후 이용 가능합니다.");
+				return false;
+			</sec:authorize>
+			
 			const pcode = '${product.pcode}';
 			const count = $("#pdtCount").val();
 			$.ajax({
