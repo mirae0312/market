@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.market.customerService.model.service.CustomerServiceService;
 import com.project.market.product.model.service.ProductService;
 import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
@@ -28,6 +29,9 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private CustomerServiceService customerService;
 	
 	
 	@GetMapping("/productList")
@@ -56,9 +60,14 @@ public class ProductController {
 		int ogp = returnMap.get("ogp");
 		int dcp = returnMap.get("dcp");
 		
+		Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
+		log.debug("userAddress = {}", addressMap);
+		
 		model.addAttribute("cartList", productInCartList);
 		model.addAttribute("ogp", ogp);
 		model.addAttribute("dcp", dcp);
+		model.addAttribute("address", addressMap);
+		
 	}
 	
 	@PostMapping("/addCart")

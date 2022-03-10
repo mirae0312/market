@@ -29,4 +29,6 @@ public interface CustomerServiceDao {
     void deleteAttachments(Map<String, Object> boardCode);
 
     void updateAnnouncement(Announcement announcement);
+
+	Map<String, Object> selectUserDefaultAddress(String userId);
 }
