@@ -148,9 +148,6 @@ display: block;
 margin-top: 18px;
 }
 </style>
-</head>
-
-<body>
     <div class="find_pwd">
         <div class="find_pwd_title">비밀번호 찾기</div>
         <div class="find_pwd_container">

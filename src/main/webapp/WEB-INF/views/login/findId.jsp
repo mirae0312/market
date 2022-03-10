@@ -9,26 +9,26 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="마켓" name="title"/>
 </jsp:include>
-    <style>
-        .find_id{
-            padding: 50px 0;
-            background-color: white;
-        }
-        .find_id_title{
-            padding-bottom: 30px;
+<style>
+.find_id{
+     padding: 50px 0;
+     background-color: white;
+}
+.find_id_title{
+    padding-bottom: 30px;
     font-weight: 500;
     font-size: 28px;
     text-align: center;
-        }
-        .find_id_container{
-            max-width: 400px;
+}
+.find_id_container{
+    max-width: 400px;
     padding: 0 10px 6px 10px;
     margin: auto;
     position: relative;
     background-color: white;
-        }
-        .select_div{
-            background-color: white;
+}
+.select_div{
+    background-color: white;
     padding: 0 15px 0 15px;
     margin: 0;
     box-shadow: inset 0 -0.5px 0 0 #ddd;
@@ -41,9 +41,9 @@
     -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
     text-align: center;
-        }
-    .phone_btn{
-        display: block;
+}
+.phone_btn{
+    display: block;
     -webkit-box-flex: 1;
     -webkit-flex-grow: 1;
     -ms-flex-positive: 1;
@@ -148,9 +148,6 @@ display: block;
 margin-top: 18px;
 }
     </style>
-</head>
-
-<body>
     <div class="find_id">
         <div class="find_id_title">아이디 찾기</div>
         <div class="find_id_container">
