@@ -159,6 +159,21 @@
 	</tbody>
 </table>
 
+<br /><br />
+<span>배송지</span>
+<br />
+<span>
+	${address.ADDRESS },
+	${address.DETAIL_ADDRESS }
+</span>
+<br />
+<span>
+	${address.DELIVERY_TYPE }
+</span>
+<br />
+<input type="button" value="배송지 변경" id="changeAddress" />
+<br /><br />
+
 <span>상품금액</span>
 <br />
 <input type="text" name="" id="allAmount" value="${ogp }"/>
@@ -174,21 +189,13 @@
 <span>결제예정금액</span>
 <br />
 <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"/>
-
+<br />
+<span>구매 시 ${acp } 원 적립</span>
 
 <br /><br />
 <input type="button" value="주문하기" id="reqOrder" />
 
 <script>
-	/* 다중삭제 */
-	$("#deleteMultiCart").click((e) => {
-		let deleteArr = [];
-		$("[name = pdtChkBox]:checked").each(function(i, e) {
-			deleteArr.push($(e).data('check-val'));
-		});
-		
-		deleteCart(deleteArr);
-	});
 	
 	$(() => {
 		let bool = $("#fTable tbody").find('tr').length;
@@ -208,7 +215,6 @@
 		countCheckBoxs();
 	});
 	
-	
 	/* 장바구니 삭제하기 */
 	$(".deleteBtn").click((e) => {
 		if(!confirm('삭제하시겠습니까?')){
@@ -219,6 +225,16 @@
 		pcode.push($(e.target).data('delete-code'));
 		
 		deleteCart(pcode);
+	});
+	
+	/* 다중삭제 */
+	$("#deleteMultiCart").click((e) => {
+		let deleteArr = [];
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			deleteArr.push($(e).data('check-val'));
+		});
+		
+		deleteCart(deleteArr);
 	});
 	
 	/* 장바구니 삭제 ajax */
@@ -247,7 +263,15 @@
 			pdtArr.push($(e).data('check-val'));
 		});
 		
-		console.log(pdtArr);
+		console.log(pdtArr == '');
+		
+		if(pdtArr == ''){
+			alert('선택된 상품이 없습니다. \n상품을 선택해 주세요.');
+		} else{
+			location.href = `${pageContext.request.contextPath}/purchase/orderPage?orderArr=\${pdtArr}`;
+		}
+		
+		
 	});
 	
 	/* 체크박스 전체선택 / 해제 */

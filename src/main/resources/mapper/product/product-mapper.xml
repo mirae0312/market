@@ -38,7 +38,8 @@
 		    i.*,
 		    b.title "brandTitle",
 		    b.sub_title "brandSubTitle",
-		    b.content "brandContent"
+		    b.content "brandContent",
+		    pp.accumulation_status
 		from
 		    mk_product p inner join mk_product_info i
 		    on p.p_code = i.p_code
@@ -73,6 +74,7 @@
 		    i.title,
 		    b.title "BRANDTITLE",
 		    p.price,
+		    p.accumulation_status,
 		    d.discount_rate,
 		    s.tem_code,
 		    s.tem_name

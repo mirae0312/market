@@ -61,4 +61,47 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     public int countAllAnnouncement() {
         return customerServiceDao.countAllAnnouncement();
     }
+
+    @Override
+    public List<Attachment> selectAllAttachments(Map<String, Object> boardCode) {
+        return customerServiceDao.selectAllAttachments(boardCode);
+    }
+
+    @Override
+    public void deleteAnnouncement(Map<String, Object> boardCode) {
+        customerServiceDao.deleteAttachments(boardCode);
+        customerServiceDao.deleteAnnouncement(boardCode);
+    }
+
+    @Override
+    public void modifyAnnouncement(Announcement announcement) {
+        customerServiceDao.updateAnnouncement(announcement);
+        if(!announcement.getAttachments().isEmpty()){
+            List<Attachment> attachments = announcement.getAttachments();
+            if(attachments != null){
+                for(Attachment attach : attachments){
+                    attach.setCode(announcement.getAnCode());
+                    insertAttachment(attach);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void deleteAttachments(Map<String, Object> boardCode) {
+        customerServiceDao.deleteAttachments(boardCode);
+    }
+
+	@Override
+	public Map<String, Object> selectUserDefaultAddress(String userId) {
+		return customerServiceDao.selectUserDefaultAddress(userId);
+	}
+
+	@Override
+	public int selectUserAccumulationRate(String userId) {
+		return customerServiceDao.selectUserAccumulationRate(userId);
+	}
+
+    
+    
 }

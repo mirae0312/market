@@ -24,6 +24,7 @@ public class Announcement implements Serializable {
     private Date regDate;
     private int readCount;
     private String content;
+    private String announce;
     private List<Attachment> attachments;
 
 }

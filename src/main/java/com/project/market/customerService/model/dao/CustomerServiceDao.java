@@ -23,4 +23,14 @@ public interface CustomerServiceDao {
     int countAllAnnouncement();
 
     void insertAttachment(Attachment attach);
+
+    void deleteAnnouncement(Map<String, Object> boardCode);
+
+    void deleteAttachments(Map<String, Object> boardCode);
+
+    void updateAnnouncement(Announcement announcement);
+
+	Map<String, Object> selectUserDefaultAddress(String userId);
+
+	int selectUserAccumulationRate(String userId);
 }

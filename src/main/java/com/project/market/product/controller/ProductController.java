@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.market.customerService.model.service.CustomerServiceService;
 import com.project.market.product.model.service.ProductService;
 import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
@@ -29,6 +30,9 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
+	@Autowired
+	private CustomerServiceService customerService;
+	
 	
 	@GetMapping("/productList")
 	public void productList(Product product, Model model) {
@@ -39,11 +43,21 @@ public class ProductController {
 	}
 	
 	@GetMapping("/productDetail")
-	public void productDetail(@RequestParam String pcode, Model model) {
+	public void productDetail(@RequestParam String pcode, Model model, @AuthenticationPrincipal Member member) {
 		Product pdt = productService.selectProductDetail(pcode);
 		log.debug("product = {}", pdt);
 		
+		String userId = member.getId();
+		
+		int accumulationRate = customerService.selectUserAccumulationRate(userId);
+		
+		int dcPrice = pdt.getPrice()/100 * (100 - pdt.getDiscountRate());
+		int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);
+		
 		model.addAttribute("product", pdt);
+		model.addAttribute("acRate", accumulationRate);
+		model.addAttribute("dcPrice", dcPrice);
+		model.addAttribute("accAmount", accAmount);
 	}
 	
 	@GetMapping("/cart/cart")
@@ -55,13 +69,26 @@ public class ProductController {
 		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
 		log.debug("cartList = {}", productInCartList);
 		
+		int accumulationRate = customerService.selectUserAccumulationRate(userId);
+
+		int accAmountAll = calculateAccumulateAmount(productInCartList, accumulationRate);
+		
+		log.debug("accAmountAll = {}", accAmountAll);
+		
+		
 		Map<String, Integer> returnMap = calculateAmount(productInCartList);
 		int ogp = returnMap.get("ogp");
 		int dcp = returnMap.get("dcp");
 		
+		Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
+		log.debug("userAddress = {}", addressMap);
+		
 		model.addAttribute("cartList", productInCartList);
 		model.addAttribute("ogp", ogp);
 		model.addAttribute("dcp", dcp);
+		model.addAttribute("acp", accAmountAll);
+		model.addAttribute("address", addressMap);
+		
 	}
 	
 	@PostMapping("/addCart")
@@ -140,6 +167,7 @@ public class ProductController {
 		int ogp = 0;
 		int dcp = 0;
 		for(Map<String, Object> pdt : list) {
+			log.debug("pdt = {}", pdt);
 			int count = Integer.parseInt(String.valueOf(pdt.get("COUNT")));
 			int og = Integer.parseInt(String.valueOf(pdt.get("PRICE")));
 			ogp += og * count;
@@ -155,5 +183,26 @@ public class ProductController {
 		map.put("dcp", dcp);
 		
 		return map;
+	}
+	
+	public int calculateAccumulateAmount(List<Map<String, Object>> pdtList, int accumulationRate) {
+		int accAmountAll = 0;
+		for(Map<String, Object> list : pdtList) {
+			if(String.valueOf(list.get("ACCUMULATION_STATUS")).equals("Y")) {				
+				int price = Integer.parseInt(String.valueOf(list.get("PRICE")));
+				int count = Integer.parseInt(String.valueOf(list.get("COUNT")));
+				if(list.get("DISCOUNT_RATE") != null) {
+					int dcRate = Integer.parseInt(String.valueOf(list.get("DISCOUNT_RATE")));
+					int dcPrice = price/100 * (100 - dcRate) * count;
+					int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);
+					accAmountAll += accAmount;					
+				} else {
+					int accAmount = (int) Math.ceil(price / 100 * accumulationRate * count);
+					accAmountAll += accAmount;
+				}
+			}
+		}
+		
+		return accAmountAll;
 	}
 }
