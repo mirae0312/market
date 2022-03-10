@@ -27,4 +27,6 @@ public interface CustomerServiceService {
     void modifyAnnouncement(Announcement announcement);
 
     void deleteAttachments(Map<String, Object> boardCode);
+
+	Map<String, Object> selectUserDefaultAddress(String userId);
 }
