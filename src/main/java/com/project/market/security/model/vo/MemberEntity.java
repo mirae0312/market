@@ -29,5 +29,6 @@ public class MemberEntity implements Serializable {
 	private String recommender;
 	private boolean enabled;	
 	private Date regDate;
+	private LoginType loginType;
 
 }
