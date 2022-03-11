@@ -16,7 +16,7 @@
 </head>
 <body>
 <h1>장바구니</h1>
-<input type="checkbox" name="checkBoxController" id="" /><label for="checkBoxController">전체 선택(<span id="checkBoxNoti"></span>)</label>
+<input type="checkbox" name="checkBoxController" id="" checked/><label for="checkBoxController">전체 선택(<span id="checkBoxNoti"></span>)</label>
 <input type="button" value="선택삭제" id="deleteMultiCart"/>
 <table id="fTable">
 	<thead>
@@ -229,6 +229,9 @@
 			$("#iTable thead th").append('상온상품');
 		}
 		
+		/* 체크박스 기본 선택 */
+		$("[name = pdtChkBox]").prop('checked', true);
+		
 		countCheckBoxs();
 	});
 	
@@ -280,15 +283,11 @@
 			pdtArr.push($(e).data('check-val'));
 		});
 		
-		console.log(pdtArr == '');
-		
 		if(pdtArr == ''){
 			alert('선택된 상품이 없습니다. \n상품을 선택해 주세요.');
 		} else{
 			location.href = `${pageContext.request.contextPath}/purchase/orderPage?orderArr=\${pdtArr}`;
-		}
-		
-		
+		};
 	});
 	
 	/* 체크박스 전체선택 / 해제 */
@@ -302,7 +301,12 @@
 		countCheckBoxs();
 	});
 	
+	/* 개별 체크박스 클릭 시 */
 	$("[name = pdtChkBox]").click((e) => {
+		/* 일부 상품 해제 시 전체 선택 체크 풀리게 */
+		if($(e.target).prop('checked') == false){
+			$("[name = checkBoxController]").prop('checked', false);
+		}
 		countCheckBoxs();
 	});
 	
@@ -319,6 +323,9 @@
 		});
 		
 		$("#checkBoxNoti").text(`\${checkedBoxs}/\${countBoxs}`);
+		
+		/* 체크박스 카운트 시 금액영역 변경 */
+		getAmount();
 	};
 	
 	
@@ -348,15 +355,30 @@
 
 	/* 전체 금액/할인금액 불러오는 함수 */
 	function getAmount(){
-		$.ajax({
-			url : '${pageContext.request.contextPath}/product/cart/getPurchaseAmount',
-			success(res){
-				$("#allAmount").val(res.ogp);
-				$("#dcAmount").val(res.dcp);
-				$("#purchaseAmount").val(res.ogp - res.dcp);
-			},
-			error: console.log
-		});		
+		let checkedArr = [];
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			checkedArr.push($(e).data('check-val'));
+		});
+		
+		if(checkedArr.length != 0){
+			$.ajax({
+				url : '${pageContext.request.contextPath}/product/cart/getPurchaseAmount',
+				data : {
+					checkedArr
+				},
+				success(res){
+					$("#allAmount").val(res.ogp);
+					$("#dcAmount").val(res.dcp);
+					$("#purchaseAmount").val(res.ogp - res.dcp);
+				},
+				error: console.log
+			});					
+		} else {
+			$("#allAmount").val(0);
+			$("#dcAmount").val(0);
+			$("#purchaseAmount").val(0);
+		}
+		
 	};
 	
 	/* 개별 상품 금액 불러오는 함수 */
@@ -377,7 +399,6 @@
 			error: console.log
 		});
 	};
-
 
 	$(".minusBtn").click((e) => {
 		let targetId = $(e.target).data('pdt-id');
