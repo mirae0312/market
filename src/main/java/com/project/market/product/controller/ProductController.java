@@ -1,5 +1,6 @@
 package com.project.market.product.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,15 +77,11 @@ public class ProductController {
 			
 			int accAmountAll = calculateAccumulateAmount(productInCartList, accumulationRate);
 			
-			log.debug("accAmountAll = {}", accAmountAll);
-			
-			
 			Map<String, Integer> returnMap = calculateAmount(productInCartList);
 			int ogp = returnMap.get("ogp");
 			int dcp = returnMap.get("dcp");
 			
 			Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
-			log.debug("userAddress = {}", addressMap);
 			
 			model.addAttribute("cartList", productInCartList);
 			model.addAttribute("ogp", ogp);
@@ -97,7 +94,6 @@ public class ProductController {
 	
 	@PostMapping("/addCart")
 	public ResponseEntity<?> addCart(@RequestParam String pcode, @RequestParam int count, @AuthenticationPrincipal Member member){
-		log.debug("addCart pcode, count = {}, {}", pcode, count);
 		Map<String, Object> cartInfo = new HashMap<>();
 		cartInfo.put("pcode", pcode);
 		cartInfo.put("count", count);
@@ -110,7 +106,6 @@ public class ProductController {
 	
 	@DeleteMapping("/cart/deleteCart")
 	public ResponseEntity<?> deleteCart(@RequestParam(value="deleteArr[]") List<String> deleteArr, @AuthenticationPrincipal Member member){
-		log.debug("deletePcode = {}", deleteArr);
 		String userId = member.getId();
 		
 		Map<String, Object> param = new HashMap<>();
@@ -123,13 +118,27 @@ public class ProductController {
 	}
 	
 	@GetMapping("/cart/getPurchaseAmount")
-	public ResponseEntity<?> getPurchaseAmount(@AuthenticationPrincipal Member member){
+	public ResponseEntity<?> getPurchaseAmount(@RequestParam(value="checkedArr[]") List<String> checkedArr, @AuthenticationPrincipal Member member){
 		String userId = member.getId();
-		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
+		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);		
+		List<Map<String, Object>> checkedCartList = new ArrayList<>();
 		
-		Map<String, Integer> returnMap = calculateAmount(productInCartList);
+		for(Map<String, Object> cart : productInCartList) {
+			String cartCode = String.valueOf(cart.get("P_CODE"));
+			
+			for(String code : checkedArr) {
+				if(cartCode.equals(code)) {
+					checkedCartList.add(cart);
+				}
+			}
+		}	
 		
-		log.debug("returnMap = {}", returnMap);
+		Map<String, Integer> returnMap = calculateAmount(checkedCartList);
+		
+		int accumulationRate = customerService.selectUserAccumulationRate(userId);
+		int accAmountAll = calculateAccumulateAmount(checkedCartList, accumulationRate);
+		
+		returnMap.put("acp", accAmountAll);
 		
 		return ResponseEntity.ok(returnMap);
 	}
@@ -143,8 +152,6 @@ public class ProductController {
 		param.put("userId", userId);
 		
 		Map<String, Object> cart = productService.selectOneProductInCart(param);
-		
-		log.debug("cart = {}", cart);
 		
 		int dcp = 0;
 		int ogp = 0;
