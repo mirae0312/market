@@ -413,7 +413,7 @@ border-radius: 12px;
 		const $phoneCheck = $(".code_num");
 		
 		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			url: "${pageContext.request.contextPath}/join/checkPhone,
 			data:{
 				type: type,
 				phone: phone
