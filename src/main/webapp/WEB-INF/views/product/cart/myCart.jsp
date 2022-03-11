@@ -202,7 +202,7 @@
 <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"/>
 <br />
 <sec:authorize access="isAuthenticated()">
-<span>구매 시 ${acp } 원 적립</span>
+<span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
 </sec:authorize>
 <br /><br />
 <c:if test="${cartList != null }">
@@ -370,6 +370,7 @@
 					$("#allAmount").val(res.ogp);
 					$("#dcAmount").val(res.dcp);
 					$("#purchaseAmount").val(res.ogp - res.dcp);
+					$("#accumulateAmount").text(res.acp);
 				},
 				error: console.log
 			});					
@@ -377,8 +378,8 @@
 			$("#allAmount").val(0);
 			$("#dcAmount").val(0);
 			$("#purchaseAmount").val(0);
+			$("#accumulateAmount").text(0);
 		}
-		
 	};
 	
 	/* 개별 상품 금액 불러오는 함수 */

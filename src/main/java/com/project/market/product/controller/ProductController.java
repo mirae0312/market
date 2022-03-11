@@ -135,6 +135,11 @@ public class ProductController {
 		
 		Map<String, Integer> returnMap = calculateAmount(checkedCartList);
 		
+		int accumulationRate = customerService.selectUserAccumulationRate(userId);
+		int accAmountAll = calculateAccumulateAmount(checkedCartList, accumulationRate);
+		
+		returnMap.put("acp", accAmountAll);
+		
 		return ResponseEntity.ok(returnMap);
 	}
 	
