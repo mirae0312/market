@@ -24,13 +24,11 @@ public class Member extends MemberEntity implements Serializable, UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private List<SimpleGrantedAuthority> authorities;	
-	
+	private List<SimpleGrantedAuthority> authorities;
+
 	@Builder
-	public Member(String id, String password, String name, String email, String phone, String gender, Date birthday,
-			String recommender, boolean enabled, Date regDate, List<SimpleGrantedAuthority> authorities) {
-		super(id, password, name, email, phone, gender, birthday, recommender, enabled, regDate);
-		this.authorities = authorities;
+	public Member(String id, String password, String name, String email, String phone, String gender, Date birthday, String recommender, boolean enabled, Date regDate, LoginType loginType) {
+		super(id, password, name, email, phone, gender, birthday, recommender, enabled, regDate, loginType);
 	}
 
 	@Override
