@@ -117,7 +117,7 @@ border-radius: 12px;
         <div id="content">
             <div class="page_aticle">
                 <div class="type_form member_join ">
-                    <form id="join_form">
+                    <form id="join_form" action="${pageContext.request.contextPath}/join/join" method="POST">
                         <p class="page_sub"><span class="ico">*</span>필수입력사항</p>
                         <table class="tbl_comm">
                             <tbody>
@@ -327,6 +327,8 @@ border-radius: 12px;
                                 </tr>
                             </tbody>
                         </table>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type="hidden" name="loginType" value="D"/>
                         <div id="formSubmit" class="form_footer">
                             <button type="submit" class="btn active" id="join_btn" >가입하기</button>
                         </div>

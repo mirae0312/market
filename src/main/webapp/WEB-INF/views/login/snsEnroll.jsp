@@ -264,7 +264,6 @@ border-radius: 12px;
                                 </tr>
                             </tbody>
                         </table>
-                        ${userInfo.nickname}
                         <c:if test="${userInfo.type eq 'kakao'}">
                         	<input type="hidden" name="id" value="${userInfo.id}"/>
 							<input type="hidden" name="password" value="${userInfo.password}"/>
@@ -279,87 +278,6 @@ border-radius: 12px;
             </div>
         </div>
     </div>
-<script>
-
-	/* $(".id-btn").click((e) => {
-		const type = "id";
-		const id = $("#id").val();
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkDuplicate",
-			data:{
-				type: type,
-				id: id
-			},
-			success(resp){
-				console.log(resp);
-				const {available} = resp;
-				
-				if(available){
-					alert("이 아이디는 사용가능합니다.");
-				}
-				else{
-					alert("이미 존재하는 아이디입니다.");
-				}
-			},
-			error: console.log
-		});
-	}); */
-	
-	/* $(".email-btn").click((e) => {
-		const type = "email";
-		const email = $("#email").val();
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkDuplicate",
-			data:{
-				type: type,
-				email: email
-			},
-			success(resp){
-				console.log(resp);
-				const {available} = resp;
-				
-				if(available){
-					alert("사용가능한 이메일입니다.");
-				}
-				else{
-					alert("이미 가입한 이메일입니다.");
-				}
-			},
-			error: console.log
-		});
-	}); */
-	
-	/* $(".phone-btn").click((e) => {
-		const type = "phone";
-		const phone = $("#phone").val();
-
-		const $phoneCheck = $(".code_num");
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkPhone",
-			data:{
-				type: type,
-				phone: phone
-			},
-			success(resp){
-				console.log(resp);
-				const {available} = resp;
-				
-				if(available){
-					alert("인증번호가 발송되었습니다.");
-					$phoneCheck.show();
-				}
-				else{
-					alert("이미 가입한 전화번호입니다.");
-				}
-			},
-			error: console.log
-		});
-	}); */
-	
-</script>
 <script>
 function selectAll(selectAll)  {
 	  const checkboxes 
