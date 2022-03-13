@@ -173,6 +173,10 @@ padding-left: 6px;
     line-height: 24px;
     text-align: right;
 }
+.address-wrapper::after{
+	content: "";
+	clear: both;
+}
 </style>
 <div class="title">
    <h2>장바구니</h2>
@@ -380,7 +384,7 @@ padding-left: 6px;
          <input type="button" value="상품을 담아주세요" disabled />
       </c:if>
    </div>
-
+	<div class="test" style="clear: both;"></div>
 </div>
 
 <script>

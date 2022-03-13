@@ -30,6 +30,10 @@ public class JoinController {
     @GetMapping("/join2")
     public void join2(){}
 
+
+	@GetMapping("/findAddress")
+	public void findAddress() {}
+	
     @Autowired
     private JoinService joinService;
 
