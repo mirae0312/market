@@ -179,14 +179,10 @@ padding-left: 6px;
 </div>
 <div class="mycart-container">
    <div class="mycart-wrapper">
-   
-      <!-- <input type="checkbox" name="checkBoxController" id="" /><label for="checkBoxController">전체 선택(<span id="checkBoxNoti"></span>)</label>
-   <input type="button" value="선택삭제" id="deleteMultiCart"/> -->
       <div class="cart_select">
          <div class="inner_select">
-            <label class="check"><input type="checkbox" name="checkAll" 
-               onclick='selectAll(this)'><span class="ico"></span>전체선택 (<span id="checkBoxNoti"></span>)</label><a
-               href="#none" class="btn_delete">선택삭제</a>
+            <label class="check"><input type="checkbox" name="checkBoxController" checked><span class="ico"></span>전체선택 (<span id="checkBoxNoti"></span>)</label><a
+               href="#none" class="btn_delete" id="deleteMultiCart">선택삭제</a>
          </div>
       </div>
       <br />
@@ -367,7 +363,7 @@ padding-left: 6px;
       <br />
       <!-- 로그인했을시 적립 포인트  -->
       <sec:authorize access="isAuthenticated()">
-         <span>구매 시 ${acp } 원 적립</span>
+         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
       </sec:authorize>
       <br />
       <br />
@@ -384,228 +380,211 @@ padding-left: 6px;
 </div>
 
 <script>
-   
-   $(() => {
-      let bool = $("#fTable tbody").find('tr').length;
-      let bool2 = $("#rTable tbody").find('tr').length;
-      let bool3 = $("#iTable tbody").find('tr').length;
-      
-      if(bool != 0){
-         $("#fTable thead tr").append('<th colspan="6"></th>');
-         $("#fTable thead th").append('냉동상품');
-         $("#fTable thead th").append('<span class="ico"></span>');
-      }
-      if(bool2 != 0){
-         $("#rTable thead tr").append('<th colspan="6"></th>');
-         $("#rTable thead th").append('냉장상품');
-         $("#rTable thead th").append('<span class="ico"></span>');
-      }
-      if(bool3 != 0){
-         $("#iTable thead tr").append('<th colspan="6"></th>');
-         $("#iTable thead th").append('상온상품');
-         $("#iTable thead th").append('<span class="ico"></span>');
-      }
-      
-      countCheckBoxs();
-      
-      
-   });
-   
-   /* 장바구니 삭제하기 */
-   $(".deleteBtn").click((e) => {
-      if(!confirm('삭제하시겠습니까?')){
-         return false;
-      }
-      
-      let pcode = []; 
-      pcode.push($(e.target).data('delete-code'));
-      
-      deleteCart(pcode);
-   });
-   
-   /* 다중삭제 */
-   $("#deleteMultiCart").click((e) => {
-      let deleteArr = [];
-      $("[name = pdtChkBox]:checked").each(function(i, e) {
-         deleteArr.push($(e).data('check-val'));
-      });
-      
-      deleteCart(deleteArr);
-   });
-   
-   /* 장바구니 삭제 ajax */
-   function deleteCart(deleteArr){
-      $.ajax({
-         url : '${pageContext.request.contextPath}/product/cart/deleteCart?${_csrf.parameterName}=${_csrf.token}',
-         data : {
-            deleteArr
-         },
-         method : 'DELETE',
-         success(res){
-            if(res != 0){
-               alert("삭제되었습니다.");
-               location.reload();
-            }
-         },
-         error: console.log
-      })
-   }
-
-   /* 주문하기 클릭 시 */
-   $("#reqOrder").click((e) => {
-      const pdtArr = [];
-      
-      $("[name = pdtChkBox]:checked").each(function(i, e) {
-         pdtArr.push($(e).data('check-val'));
-      });
-      
-      console.log(pdtArr == '');
-      
-      if(pdtArr == ''){
-         alert('선택된 상품이 없습니다. \n상품을 선택해 주세요.');
-      } else{
-         location.href = `${pageContext.request.contextPath}/purchase/orderPage?orderArr=\${pdtArr}`;
-      }
-      
-      
-   });
-   
-   /* 체크박스 전체선택 / 해제 */
-   $("[name = checkBoxController]").change((e) => {
-      if($(e.target).prop('checked') == true){
-         $("[name = pdtChkBox]").prop('checked', true);
-      } else {
-         $("[name = pdtChkBox]").prop('checked', false);
-      }
-      
-      countCheckBoxs();
-   });
-   
-   $("[name = pdtChkBox]").click((e) => {
-      countCheckBoxs();
-   });
-   
-   /* checkbox count */
-   function countCheckBoxs(){
-      let countBoxs = 0;
-      $("[name = pdtChkBox]").each(function(i, e) {
-         countBoxs += 1;
-      });
-      
-      let checkedBoxs = 0;
-      $("[name = pdtChkBox]:checked").each(function(i, e) {
-         checkedBoxs += 1;
-      });
-      
-      $("#checkBoxNoti").text(`\${checkedBoxs}/\${countBoxs}`);
-   };
-   
-   
-   /* 장바구니 - + 시 DB 반영 */
-   function applyCartUpdate(pcode, count){
-      $.ajax({
-         url : '${pageContext.request.contextPath}/product/addCart?${_csrf.parameterName}=${_csrf.token}',
-         method : 'POST',
-         data : {
-            pcode,
-            count
-         },
-         success(res){
-            if(res == 1){
-               alert("변경되었습니다.");
-               getProductAmount(pcode);
-            } else {
-               alert("변경되지 않았습니다.");
-            }
-         },
-         complete(){
-            getAmount()
-         },
-         error: console.log
-      });
-   };
-
-   /* 전체 금액/할인금액 불러오는 함수 */
-   function getAmount(){
-      $.ajax({
-         url : '${pageContext.request.contextPath}/product/cart/getPurchaseAmount',
-         success(res){
-            $("#allAmount").val(res.ogp);
-            $("#dcAmount").val(res.dcp);
-            $("#purchaseAmount").val(res.ogp - res.dcp);
-         },
-         error: console.log
-      });      
-   };
-   
-   /* 개별 상품 금액 불러오는 함수 */
-   function getProductAmount(pcode){
-      $.ajax({
-         url : '${pageContext.request.contextPath}/product/cart/getProductAmount',
-         data:{
-            pcode
-         },
-         success(res){
-            if(res.dcp != 0){
-               $(`#\${pcode}_amount`).text(`\${res.dcp} 원`);
-               $(`#\${pcode}_ogp`).text(`\${res.ogp} 원`);               
-            } else {
-               $(`#\${pcode}_ogp`).text(`\${res.ogp} 원`);
-            }
-         },
-         error: console.log
-      });
-   };
-
-
-   $(".minusBtn").click((e) => {
-      let targetId = $(e.target).data('pdt-id');
-      let targetVal = $(`#\${targetId}`).val();
-   
-      let changeCount = targetVal - 1;
-      if(targetVal != 1){
-         $(`#\${targetId}`).val(changeCount);
-      };
-      
-      applyCartUpdate(targetId, -1);
-   });
-   $(".plusBtn").click((e) => {
-      let targetId = $(e.target).data('pdt-id');
-      let targetVal = $(`#\${targetId}`).val() * 1;
-      
-      let changeCount = targetVal + 1;
-      
-      $(`#\${targetId}`).val(changeCount);      
-      
-      applyCartUpdate(targetId, 1);
-   });
-   function checkSelectAll()  {
-        // 전체 체크박스
-        const checkboxes 
-          = document.querySelectorAll('input[name="pdtChkBox"]');
-        // 선택된 체크박스
-        const checked 
-          = document.querySelectorAll('input[name="pdtChkBox"]:checked');
-        // select all 체크박스
-        const selectAll 
-          = document.querySelector('input[name="checkAll"]');
-        
-        if(checkboxes.length === checked.length)  {
-          selectAll.checked = true;
-        }else {
-          selectAll.checked = false;
-        }
-
-      }
-   function selectAll(selectAll)  {
-        const checkboxes 
-           = document.querySelectorAll('input[type="checkbox"]');
-        
-        checkboxes.forEach((checkbox) => {
-          checkbox.checked = selectAll.checked
-        })
-   }
+	
+	$(() => {
+		let bool = $("#fTable tbody").find('tr').length;
+		let bool2 = $("#rTable tbody").find('tr').length;
+		let bool3 = $("#iTable tbody").find('tr').length;
+		
+		if(bool != 0){
+			$("#fTable thead th").append('냉동상품');
+		}
+		if(bool2 != 0){
+			$("#rTable thead th").append('냉장상품');
+		}
+		if(bool3 != 0){
+			$("#iTable thead th").append('상온상품');
+		}
+		
+		/* 체크박스 기본 선택 */
+		$("[name = pdtChkBox]").prop('checked', true);
+		
+		countCheckBoxs();
+	});
+	
+	/* 장바구니 삭제하기 */
+	$(".deleteBtn").click((e) => {
+		if(!confirm('삭제하시겠습니까?')){
+			return false;
+		}
+		
+		let pcode = []; 
+		pcode.push($(e.target).data('delete-code'));
+		
+		deleteCart(pcode);
+	});
+	
+	/* 다중삭제 */
+	$("#deleteMultiCart").click((e) => {
+		let deleteArr = [];
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			deleteArr.push($(e).data('check-val'));
+		});
+		
+		deleteCart(deleteArr);
+	});
+	
+	/* 장바구니 삭제 ajax */
+	function deleteCart(deleteArr){
+		$.ajax({
+			url : '${pageContext.request.contextPath}/product/cart/deleteCart?${_csrf.parameterName}=${_csrf.token}',
+			data : {
+				deleteArr
+			},
+			method : 'DELETE',
+			success(res){
+				if(res != 0){
+					alert("삭제되었습니다.");
+					location.reload();
+				}
+			},
+			error: console.log
+		})
+	}
+	/* 주문하기 클릭 시 */
+	$("#reqOrder").click((e) => {
+		const pdtArr = [];
+		
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			pdtArr.push($(e).data('check-val'));
+		});
+		
+		if(pdtArr == ''){
+			alert('선택된 상품이 없습니다. \n상품을 선택해 주세요.');
+		} else{
+			location.href = `${pageContext.request.contextPath}/purchase/orderPage?orderArr=\${pdtArr}`;
+		};
+	});
+	
+	/* 체크박스 전체선택 / 해제 */
+	$("[name = checkBoxController]").change((e) => {
+		if($(e.target).prop('checked') == true){
+			$("[name = pdtChkBox]").prop('checked', true);
+		} else {
+			$("[name = pdtChkBox]").prop('checked', false);
+		}
+		
+		countCheckBoxs();
+	});
+	
+	/* 개별 체크박스 클릭 시 */
+	$("[name = pdtChkBox]").click((e) => {
+		/* 일부 상품 해제 시 전체 선택 체크 풀리게 */
+		if($(e.target).prop('checked') == false){
+			$("[name = checkBoxController]").prop('checked', false);
+		}
+		countCheckBoxs();
+	});
+	
+	/* checkbox count */
+	function countCheckBoxs(){
+		let countBoxs = 0;
+		$("[name = pdtChkBox]").each(function(i, e) {
+			countBoxs += 1;
+		});
+		
+		let checkedBoxs = 0;
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			checkedBoxs += 1;
+		});
+		
+		$("#checkBoxNoti").text(`\${checkedBoxs}/\${countBoxs}`);
+		
+		/* 체크박스 카운트 시 금액영역 변경 */
+		getAmount();
+	};
+	
+	
+	/* 장바구니 - + 시 DB 반영 */
+	function applyCartUpdate(pcode, count){
+		$.ajax({
+			url : '${pageContext.request.contextPath}/product/addCart?${_csrf.parameterName}=${_csrf.token}',
+			method : 'POST',
+			data : {
+				pcode,
+				count
+			},
+			success(res){
+				if(res == 1){
+					alert("변경되었습니다.");
+					getProductAmount(pcode);
+				} else {
+					alert("변경되지 않았습니다.");
+				}
+			},
+			complete(){
+				getAmount()
+			},
+			error: console.log
+		});
+	};
+	/* 전체 금액/할인금액 불러오는 함수 */
+	function getAmount(){
+		let checkedArr = [];
+		$("[name = pdtChkBox]:checked").each(function(i, e) {
+			checkedArr.push($(e).data('check-val'));
+		});
+		
+		if(checkedArr.length != 0){
+			$.ajax({
+				url : '${pageContext.request.contextPath}/product/cart/getPurchaseAmount',
+				data : {
+					checkedArr
+				},
+				success(res){
+					$("#allAmount").val(res.ogp);
+					$("#dcAmount").val(res.dcp);
+					$("#purchaseAmount").val(res.ogp - res.dcp);
+					$("#accumulateAmount").text(res.acp);
+				},
+				error: console.log
+			});					
+		} else {
+			$("#allAmount").val(0);
+			$("#dcAmount").val(0);
+			$("#purchaseAmount").val(0);
+			$("#accumulateAmount").text(0);
+		}
+	};
+	
+	/* 개별 상품 금액 불러오는 함수 */
+	function getProductAmount(pcode){
+		$.ajax({
+			url : '${pageContext.request.contextPath}/product/cart/getProductAmount',
+			data:{
+				pcode
+			},
+			success(res){
+				if(res.dcp != 0){
+					$(`#\${pcode}_amount`).text(`\${res.dcp} 원`);
+					$(`#\${pcode}_ogp`).text(`\${res.ogp} 원`);					
+				} else {
+					$(`#\${pcode}_ogp`).text(`\${res.ogp} 원`);
+				}
+			},
+			error: console.log
+		});
+	};
+	$(".minusBtn").click((e) => {
+		let targetId = $(e.target).data('pdt-id');
+		let targetVal = $(`#\${targetId}`).val();
+	
+		let changeCount = targetVal - 1;
+		if(targetVal != 1){
+			$(`#\${targetId}`).val(changeCount);
+		};
+		
+		applyCartUpdate(targetId, -1);
+	});
+	$(".plusBtn").click((e) => {
+		let targetId = $(e.target).data('pdt-id');
+		let targetVal = $(`#\${targetId}`).val() * 1;
+		
+		let changeCount = targetVal + 1;
+		
+		$(`#\${targetId}`).val(changeCount);		
+		
+		applyCartUpdate(targetId, 1);
+	});
 </script>
     
-    
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
