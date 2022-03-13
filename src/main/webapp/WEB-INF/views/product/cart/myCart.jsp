@@ -331,19 +331,28 @@ padding-left: 6px;
       </div>
    </div>
    <div class="address-wrapper">
-      <span>배송지</span> <br /> <span> <!-- 배송지 있을때 --> <c:if
-            test="${address != null }">   
-         ${address.ADDRESS },
-         ${address.DETAIL_ADDRESS }
-      </c:if> <!-- 배송지 없을때 --> <c:if test="${address == null }">
+      <span>배송지</span> <br /> <span> 
+      
+      <!-- 배송지 있을때 --> 
+      <c:if test="${address != null }">   
+	      <div id="address">
+	      ${address.ADDRESS }
+	      </div>
+	      <div id="detailAddress">
+	      ${address.DETAIL_ADDRESS }
+	      </div>
+      </c:if> 
+      <!-- 배송지 없을때 --> 
+      <c:if test="${address == null }">
          배송지를 입력하고<br />
          배송유형을 확인해 보세요!
       </c:if>
-      </span> <br /> <span> <!-- 샛별배송~ --> ${address.DELIVERY_TYPE }
+      </span> <br /> <span> 
+      <!-- 샛별배송~ --> ${address.DELIVERY_TYPE }
       </span> <br />
       <!-- 로그인했을때 => 배송지변경 -->
       <sec:authorize access="isAuthenticated()">
-         <input type="button" value="배송지 변경" id="changeAddress" />
+         <input type="button" value="배송지 변경" id="changeAddress" onclick="findAddress()" />
       </sec:authorize>
    
       <!-- 로그인 x => 주소검색 -->
@@ -391,13 +400,19 @@ padding-left: 6px;
 		let bool3 = $("#iTable tbody").find('tr').length;
 		
 		if(bool != 0){
+			$("#fTable thead tr").append('<th colspan="6"></th>');
 			$("#fTable thead th").append('냉동상품');
+			$("#fTable thead th").append('<span class="ico"></span>');
 		}
 		if(bool2 != 0){
-			$("#rTable thead th").append('냉장상품');
+			$("#rTable thead tr").append('<th colspan="6"></th>');
+	        $("#rTable thead th").append('냉장상품');
+	        $("#rTable thead th").append('<span class="ico"></span>');
 		}
 		if(bool3 != 0){
-			$("#iTable thead th").append('상온상품');
+			$("#iTable thead tr").append('<th colspan="6"></th>');
+	        $("#iTable thead th").append('상온상품');
+	        $("#iTable thead th").append('<span class="ico"></span>');
 		}
 		
 		/* 체크박스 기본 선택 */
@@ -591,4 +606,3 @@ padding-left: 6px;
 		applyCartUpdate(targetId, 1);
 	});
 </script>
-    

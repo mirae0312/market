@@ -102,7 +102,7 @@
                                     <th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td class="field_address">
                                         <input type="text" id="postcode" placeholder="우편번호" value="06234">
-                                        <input type="button" id="addressNo" class="white-btn" onclick="findAddress()" value="주소검색"><br>
+                                        <input type="button" id="addressNo" class="white-btn" onclick="popup()" value="주소검색"><br>
 										<input type="text" id="address" placeholder="주소" value="서울 강남구 논현로85길 58"><br>
 										<input type="text" id="detailAddress" placeholder="상세주소" value="5층">
 										<input type="hidden" name="addAddress" class="form-control addAddress" required />
@@ -481,6 +481,8 @@ function selectAll(selectAll)  {
 		console.log($(".addAddress").val());
 	});
 </script>
+
+<!-- 다움 주소검색 API -->
 <script src="https://kit.fontawesome.com/4123702f4b.js" crossorigin="anonymous"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

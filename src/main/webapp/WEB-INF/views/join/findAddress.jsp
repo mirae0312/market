@@ -11,8 +11,8 @@
 <title>주소찾기</title>
 <iframe frameborder="0" title="카카오 주소찾기"
 	id="__daum__viewerFrame_1"
-	src="https://postcode.map.daum.net/search?origin=https%3A%2F%2Fwww.kurly.com&indaum=off&banner=on&ubl=on&mode=transmit&vt=layer&amr=on&amj=on&ani=off&sd=on&fi=on&fc=on&plrg=&plrgt=1.5&hmb=on&heb=on&asea=off&smh=off&zo=on&us=on&msi=5&ahs=off&whas=275&sm=on&a51=off&zn=Y&fullpath=%2Fshop%2Fproc%2Fpopup_address.php"
-	style="border: 0 none; margin: 0; width: 100%; height: 100%; min-width: 300px; overflow: hidden; padding: 0"></iframe>
+	src="http://postcode.map.daum.net/search?origin=http%3A%2F%2Flocalhost%3A10000&indaum=off&banner=on&ubl=on&mode=transmit&vt=popup&amr=on&amj=on&ani=off&sd=on&fi=on&fc=on&plrg=&plrgt=1.5&hmb=off&heb=off&asea=off&smh=off&zo=on&us=on&msi=10&ahs=off&whas=500&sm=on&a51=off&zn=Y&fullpath=%2Fmarket%2Fproduct%2Fcart%2FmyCart"
+	style="border: 0 none; margin: 0; width: 100%; height: 70%; min-width: 300px; overflow: hidden; padding: 0"></iframe>
 <div class="address_search" style="display: block;">
 	<div class="layer_prev">
 		<img
