@@ -19,7 +19,7 @@ public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
     private String qCode;
     private String title;
-    private QuestionCategory questionCategory;
+    private String questionCategory;
     private String pCode;
     private String writer;
     private String phone;
