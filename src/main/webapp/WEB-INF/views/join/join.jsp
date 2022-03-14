@@ -82,7 +82,7 @@
 									<div class="phone_num">
 										<input type="text" value="01021443418" pattern="[0-9]*"
 											name="phone" id="phone" placeholder="숫자만 입력해주세요">
-										<input type="hidden" name="phoneVal" id="phoneVal" value="0" /> <br />
+										<input type="hidden" name="phoneVal" id="phoneVal" value="0" />
 										<button type="button" class="white-btn phone-btn">인증번호
 											받기</button>
 									</div>
@@ -519,5 +519,18 @@
         }).open();
     }
 </script>
+<script>
+function noEvent() {
+    if (event.keyCode == 116) {
+        event.keyCode= 2;
+        return false;
+    }
+    else if(event.ctrlKey && (event.keyCode==78 || event.keyCode == 82))
+    {
+        return false;
+    }
+}
+document.onkeydown = noEvent;
 
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
