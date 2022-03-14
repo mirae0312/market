@@ -1,283 +1,250 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-	<jsp:param value="마켓" name="title"/>
+	<jsp:param value="마켓" name="title" />
 </jsp:include>
 <!-- join css -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/join/join.css" /> 
- <style>
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 3; /* Sit on top */
-  padding-top: 250px;
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-border-radius: 12px;
-    width: 440px;
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-.btn_agreement{
-	cursor: pointer;
-}
-.modal-header{
-    padding: 25px 25px 8px 30px;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 40px;
-    color: #333;
-    letter-spacing: -1px;
-}
-.guide{
-	display: none;
-	padding-top: 10px;
-}
-.ok{
-	color: #0f851a;
-}
-.ok:before{
-    content: '\2713';
-    display: inline-block;
-    padding: 0 4px 0 2px;
-    font-size: 12px;
-    vertical-align: 0;
-}
-.error, .limit{
-	color: #b3130b;
-}
-.error:before, .limit:before{
-    content: '\2715';
-    display: inline-block;
-    padding-right: 3px;
-    font-size: 12px;
-    vertical-align: 0;
-}
-
-/*타이머*/
-.member_join .field_phone .code_num .count_down {
-    position: absolute;
-    left: 216px;
-    top: 21px;
-    width: 100px;
-    font-size: 14px;
-    color: #b3130b;
-    line-height: 20px;
-    text-align: right;
-    letter-spacing: -.5px;
-}
-
-.member_join .field_phone .code_num {
-    position: relative;
-    padding-top: 10px;
-}
-.code_num{
-	display:none;
-}
- </style>
- 
-<body>
-    <div class="tit_page">
-        <h2 class="tit">${userInfo.type} 회원가입</h2>
-    </div>
-    <div id="main">
-        <div id="content">
-            <div class="page_aticle">
-                <div class="type_form member_join ">
-	                
-                    <form id="joinFrm" action="${pageContext.request.contextPath}/join/join" method="POST">
-                        <p class="page_sub"><span class="ico">*</span>필수입력사항</p>
-                        <table class="tbl_comm">
-                            <tbody>
-                                
-                                <tr>
-                                    <th>이름<span class="ico">*<span class="screen_out">필수항목</span></span></th>
-                                    <td>
-                                        <input type="text" name="name" value="희연" required="" fld_esssential="" label="이름"
-                                            placeholder="이름을 입력해주세요">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
-                                    <td class="field_address">
-                                        <input type="text" id="postcode" placeholder="우편번호" value="06234">
-                                        <input type="button" id="addressNo" class="white-btn" onclick="findAddress()" value="주소검색"><br>
-										<input type="text" id="address" placeholder="주소" value="서울 강남구 논현로85길 58"><br>
-										<input type="text" id="detailAddress" placeholder="상세주소" value="5층">
-										<input type="hidden" name="addAddress" class="form-control addAddress" required />
-										
-                                    </td>
-                                </tr>
-                                <tr class="select_gender">
-                                    <th>성별</th>
-                                    <td>
-                                        <label class="">
-                                            <input type="radio" name="gender" value="m">
-                                            <span class="ico"></span>남자
-                                        </label>
-                                        <label class="">
-                                            <input type="radio" name="gender" value="w" checked>
-                                            <span class="ico"></span>여자
-                                        </label>
-                                        <label class="checked">
-                                            <input type="radio" name="gender" value="n" >
-                                            <span class="ico"></span>선택안함
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr class="birth field_birth">
-                                    <th>생년월일</th>
-                                    <td>
-                                        <div class="birth_day">
-                                            <input type="text" name="birth_year" id="birth_year" pattern="[0-9]*"
-                                                value="" label="생년월일" size="4" maxlength="4" placeholder="YYYY">
-                                            <span class="bar"></span>
-                                            <input type="text" name="birth[]" id="birth_month" pattern="[0-9]*" value=""
-                                                label="생년월일" size="2" maxlength="2" placeholder="MM">
-                                            <span class="bar"></span>
-                                            <input type="text" name="birth[]" id="birth_day" pattern="[0-9]*" value=""
-                                                label="생년월일" size="2" maxlength="2" placeholder="DD">
-                                        </div>
-                                        <p class="txt_guide">
-                                            <span class="txt bad"></span>
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr class="route" id="selectRecommend">
-                                    <th>추가입력 사항</th>
-                                    <td>
-                                        <div class="group_radio">
-                                            <span class="radio_wrapper">
-                                                <label for="recommendId">
-                                                    <input type="radio" name="recommend" id="recommendId"
-                                                        label="추천인아이디">
-                                                    <span class="ico"></span>추천인 아이디
-                                                </label>
-                                            </span>
-                                        </div>
-                                        <div class="input_wrapper">
-                                            <input type="text" name="recommid" value="" class="inp"
-                                                placeholder="추천인 아이디를 입력해주세요.">
-                                            <p class="txt_guide">
-                                                <br>
-                                                가입 이후, 수정이 불가합니다.
-                                                <br>
-                                                대소문자 및 띄어쓰기에 유의해주세요.
-                                            </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="reg_agree">
-                                    <th>이용약관동의 <span class="ico">*<span class="screen_out">필수항목</span></span></th>
-                                    <td>
-                                        <div class="bg_dim"></div>
-                                        <div class="check">
-                                            <label class="check_agree label_all_check label_block">
-                                                <input type="checkbox" name="agree_allcheck" onclick='selectAll(this)'>
-                                                <span class="ico"></span>전체 동의합니다.
-                                            </label>
-                                            <p class="sub">선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</p>
-                                        </div>
-                                        <div class="check_view">
-                                            <label class="check_agree label_block">
-                                                <input type="checkbox" value="" name="agree" required="" label="이용약관">
-                                                <span class="ico"></span>이용약관 동의 <span class="sub">(필수)</span>
-                                            </label>
-                                            <a onclick="open_modal();" class="link btn_link btn_agreement">약관보기 </a>
-                                        </div> 
-                                        <!-- The Modal -->
-										<div id="modal_1" class="modal">
-										  <div class="modal-content">
-										    <div class="modal-header">
-										      <span class="close">&times;</span>
-										      <h4>개인정보 수집 이용 동의</h4>
-										    </div>
-										    <div class="modal-body">
-										      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab quod alias at perspiciatis consequatur cupiditate non veniam illo voluptatum ratione ex dolor inventore voluptas odit consequuntur a commodi quos sequi.</p>
-										      
-										    </div>
-										    <div class="modal-footer">
-										      <h3>확인</h3>
-										    </div>
-										  </div>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/join/join.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/login/snsEnroll.css" />
+<div class="tit_page">
+	<h2 class="tit">${userInfo.type}회원가입</h2>
+</div>
+<div id="main">
+	<div id="content">
+		<div class="page_aticle">
+			<div class="type_form member_join ">
+				<form id="joinFrm"
+					action="${pageContext.request.contextPath}/join/join" method="POST">
+					<p class="page_sub">
+						<span class="ico">*</span>필수입력사항
+					</p>
+					<table class="tbl_comm">
+						<tbody>
+							<c:if test="${userInfo.type eq 'naver' || 'google'}">
+								<tr>
+									<th>이름<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+									<td><input type="text" name="name"
+										value="${userInfo.name}" required="" fld_esssential=""
+										label="이름" readonly placeholder="이름을 입력해주세요"></td>
+								</tr>
+							</c:if>
+							<tr>
+								<th>이름<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+								<td><input type="text" name="name" value="희연" required=""
+									fld_esssential="" label="이름" placeholder="이름을 입력해주세요">
+								</td>
+							</tr>
+							<c:if test="${userInfo.type eq 'naver' || 'google'}">
+								<tr>
+									<th>이메일<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+									<td><input type="text" name="email" id="email"
+										value="${userInfo.email}" size="30" option="regEmail"
+										label="이메일" readonly> <input type="hidden"
+										name="chk_email" label="이메일중복체크">
+										<button type="button" class="white-btn email-btn">중복확인</button>
+									</td>
+								</tr>
+							</c:if>
+							<tr>
+								<th>이메일<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+								<td><input type="text" name="email" id="email"
+									value="sp5na92@gmail.com" size="30" option="regEmail"
+									label="이메일" placeholder="예: marketkurly@kurly.com"> <input
+									type="hidden" name="chk_email" label="이메일중복체크">
+									<button type="button" class="white-btn email-btn">중복확인</button>
+								</td>
+							</tr>
+							<c:if test="${userInfo.type eq 'naver'}">
+								<tr class="field_phone">
+									<th>휴대폰<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+									<td>
+										<div class="phone_num">
+											<input type="text" value="${userInfo.phone}" name="phone"
+												id="phone" readonly />
 										</div>
+									</td>
+								</tr>
+							</c:if>
+							<tr class="field_phone">
+								<th>휴대폰<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+								<td>
+									<div class="phone_num">
+										<input type="text" value="01021443418" pattern="[0-9]*"
+											name="phone" id="phone" placeholder="숫자만 입력해주세요">
+										<button type="button" class="white-btn phone-btn">인증번호
+											받기</button>
+									</div>
+									<div id="codeNum" class="code_num">
+										<input type="text" name="phone_code" id="phone_code" value=""
+											size="6" maxlength="6" pattern="[0-9]*"
+											placeholder="인증번호 숫자 6자리">
+										<button id="phone_confirm_btn" class="btn default"
+											type="button">인증번호 확인</button>
+										<p id="countdown" class="count_down"></p>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+								<td class="field_address"><input type="text" id="postcode"
+									placeholder="우편번호" value="06234"> <input type="button"
+									id="addressNo" class="white-btn" onclick="findAddress()"
+									value="주소검색"><br> <input type="text" id="address"
+									placeholder="주소" value="서울 강남구 논현로85길 58"><br> <input
+									type="text" id="detailAddress" placeholder="상세주소" value="5층">
+									<input type="hidden" name="addAddress"
+									class="form-control addAddress" required /></td>
+							</tr>
+							<tr class="select_gender">
+								<th>성별</th>
+								<td><label class=""> <input type="radio"
+										name="gender" value="m"> <span class="ico"></span>남자
+								</label> <label class=""> <input type="radio" name="gender"
+										value="w" checked> <span class="ico"></span>여자
+								</label> <label class="checked"> <input type="radio"
+										name="gender" value="n"> <span class="ico"></span>선택안함
+								</label></td>
+							</tr>
+							<tr class="birth field_birth">
+								<th>생년월일</th>
+								<td>
+									<div class="birth_day">
+										<input type="text" name="birth_year" id="birth_year"
+											pattern="[0-9]*" value="" label="생년월일" size="4" maxlength="4"
+											placeholder="YYYY"> <span class="bar"></span> <input
+											type="text" name="birth[]" id="birth_month" pattern="[0-9]*"
+											value="" label="생년월일" size="2" maxlength="2" placeholder="MM">
+										<span class="bar"></span> <input type="text" name="birth[]"
+											id="birth_day" pattern="[0-9]*" value="" label="생년월일"
+											size="2" maxlength="2" placeholder="DD">
+									</div>
+									<p class="txt_guide">
+										<span class="txt bad"></span>
+									</p>
+								</td>
+							</tr>
+							<tr class="route" id="selectRecommend">
+								<th>추가입력 사항</th>
+								<td>
+									<div class="group_radio">
+										<span class="radio_wrapper"> <label for="recommendId">
+												<input type="radio" name="recommend" id="recommendId"
+												label="추천인아이디"> <span class="ico"></span>추천인 아이디
+										</label>
+										</span>
+									</div>
+									<div class="input_wrapper">
+										<input type="text" name="recommid" value="" class="inp"
+											placeholder="추천인 아이디를 입력해주세요.">
+										<p class="txt_guide">
+											<br> 가입 이후, 수정이 불가합니다. <br> 대소문자 및 띄어쓰기에 유의해주세요.
+										</p>
+									</div>
+								</td>
+							</tr>
+							<tr class="reg_agree">
+								<th>이용약관동의 <span class="ico">*<span
+										class="screen_out">필수항목</span></span></th>
+								<td>
+									<div class="bg_dim"></div>
+									<div class="check">
+										<label class="check_agree label_all_check label_block">
+											<input type="checkbox" name="agree_allcheck"
+											onclick='selectAll(this)'> <span class="ico"></span>전체
+											동의합니다.
+										</label>
+										<p class="sub">선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수
+											있습니다.</p>
+									</div>
+									<div class="check_view">
+										<label class="check_agree label_block"> <input
+											type="checkbox" value="" name="agree" required=""
+											label="이용약관"> <span class="ico"></span>이용약관 동의 <span
+											class="sub">(필수)</span>
+										</label> <a onclick="open_modal();"
+											class="link btn_link btn_agreement">약관보기 </a>
+									</div> <!-- The Modal -->
+									<div id="modal_1" class="modal">
+										<div class="modal-content">
+											<div class="modal-header">
+												<span class="close">&times;</span>
+												<h4>개인정보 수집 이용 동의</h4>
+											</div>
+											<div class="modal-body">
+												<p>Lorem ipsum dolor sit amet, consectetur adipisicing
+													elit. Ab quod alias at perspiciatis consequatur cupiditate
+													non veniam illo voluptatum ratione ex dolor inventore
+													voluptas odit consequuntur a commodi quos sequi.</p>
+
+											</div>
+											<div class="modal-footer">
+												<h3>확인</h3>
+											</div>
+										</div>
+									</div>
 
 
-										<div class="check_view">
-                                            <label class="check_agree label_block">
-                                                <input type="checkbox" id="private1" name="private1" value=""
-                                                    required="" label="개인정보 수집·이용">
-                                                <span class="ico"></span>개인정보 수집·이용 동의 <span class="sub">(필수)</span>
-                                            </label>
-                                            <a href="#none" class="link btn_link btn_essential">약관보기 </a>
-                                        </div>
+									<div class="check_view">
+										<label class="check_agree label_block"> <input
+											type="checkbox" id="private1" name="private1" value=""
+											required="" label="개인정보 수집·이용"> <span class="ico"></span>개인정보
+											수집·이용 동의 <span class="sub">(필수)</span>
+										</label> <a href="#none" class="link btn_link btn_essential">약관보기
+										</a>
+									</div>
 
-                                        <div class="check_view">
-                                            <input type="hidden" id="consentHidden" name="consent[1]" value="">
-                                            <label class=" check_agree label_block">
-                                                <input type="checkbox" name="hiddenCheck" >
-                                                <span class="ico"></span>개인정보 수집·이용 동의 <span class="sub">(선택)</span>
-                                            </label>
-                                            <a href="#none" class="link btn_link btn_choice">약관보기 </a>
-                                        </div>
-                                        <div class="check_view">
-                                            <label class=" check_agree label_block">
-                                                <input type="checkbox" value="n" name="fourteen_chk" required=""
-                                                    label="만 14세 이상">
-                                                <span class="ico"></span>본인은 만 14세 이상입니다. <span class="sub">(필수)</span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <c:if test="${userInfo.type eq 'kakao'}">
-                        	<input type="hidden" name="id" value="${userInfo.id}"/>
-							<input type="hidden" name="password" value="${userInfo.password}"/>
-							<input type="hidden" name="loginType" value="K"/>
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        </c:if>
-                        <div id="formSubmit" class="form_footer">
-                            <button type="submit" class="btn active" id="join_btn"  >가입하기</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+									<div class="check_view">
+										<input type="hidden" id="consentHidden" name="consent[1]"
+											value=""> <label class=" check_agree label_block">
+											<input type="checkbox" name="hiddenCheck"> <span
+											class="ico"></span>개인정보 수집·이용 동의 <span class="sub">(선택)</span>
+										</label> <a href="#none" class="link btn_link btn_choice">약관보기 </a>
+									</div>
+									<div class="check_view">
+										<label class=" check_agree label_block"> <input
+											type="checkbox" value="n" name="fourteen_chk" required=""
+											label="만 14세 이상"> <span class="ico"></span>본인은 만 14세
+											이상입니다. <span class="sub">(필수)</span>
+										</label>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<c:if test="${userInfo.type eq 'kakao'}">
+						<input type="hidden" name="id" value="${userInfo.id}" />
+						<input type="hidden" name="password" value="${userInfo.password}" />
+						<input type="hidden" name="loginType" value="K" />
+					</c:if>
+					<c:if test="${userInfo.type eq 'naver'}">
+						<input type="hidden" name="id" value="${userInfo.id}" />
+						<input type="hidden" name="password" value="${userInfo.password}" />
+						<input type="hidden" name="loginType" value="N" />
+					</c:if>
+					<c:if test="${userInfo.type eq 'google'}">
+						<input type="hidden" name="id" value="${userInfo.id}" />
+						<input type="hidden" name="password" value="${userInfo.password}" />
+						<input type="hidden" name="loginType" value="G" />
+					</c:if>
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+					<div id="formSubmit" class="form_footer">
+						<button type="submit" class="btn active" id="join_btn">가입하기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 function selectAll(selectAll)  {
 	  const checkboxes 
@@ -318,8 +285,10 @@ window.onclick = function(event) {
 		console.log($(".addAddress").val());
 	});
 </script>
-<script src="https://kit.fontawesome.com/4123702f4b.js" crossorigin="anonymous"></script>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://kit.fontawesome.com/4123702f4b.js"
+	crossorigin="anonymous"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     function findAddress() {
         new daum.Postcode({
@@ -370,4 +339,4 @@ window.onclick = function(event) {
     }
 </script>
 
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
