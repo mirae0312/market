@@ -1,5 +1,6 @@
 package com.project.market.product.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.market.customerService.model.service.CustomerServiceService;
 import com.project.market.product.model.service.ProductService;
 import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
@@ -29,6 +31,9 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 	
+	@Autowired
+	private CustomerServiceService customerService;
+	
 	
 	@GetMapping("/productList")
 	public void productList(Product product, Model model) {
@@ -39,31 +44,56 @@ public class ProductController {
 	}
 	
 	@GetMapping("/productDetail")
-	public void productDetail(@RequestParam String pcode, Model model) {
+	public void productDetail(@RequestParam String pcode, Model model, @AuthenticationPrincipal Member member) {
 		Product pdt = productService.selectProductDetail(pcode);
 		log.debug("product = {}", pdt);
+		
+		if(member != null) {
+			String userId = member.getId();
+			
+			int accumulationRate = customerService.selectUserAccumulationRate(userId);
+			
+			int dcPrice = pdt.getPrice()/100 * (100 - pdt.getDiscountRate());
+			int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);			
+			model.addAttribute("acRate", accumulationRate);
+			model.addAttribute("dcPrice", dcPrice);
+			model.addAttribute("accAmount", accAmount);
+		}
 		
 		model.addAttribute("product", pdt);
 	}
 	
+	@GetMapping("/cart/cart")
+	public void cart() {}
+	
 	@GetMapping("/cart/myCart")
 	public void myCart(@AuthenticationPrincipal Member member, Model model) {
-		String userId = member.getId();
-		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
-		log.debug("cartList = {}", productInCartList);
+		if(member != null) {
+			String userId = member.getId();
+			List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
+			log.debug("cartList = {}", productInCartList);
+			
+			int accumulationRate = customerService.selectUserAccumulationRate(userId);
+			
+			int accAmountAll = calculateAccumulateAmount(productInCartList, accumulationRate);
+			
+			Map<String, Integer> returnMap = calculateAmount(productInCartList);
+			int ogp = returnMap.get("ogp");
+			int dcp = returnMap.get("dcp");
+			
+			Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
+			
+			model.addAttribute("cartList", productInCartList);
+			model.addAttribute("ogp", ogp);
+			model.addAttribute("dcp", dcp);
+			model.addAttribute("acp", accAmountAll);
+			model.addAttribute("address", addressMap);			
+		}
 		
-		Map<String, Integer> returnMap = calculateAmount(productInCartList);
-		int ogp = returnMap.get("ogp");
-		int dcp = returnMap.get("dcp");
-		
-		model.addAttribute("cartList", productInCartList);
-		model.addAttribute("ogp", ogp);
-		model.addAttribute("dcp", dcp);
 	}
 	
 	@PostMapping("/addCart")
 	public ResponseEntity<?> addCart(@RequestParam String pcode, @RequestParam int count, @AuthenticationPrincipal Member member){
-		log.debug("addCart pcode, count = {}, {}", pcode, count);
 		Map<String, Object> cartInfo = new HashMap<>();
 		cartInfo.put("pcode", pcode);
 		cartInfo.put("count", count);
@@ -76,7 +106,6 @@ public class ProductController {
 	
 	@DeleteMapping("/cart/deleteCart")
 	public ResponseEntity<?> deleteCart(@RequestParam(value="deleteArr[]") List<String> deleteArr, @AuthenticationPrincipal Member member){
-		log.debug("deletePcode = {}", deleteArr);
 		String userId = member.getId();
 		
 		Map<String, Object> param = new HashMap<>();
@@ -89,13 +118,27 @@ public class ProductController {
 	}
 	
 	@GetMapping("/cart/getPurchaseAmount")
-	public ResponseEntity<?> getPurchaseAmount(@AuthenticationPrincipal Member member){
+	public ResponseEntity<?> getPurchaseAmount(@RequestParam(value="checkedArr[]") List<String> checkedArr, @AuthenticationPrincipal Member member){
 		String userId = member.getId();
-		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);
+		List<Map<String, Object>> productInCartList = productService.selectProductInCart(userId);		
+		List<Map<String, Object>> checkedCartList = new ArrayList<>();
 		
-		Map<String, Integer> returnMap = calculateAmount(productInCartList);
+		for(Map<String, Object> cart : productInCartList) {
+			String cartCode = String.valueOf(cart.get("P_CODE"));
+			
+			for(String code : checkedArr) {
+				if(cartCode.equals(code)) {
+					checkedCartList.add(cart);
+				}
+			}
+		}	
 		
-		log.debug("returnMap = {}", returnMap);
+		Map<String, Integer> returnMap = calculateAmount(checkedCartList);
+		
+		int accumulationRate = customerService.selectUserAccumulationRate(userId);
+		int accAmountAll = calculateAccumulateAmount(checkedCartList, accumulationRate);
+		
+		returnMap.put("acp", accAmountAll);
 		
 		return ResponseEntity.ok(returnMap);
 	}
@@ -109,8 +152,6 @@ public class ProductController {
 		param.put("userId", userId);
 		
 		Map<String, Object> cart = productService.selectOneProductInCart(param);
-		
-		log.debug("cart = {}", cart);
 		
 		int dcp = 0;
 		int ogp = 0;
@@ -137,6 +178,7 @@ public class ProductController {
 		int ogp = 0;
 		int dcp = 0;
 		for(Map<String, Object> pdt : list) {
+			log.debug("pdt = {}", pdt);
 			int count = Integer.parseInt(String.valueOf(pdt.get("COUNT")));
 			int og = Integer.parseInt(String.valueOf(pdt.get("PRICE")));
 			ogp += og * count;
@@ -152,5 +194,26 @@ public class ProductController {
 		map.put("dcp", dcp);
 		
 		return map;
+	}
+	
+	public int calculateAccumulateAmount(List<Map<String, Object>> pdtList, int accumulationRate) {
+		int accAmountAll = 0;
+		for(Map<String, Object> list : pdtList) {
+			if(String.valueOf(list.get("ACCUMULATION_STATUS")).equals("Y")) {				
+				int price = Integer.parseInt(String.valueOf(list.get("PRICE")));
+				int count = Integer.parseInt(String.valueOf(list.get("COUNT")));
+				if(list.get("DISCOUNT_RATE") != null) {
+					int dcRate = Integer.parseInt(String.valueOf(list.get("DISCOUNT_RATE")));
+					int dcPrice = price/100 * (100 - dcRate) * count;
+					int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);
+					accAmountAll += accAmount;					
+				} else {
+					int accAmount = (int) Math.ceil(price / 100 * accumulationRate * count);
+					accAmountAll += accAmount;
+				}
+			}
+		}
+		
+		return accAmountAll;
 	}
 }

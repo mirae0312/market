@@ -5,7 +5,7 @@
 <mapper namespace="com.project.market.customerService.model.dao.CustomerServiceDao">
 
     <insert id="insertAnnouncement">
-        insert into mk_announcement values(concat('anno-',seq_mk_announcement_no.nextval), #{title}, #{writer}, default, default, #{content})
+        insert into mk_announcement values(concat('anno-',seq_mk_announcement_no.nextval), #{title}, #{writer}, default, default, #{content}, #{announce})
         <selectKey order="AFTER" resultType="string" keyProperty="an_code">
             select concat('anno-',seq_mk_announcement_no.currval) from dual
         </selectKey>
@@ -24,7 +24,7 @@
     </select>
 
     <select id="selectAllAttachments" resultType="attachment">
-        select * from mk_attachment where code = #{code}
+        select * from mk_attachment where code = #{code} order by no asc
     </select>
 
     <select id="selectAllAnnouncement" resultType="announcement">
@@ -33,6 +33,39 @@
 
     <select id="countAllAnnouncement" resultType="_int">
         select count(*) from mk_announcement
+    </select>
+
+    <delete id="deleteAnnouncement">
+        delete from mk_announcement where an_code = #{code}
+    </delete>
+
+    <delete id="deleteAttachments">
+        delete from mk_attachment where code = #{code}
+    </delete>
+
+    <update id="updateAnnouncement">
+        update mk_announcement set title = #{title}, writer = #{writer}, content = #{content}, announce = #{announce} where an_code = #{anCode}
+    </update>
+    
+    <select id="selectUserDefaultAddress" parameterType="string" resultType="map">
+    	select
+    		*
+    	from
+    		mk_address
+    	where
+    		id = #{userId}
+    		and
+    		default_address = 'D'
+    </select>
+    
+    <select id="selectUserAccumulationRate" parameterType="string" resultType="int">
+    	select
+    		a.accumulate_rate
+    	from
+    		mk_grade g inner join accumulation_rate a
+    		on g.grade = a.grade
+    	where
+    		id = #{userId}
     </select>
 </mapper>
 

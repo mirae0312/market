@@ -12,6 +12,101 @@
 <!-- join css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/join/join.css" /> 
  <style>
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 3; /* Sit on top */
+  padding-top: 250px;
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+border-radius: 12px;
+    width: 440px;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn_agreement{
+	cursor: pointer;
+}
+.modal-header{
+    padding: 25px 25px 8px 30px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 40px;
+    color: #333;
+    letter-spacing: -1px;
+}
+.guide{
+	display: none;
+	padding-top: 10px;
+}
+.ok{
+	color: #0f851a;
+}
+.ok:before{
+    content: '\2713';
+    display: inline-block;
+    padding: 0 4px 0 2px;
+    font-size: 12px;
+    vertical-align: 0;
+}
+.error, .limit{
+	color: #b3130b;
+}
+.error:before, .limit:before{
+    content: '\2715';
+    display: inline-block;
+    padding-right: 3px;
+    font-size: 12px;
+    vertical-align: 0;
+}
+
+/*타이머*/
+.member_join .field_phone .code_num .count_down {
+    position: absolute;
+    left: 216px;
+    top: 21px;
+    width: 100px;
+    font-size: 14px;
+    color: #b3130b;
+    line-height: 20px;
+    text-align: right;
+    letter-spacing: -.5px;
+}
+
+.member_join .field_phone .code_num {
+    position: relative;
+    padding-top: 10px;
+}
+.code_num{
+	display:none;
+}
  </style>
  
 <body>
@@ -22,89 +117,90 @@
         <div id="content">
             <div class="page_aticle">
                 <div class="type_form member_join ">
-                    <form id="form" name="frmMember">
+                    <form id="join_form" action="${pageContext.request.contextPath}/join/join" method="POST">
                         <p class="page_sub"><span class="ico">*</span>필수입력사항</p>
                         <table class="tbl_comm">
                             <tbody>
                                 <tr class="fst">
                                     <th>아이디<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
-                                        <input type="text" name="m_id" value="" maxlength="16" required=""
+                                        <input type="text" name="id" id="id" value="jbomb99" maxlength="15" required=""
                                             fld_esssential="" option="regId" label="아이디"
-                                            placeholder="6자 이상의 영문 혹은 영문과 숫자를 조합">
-                                        <input type="hidden" name="chk_id" required="" fld_esssential="" label="아이디중복체크"
-                                            value="">
-                                        <button class="white-btn">중복확인</button>
+                                            placeholder="6~10자 사이의 아이디를 입력해주세요.">
+                                        <button type="button" class="white-btn id-btn">중복확인</button>
                                         <p class="txt_guide square" style="display: block;">
-                                            <span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span>
+                                            <p class="text-success guide ok" >이 아이디는 사용가능합니다.</p>
+											<p class="text-danger guide error" >이미 존재하는 아이디입니다.</p>
+											<p class="text-danger guide limit">아이디는 6자 이상 10자 이하여야 합니다.</p>
+											<input type="hidden" name="idVal"id="idVal" value="0" />
                                             <br />
-                                            <span class="txt txt_case2">아이디 중복확인</span>
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>비밀번호<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
-                                        <input type="password" name="password" required="" fld_esssential=""
-                                            option="regPass" label="비밀번호" maxlength="16" class="reg_pw"
-                                            placeholder="비밀번호를 입력해주세요">
+                                        <input type="password" name="password" id="password" required="" fld_esssential="" 
+                                            option="regPass" label="비밀번호" maxlength="16" class="reg_pw" value="gmldus1234"
+                                            placeholder="8~15자 사이의 비밀번호를 입력해주세요">
                                         <p class="txt_guide square">
-                                            <span class="txt txt_case1">10자 이상 입력</span>
-                                            <span class="txt txt_case2">영문/숫자/특수문자(공백 제외)만 허용하며, 2개 이상 조합</span>
-                                            <span class="txt txt_case3">동일한 숫자 3개 이상 연속 사용 불가</span>
+                                            <span class="guide pwd-ok">이 비밀번호는 사용가능합니다.</span>
+                                            <span class="guide pwd-error">비밀번호는 8자 이상 15자 이하여야 합니다.</span>
                                         </p>
                                     </td>
                                 </tr>
                                 <tr class="member_pwd">
                                     <th>비밀번호확인<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
-                                        <input type="password" name="password2" required="" fld_esssential=""
-                                            option="regPass" label="비밀번호" maxlength="16" class="confirm_pw"
-                                            placeholder="비밀번호를 한번 더 입력해주세요">
+                                        <input type="password" name="password2" id="password2" required="" fld_esssential=""
+                                            option="regPass" label="비밀번호" maxlength="16" class="confirm_pw" value="gmldus1234"
+                                            placeholder="비밀번호를 한번 더 입력해주세요"> 
                                         <p class="txt_guide square">
-                                            <span class="txt txt_case1">동일한 비밀번호를 입력해주세요.</span>
+                                            <span class="guide pwd2-error">비밀번호가 일치하지 않습니다.</span>
+                                            <span class="guide pwd2-ok">비밀번호가 일치합니다.</span>
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>이름<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
-                                        <input type="text" name="name" value="" required="" fld_esssential="" label="이름"
+                                        <input type="text" name="name" value="희연" required="" fld_esssential="" label="이름"
                                             placeholder="이름을 입력해주세요">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>이메일<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
-                                        <input type="text" name="email" value="" data-email="" size="30" required=""
-                                            fld_esssential="" option="regEmail" label="이메일"
+                                        <input type="text" name="email" id="email" value="sp5na92@gmail.com"  size="30"  option="regEmail" label="이메일"
                                             placeholder="예: marketkurly@kurly.com">
-                                        <input type="hidden" name="chk_email" required="" fld_esssential=""
-                                            label="이메일중복체크">
-                                            <button class="white-btn">중복확인</button>
+                                        <input type="hidden" name="chk_email"
+                                            label="이메일중복체크" >
+                                            <button type="button" class="white-btn email-btn">중복확인</button>
                                     </td>
                                 </tr>
                                 <tr class="field_phone">
                                     <th>휴대폰<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td>
                                         <div class="phone_num">
-                                            <input type="text" value="" pattern="[0-9]*" name="mobileInp"
-                                                placeholder="숫자만 입력해주세요" class="inp">
-                                            <button class="white-btn">인증번호 받기</button>
+                                            <input type="text" value="01012341234" pattern="[0-9]*" name="phone" id="phone"
+                                                placeholder="숫자만 입력해주세요" >
+                                            <button type="button" class="white-btn phone-btn">인증번호 받기</button>
                                         </div>
-                                        <p class="txt_guide">
-                                            <span class="txt txt_case1"></span>
-                                        </p>
+                                        <div id="codeNum" class="code_num" >
+											<input type="text" name="auth_code" id="auth_code" value="" size="6" maxlength="6" pattern="[0-9]*" label="인증번호 확인" class="inp_confirm" >
+											<button id="btn_cert_confirm" class="btn default" type="button">인증번호 확인</button>
+											<p id="countdown" class="count_down">3 : 00</p>
+										</div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
                                     <td class="field_address">
-                                        <input type="text" id="sample6_postcode" placeholder="우편번호">
-                                        <input type="button" id="addressNo" class="white-btn" onclick="sample6_execDaumPostcode()" value="주소검색"><br>
-										<input type="text" id="sample6_address" placeholder="주소"><br>
-										<input type="text" id="sample6_detailAddress" placeholder="상세주소">
-										<input type="text" id="sample6_extraAddress" placeholder="참고항목">
+                                        <input type="text" id="postcode" placeholder="우편번호" value="06234">
+                                        <input type="button" id="addressNo" class="white-btn" onclick="findAddress()" value="주소검색"><br>
+										<input type="text" id="address" placeholder="주소" value="서울 강남구 논현로85길 58"><br>
+										<input type="text" id="detailAddress" placeholder="상세주소" value="5층">
+										<input type="hidden" name="addAddress" class="form-control addAddress" required />
 										
                                     </td>
                                 </tr>
@@ -116,11 +212,11 @@
                                             <span class="ico"></span>남자
                                         </label>
                                         <label class="">
-                                            <input type="radio" name="gender" value="w">
+                                            <input type="radio" name="gender" value="w" checked>
                                             <span class="ico"></span>여자
                                         </label>
                                         <label class="checked">
-                                            <input type="radio" name="gender" value="n" checked="checked">
+                                            <input type="radio" name="gender" value="n" >
                                             <span class="ico"></span>선택안함
                                         </label>
                                     </td>
@@ -173,7 +269,7 @@
                                         <div class="bg_dim"></div>
                                         <div class="check">
                                             <label class="check_agree label_all_check label_block">
-                                                <input type="checkbox" name="agree_allcheck">
+                                                <input type="checkbox" name="agree_allcheck" onclick='selectAll(this)'>
                                                 <span class="ico"></span>전체 동의합니다.
                                             </label>
                                             <p class="sub">선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</p>
@@ -183,11 +279,27 @@
                                                 <input type="checkbox" value="" name="agree" required="" label="이용약관">
                                                 <span class="ico"></span>이용약관 동의 <span class="sub">(필수)</span>
                                             </label>
-                                            <a href="#none" class="link btn_link btn_agreement">약관보기 </a>
-                                        </div>
+                                            <a onclick="open_modal();" class="link btn_link btn_agreement">약관보기 </a>
+                                        </div> 
+                                        <!-- The Modal -->
+										<div id="modal_1" class="modal">
+										  <div class="modal-content">
+										    <div class="modal-header">
+										      <span class="close">&times;</span>
+										      <h4>개인정보 수집 이용 동의</h4>
+										    </div>
+										    <div class="modal-body">
+										      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab quod alias at perspiciatis consequatur cupiditate non veniam illo voluptatum ratione ex dolor inventore voluptas odit consequuntur a commodi quos sequi.</p>
+										      
+										    </div>
+										    <div class="modal-footer">
+										      <h3>확인</h3>
+										    </div>
+										  </div>
+										</div>
 
 
-                                        <div class="check_view">
+										<div class="check_view">
                                             <label class="check_agree label_block">
                                                 <input type="checkbox" id="private1" name="private1" value=""
                                                     required="" label="개인정보 수집·이용">
@@ -199,7 +311,7 @@
                                         <div class="check_view">
                                             <input type="hidden" id="consentHidden" name="consent[1]" value="">
                                             <label class=" check_agree label_block">
-                                                <input type="checkbox" name="hiddenCheck">
+                                                <input type="checkbox" name="hiddenCheck" >
                                                 <span class="ico"></span>개인정보 수집·이용 동의 <span class="sub">(선택)</span>
                                             </label>
                                             <a href="#none" class="link btn_link btn_choice">약관보기 </a>
@@ -215,20 +327,160 @@
                                 </tr>
                             </tbody>
                         </table>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<input type="hidden" name="loginType" value="D"/>
                         <div id="formSubmit" class="form_footer">
-                            <button type="submit" class="btn active btn_join" onclick="">가입하기</button>
+                            <button type="submit" class="btn active" id="join_btn" >가입하기</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
-    
+<script>
+
+	$("#join_btn").click((e) => {
+		const $password = $(password);
+		const $passwordCheck = $(password2);
+		// 비밀번호	
+		if(! /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test($password.val())){
+	        alert("비밀번호는 숫자와 영문이 포함된 8~15자리입니다");
+			$password.focus();
+			return false;
+	    }
+		
+		// 비밀번호 일치 확인
+		if($password.val() != $passwordCheck.val()){
+	    	alert("비밀번호가 일치하지 않습니다.");
+			$passwordCheck.focus();
+			return false;
+		}
+	});
+	
+
+	$(".id-btn").click((e) => {
+		const type = "id";
+		const id = $("#id").val();
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			data:{
+				type: type,
+				id: id
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if(available){
+					alert("이 아이디는 사용가능합니다.");
+				}
+				else{
+					alert("이미 존재하는 아이디입니다.");
+				}
+			},
+			error: console.log
+		});
+	});
+	
+	$(".email-btn").click((e) => {
+		const type = "email";
+		const email = $("#email").val();
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			data:{
+				type: type,
+				email: email
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if(available){
+					alert("사용가능한 이메일입니다.");
+				}
+				else{
+					alert("이미 가입한 이메일입니다.");
+				}
+			},
+			error: console.log
+		});
+	});
+	
+	$(".phone-btn").click((e) => {
+		const type = "phone";
+		const phone = $("#phone").val();
+
+		const $phoneCheck = $(".code_num");
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkPhone",
+			data:{
+				type: type,
+				phone: phone
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if(available){
+					alert("인증번호가 발송되었습니다.");
+					$phoneCheck.show();
+				}
+				else{
+					alert("이미 가입한 전화번호입니다.");
+				}
+			},
+			error: console.log
+		});
+	});
+	
+</script>
+<script>
+function selectAll(selectAll)  {
+	  const checkboxes 
+	     = document.querySelectorAll('input[type="checkbox"]');
+	  
+	  checkboxes.forEach((checkbox) => {
+	    checkbox.checked = selectAll.checked
+	  })
+}
+</script>
+<script>
+
+//Get the modal
+var modal = document.getElementById("modal_1");
+
+//Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+//When the user clicks the button, open the modal 
+function open_modal(){
+	modal.style.display = "block";
+}
+//When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+	modal.style.display = "none";
+}
+
+//When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+	if (event.target == modal) {
+	 modal.style.display = "none";
+	}
+}
+</script>
+<script>
+	$(detailAddress).blur((e) => {
+		$(".addAddress").val($(address).val() + ' ' + $(detailAddress).val());
+		console.log($(".addAddress").val());
+	});
+</script>
 <script src="https://kit.fontawesome.com/4123702f4b.js" crossorigin="anonymous"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-    function sample6_execDaumPostcode() {
+    function findAddress() {
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -261,22 +513,20 @@
                         extraAddr = ' (' + extraAddr + ')';
                     }
                     // 조합된 참고항목을 해당 필드에 넣는다.
-                    document.getElementById("sample6_extraAddress").value = extraAddr;
+                    document.getElementById("extraAddress").value = extraAddr;
                 
                 } else {
-                    document.getElementById("sample6_extraAddress").value = '';
+                    document.getElementById("extraAddress").value = '';
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sample6_postcode').value = data.zonecode;
-                document.getElementById("sample6_address").value = addr;
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("address").value = addr;
                 // 커서를 상세주소 필드로 이동한다.
-                document.getElementById("sample6_detailAddress").focus();
+                document.getElementById("detailAddress").focus();
             }
         }).open();
     }
 </script>
 
-</body>
-
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
