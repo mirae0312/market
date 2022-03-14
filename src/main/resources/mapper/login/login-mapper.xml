@@ -20,16 +20,16 @@
         from
             mk_member
         <where>
-            <if test="id_chk_p = 'IP'">
+            <if test="checkType == 'IP'">
                 name = #{name} and phone = #{phone}
             </if>
-            <if test="id_chk_e = 'IE'">
+            <if test="checkType == 'IE'">
                 name = #{name} and email = #{email}
             </if>
-            <if test="pwd_chk_e = 'PE'">
+            <if test="checkType == 'PE'">
                 id = #{id} and email = #{email}
             </if>
-            <if test="pwd_chk_p = 'PE'">
+            <if test="checkType == 'PE'">
                 id = #{id} and phone = #{phone}
             </if>
         </where>
