@@ -439,26 +439,6 @@
 </script>
 <script>
 
-	// 체크박스 모두선택
-	// +체크박스 다 선택되면 모두선택 불들어오는것도 해야함 ㅇㅇ
-	function checkSelectAll()  {
-  // 전체 체크박스
-  const checkboxes 
-    = document.querySelectorAll('input[name="agree_ck"]');
-  // 선택된 체크박스
-  const checked 
-    = document.querySelectorAll('input[name="agree_ck"]:checked');
-  // select all 체크박스
-  const selectAll 
-    = document.querySelector('input[name="selectAll"]');
-  
-  if(checkboxes.length === checked.length)  {
-    selectAll.checked = true;
-  }else {
-    selectAll.checked = false;
-  }
-
-}
 	function selectAll(selectAll)  {
 		  const checkboxes 
 		     = document.querySelectorAll('input[type="checkbox"]');
