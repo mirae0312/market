@@ -16,25 +16,45 @@
 	<br />
 	<span>쿠폰등록</span><input type="button" value="useCoupon" id="useCoupon"/>
 	<br />
-	<span>발급된쿠폰번호</span><input type="text" name="" id="couponCode" />
-	
-	
-	
-	
+	<span>내 쿠폰</span>
+	<br />
+	<c:forEach var="list" items="${couponList }">
+        <tr>
+            <td><span>쿠폰 코드 </span>${list.code }</td>
+            <td><span>할인률 </span>${list.discountRate }</td>
+            <td><span>만료일자 </span><fmt:formatDate value="${list.expiration}" pattern="yyyy/MM/dd일"/></td>
+            <br/>
+        </tr>
+    </c:forEach>
+
+
 <script>
-	$("#useCoupon").click((e) => {
+
+
+
+
+
+$("#useCoupon").click((e) => {
 		console.log("쿠폰 등록");
 		$.ajax({
-			url: '${pageContext.request.contextPath}/myPage/useCoupon',
+			url: '${pageContext.request.contextPath}/mypage/useCoupon',
 			data : {
 				writeCoupon: $("#writeCoupon").val()
 			},
 			success(res){
-				alert("성공");
+				if(res == 2){
+					alert("쿠폰 등록 성공!");
+				}
+				else if(res == 1){
+					alert("유효기간이 만료된 쿠폰입니다.");
+				}
+				else if(res == 0){
+					alert("쿠폰 등록 실패!");
+				}
 			},
 			error: console.log
 		});
-	});
+});
 
 
 </script>
