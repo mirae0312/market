@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.market.myPage.model.service.MyPageService;
-import com.project.market.myPage.model.vo.Coupon;
 import com.project.market.myPage.model.vo.UserCoupon;
 import com.project.market.security.model.vo.Member;
 
@@ -28,10 +27,6 @@ public class MyPageController {
 		
 	}
 	
-	//public ResponseEntity<?> useCoupon(@RequestParam String writeCoupon, @AuthenticationPrincipal Member member)
-	//{
-		
-	//	return ResponseEntity.ok();
-	//}
+	
 
 }
