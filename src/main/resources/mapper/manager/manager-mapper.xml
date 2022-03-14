@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.market.manager.model.dao.ProductManagemantDao">
+	<insert id="insertProduct">
+        INSERT INTO MK_PRODUCT
+        VALUES(concat(#{largeCategory} + #{smallCategory}, seq_mk_product_no.nextval), #{brandCode}, #{largeCategory}, #{smallCategory});
+    </insert>
+</mapper>
+
