@@ -70,8 +70,8 @@
     </div>
 <script>
 $(".kakao").click((e) => {
-	location.href = "https://kauth.kakao.com/oauth/authorize?client_id=2ae5bd0deaf271ba341cbf761624570d&redirect_uri=http://localhost:10000/market/login/kakaoLogin&response_type=code";
-	/* const type = "kakao";
+	/* location.href = "https://kauth.kakao.com/oauth/authorize?client_id=2ae5bd0deaf271ba341cbf761624570d&redirect_uri=http://localhost:10000/market/login/kakaoLogin&response_type=code"; */
+	const type = "kakao";
 	$.ajax({
 		url: `${pageContext.request.contextPath}/login/snsLogin/\${type}`,
 		method: "GET",
@@ -82,7 +82,7 @@ $(".kakao").click((e) => {
 			console.log(resp);
 		},
 		error: console.log
-	}); */
+	});
 });
 
 
