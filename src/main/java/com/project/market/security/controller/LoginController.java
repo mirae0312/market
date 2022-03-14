@@ -176,8 +176,8 @@ public class LoginController {
         return ResponseEntity.ok(check);
     }
 
-    @GetMapping("/findMemberInfo")
-    public void findMemberInfo(@RequestParam Map<String, Object> param, Model model){
+    @GetMapping("/findId")
+    public void findId(@RequestParam Map<String, Object> param, Model model){
         try{
             log.debug("info = {}", param);
             Member member = loginService.selectOneMemberForFind(param);
@@ -192,7 +192,7 @@ public class LoginController {
     public void changePw(@RequestParam Map<String, Object> param, Model model){
         try{
             log.debug("info = {}", param);
-            model.addAttribute("member", model);
+            model.addAttribute("member", param);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
