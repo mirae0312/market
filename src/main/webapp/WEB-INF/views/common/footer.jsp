@@ -1,7 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- section 닫는 태그 -->
 </section>
+
+
 <!-- footer -->
 <footer>
 	<!-- footer -->
@@ -32,8 +34,7 @@
 					</div>
 					<div class="cc_view cc_qna">
 						<h3 class="footer-h3">
-							<a href="#none"
-								onclick="KurlyTrackerLink('/shop/mypage/mypage_qna_register.php?mode=add_qna', 'select_bottom_onebyone_button')"
+							<a href="${pageContext.request.contextPath}/service/questionEnrollForm"
 								class="tit footer-a">1:1 문의</a>
 						</h3>
 						<dl class="list footer-dl">
@@ -67,22 +68,22 @@
 						<li class="footer-li"><a class="link footer-a"
 							href="/shop/service/guide.php">이용안내</a></li>
 					</ul>
-					법인명 (상호) : 주식회사 컬리 <span class="bar">I</span> 사업자등록번호 :
-					261-81-23567 <a
-						href="http://www.ftc.go.kr/bizCommPop.do?wrkr_no=2618123567&apv_perm_no="
+					법인명 (상호) : 주식회사 마켓갈래 <span class="bar">I</span> 사업자등록번호 :
+					000-00-00000 <a
+						href="#"
 						target="_blank" class="link footer-a">사업자정보 확인</a> <br> 통신판매업
-					: 제 2018-서울강남-01646 호 <span class="bar">I</span> 개인정보보호책임자 : 이원준 <br>
-					주소 : 서울특별시 강남구 테헤란로 133, 18층(역삼동) <span class="bar">I</span> 대표이사 :
-					김슬아 <br> 입점문의 : <a
-						href="https://docs.google.com/forms/d/e/1FAIpQLScLB7YkGJwNRzpGpp0gbR1i4C1_uvTEFj43SFfJ_XEadTn3gQ/viewform?usp=sf_link"
+					: 제 2022-서울강남-00001 호 <span class="bar">I</span> 개인정보보호책임자 : 김미래 <br>
+					주소 : 서울특별시 가나구 마바사로 123, 1층 <span class="bar">I</span> 대표이사 :
+					김미래 <br> 입점문의 : <a
+						href="#"
 						target="_blank" class="link footer-a">입점문의하기</a> <span class="bar">I</span>
-					마케팅제휴 : <a href="mailto:business@kurlycorp.com" class="link">business@kurlycorp.com</a>
-					<br> 채용문의 : <a href="mailto:recruit@kurlycorp.com"
-						class="link footer-a">recruit@kurlycorp.com</a> <br> 팩스: 070
-					- 7500 - 6098 <span class="bar">I</span> 이메일 : <a
-						href="mailto:help@kurlycorp.com" class="link footer-a">help@kurlycorp.com</a>
-					<br> 대량주문 문의 : <a href="mailto:kurlygift@kurlycorp.com"
-						class="link footer-a">kurlygift@kurlycorp.com</a> <br>
+					마케팅제휴 : <a href="mailto:zzzzz232@nate.com" class="link">zzzzz232@nate.com</a>
+					<br> 채용문의 : <a href="mailto:zzzzz232@nate.com"
+						class="link footer-a">zzzzz232@nate.com</a> <br> 팩스: 000
+					- 0000 - 0000 <span class="bar">I</span> 이메일 : <a
+						href="mailto:help@kurlycorp.com" class="link footer-a">zzzzz232@nate.com</a>
+					<br> 대량주문 문의 : <a href="mailto:zzzzz232@nate.com"
+						class="link footer-a">zzzzz232@nate.com</a> <br>
 					<ul class="list_sns footer-ul">
 						<li class="footer-li"><a
 							href="https://instagram.com/marketkurly"
