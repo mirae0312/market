@@ -86,7 +86,10 @@ crossorigin="anonymous"></script>
     <nav class="category">
       <div class="product-category">
         <div class="proudct-category-list">
-          <div><a href="#"><i class="fas fa-bars"></i><span>전체 카테고리</span></a></div>
+          <div class="product-category-list-all">
+          	<a href="#"><i class="fas fa-bars"></i><span>전체 카테고리</span></a>
+          	<div class="large-category-list"></div>
+          </div>
           <div><a href="#"><span>신상품</span></a></div>
           <div><a href="#"><span>베스트</span></a></div>
           <div><a href="#"><span>알뜰쇼핑</span></a></div>

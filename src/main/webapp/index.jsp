@@ -9,6 +9,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="마켓" name="title"/>
 </jsp:include>
+<article class="main-product-section box">
 	<h1>우왕 인덱스다~</h1>
 	
 	<br />
@@ -20,8 +21,6 @@
 	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 	<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-	
 
-</body>
-</html>
+</article>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

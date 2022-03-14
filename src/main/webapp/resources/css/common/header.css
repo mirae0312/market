@@ -100,7 +100,7 @@ a {
   list-style-type: none;
 }
 
-.user-menu ul li, .product-category ul li {
+.user-menu ul li {
   display: inline-block;
   padding : 3px 10px;
 }
@@ -181,11 +181,44 @@ a {
   width : 70%;
   height: 55px;
   margin: 0 auto;
+  position : relative;
 }
 
 .product-category a:hover {
   color : var(--purple);
   cursor: pointer;
+}
+
+.large-category-list {
+  width : 200px;
+  position : absolute;
+  top : 55px;
+  background : var(--white);
+}
+
+.largeCategory, .smallCategory {
+  font-size : 15px;
+  display : block;
+  padding : 12px 25px;
+}
+
+.largeCategory:hover {
+	cursor : pointer;	
+	background-color : var(--gray2);
+	color : var(--purple);
+}
+
+.small-category-list {
+	width : 200px;
+	height : 450px;
+	background : var(--gray2);
+	position : absolute;
+	top : 0;
+	left : 200px;
+}
+
+.onView {
+	width : 200px;
 }
 
 .product-category, .personal-product-icon, .proudct-category-list {
@@ -322,6 +355,7 @@ a {
   right : 15%;
 
 } */
+
 
 .contentWrapper {
 	width : 70%;
