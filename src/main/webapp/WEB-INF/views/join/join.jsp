@@ -100,7 +100,7 @@
 								<th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
 								<td class="field_address"><input type="text" id="postcode"
 									placeholder="우편번호" value="06234"> <input type="button"
-									id="addressNo" class="white-btn" onclick="popup()" value="주소검색"><br>
+									id="addressNo" class="white-btn" onclick="findAddress()" value="주소검색"><br>
 									<input type="text" id="address" placeholder="주소"
 									value="서울 강남구 논현로85길 58"><br> <input type="text"
 									id="detailAddress" placeholder="상세주소" value="5층"> <input
@@ -163,7 +163,7 @@
 									<div class="bg_dim"></div>
 									<div class="check">
 										<label class="check_agree label_all_check label_block">
-											<input type="checkbox" name="agree_allcheck"
+											<input type="checkbox" name="selectAll"
 											onclick='selectAll(this)'> <span class="ico"></span>전체
 											동의합니다.
 										</label>
@@ -172,7 +172,7 @@
 									</div>
 									<div class="check_view">
 										<label class="check_agree label_block"> <input
-											type="checkbox" value="" name="agree" required=""
+											type="checkbox" value="" name="agree_ck" required=""
 											label="이용약관"> <span class="ico"></span>이용약관 동의 <span
 											class="sub">(필수)</span>
 										</label> <a onclick="open_modal();"
@@ -200,7 +200,7 @@
 
 									<div class="check_view">
 										<label class="check_agree label_block"> <input
-											type="checkbox" id="private1" name="private1" value=""
+											type="checkbox" id="private1" name="agree_ck"" value=""
 											required="" label="개인정보 수집·이용"> <span class="ico"></span>개인정보
 											수집·이용 동의 <span class="sub">(필수)</span>
 										</label> <a href="#none" class="link btn_link btn_essential">약관보기
@@ -210,13 +210,13 @@
 									<div class="check_view">
 										<input type="hidden" id="consentHidden" name="consent[1]"
 											value=""> <label class=" check_agree label_block">
-											<input type="checkbox" name="hiddenCheck"> <span
+											<input type="checkbox" name="agree_ck"> <span
 											class="ico"></span>개인정보 수집·이용 동의 <span class="sub">(선택)</span>
 										</label> <a href="#none" class="link btn_link btn_choice">약관보기 </a>
 									</div>
 									<div class="check_view">
 										<label class=" check_agree label_block"> <input
-											type="checkbox" value="n" name="fourteen_chk" required=""
+											type="checkbox" value="n" name="agree_ck" required=""
 											label="만 14세 이상"> <span class="ico"></span>본인은 만 14세
 											이상입니다. <span class="sub">(필수)</span>
 										</label>
@@ -441,6 +441,24 @@
 
 	// 체크박스 모두선택
 	// +체크박스 다 선택되면 모두선택 불들어오는것도 해야함 ㅇㅇ
+	function checkSelectAll()  {
+  // 전체 체크박스
+  const checkboxes 
+    = document.querySelectorAll('input[name="agree_ck"]');
+  // 선택된 체크박스
+  const checked 
+    = document.querySelectorAll('input[name="agree_ck"]:checked');
+  // select all 체크박스
+  const selectAll 
+    = document.querySelector('input[name="selectAll"]');
+  
+  if(checkboxes.length === checked.length)  {
+    selectAll.checked = true;
+  }else {
+    selectAll.checked = false;
+  }
+
+}
 	function selectAll(selectAll)  {
 		  const checkboxes 
 		     = document.querySelectorAll('input[type="checkbox"]');

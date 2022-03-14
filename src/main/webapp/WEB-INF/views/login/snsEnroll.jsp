@@ -60,6 +60,7 @@
 									value="sp5na92@gmail.com" size="30" option="regEmail"
 									label="이메일" placeholder="예: marketkurly@kurly.com"> <input
 									type="hidden" name="chk_email" label="이메일중복체크">
+									<input type="hidden" name="emailVal" id="emailVal" value="0" />
 									<button type="button" class="white-btn email-btn">중복확인</button>
 								</td>
 							</tr>
@@ -80,6 +81,7 @@
 									<div class="phone_num">
 										<input type="text" value="01021443418" pattern="[0-9]*"
 											name="phone" id="phone" placeholder="숫자만 입력해주세요">
+										<input type="hidden" name="phoneVal" id="phoneVal" value="0" />
 										<button type="button" class="white-btn phone-btn">인증번호
 											받기</button>
 									</div>
@@ -246,50 +248,236 @@
 	</div>
 </div>
 <script>
-function selectAll(selectAll)  {
-	  const checkboxes 
-	     = document.querySelectorAll('input[type="checkbox"]');
-	  
-	  checkboxes.forEach((checkbox) => {
-	    checkbox.checked = selectAll.checked
-	  })
-}
+	//유효성 검사
+	$("#join_btn").click((e) => {
+		
+		const $emailVal = $("#emailVal").val();
+		const $phoneVal = $("#phoneVal").val();
+		
+		
+		// 이메일
+		if($emailVal == '0'){
+			alert("이메일을 중복확인해주세요.");
+			$(email).focus();
+			return false;
+		}
+		
+		// 핸드폰 번호
+		if($phoneVal == '0'){
+			alert("휴대폰번호를 인증해주세요.");
+			$(phone).focus();
+			return false;
+		}
+		
+	});
+	
+
+	$(".id-btn").click((e) => {
+		const type = "id";
+		const id = $("#id").val();
+		var idReg = /^[a-zA-z0-9]{4,12}$/;
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			data:{
+				type: type,
+				id: id
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if (!idReg.test(id)) {
+			        alert("아이디는 영문 대소문자와 숫자 4~12자리로 입력해주세요.");
+			    }
+				else{
+					if(available){
+						alert("이 아이디는 사용가능합니다.");
+						$("#idVal").val(1);
+					}
+					else{
+						alert("이미 존재하는 아이디입니다.");
+					}
+				}
+				
+			},
+			error: console.log
+		});
+	});
+	
+	$(".email-btn").click((e) => {
+		const type = "email";
+		const email = $("#email").val();
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			data:{
+				type: type,
+				email: email
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if(available){
+					alert("사용가능한 이메일입니다.");
+					$("#emailVal").val(1);
+				}
+				else{
+					alert("이미 가입한 이메일입니다.");
+				}
+			},
+			error: console.log
+		});
+	});
+	
+	$(".phone-btn").click((e) => {
+		const type = "phone";
+		const phone = $("#phone").val();
+		const $phoneCheck = $(".code_num");
+		
+		//인증번호 타이머
+		var count_down = $(".count_down");
+		var timer = null;
+		var isRunning = false;
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkPhone",
+			data:{
+				type: type,
+				phone: phone
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				const {num} = resp;
+				
+				if(available){
+					alert("인증번호가 발송되었습니다.");
+					$phoneCheck.show();
+					  // 유효시간 설정
+					 var leftSec = 180;
+
+					  // 버튼 클릭 시 시간 연장
+					  if (isRunning){ 
+					    clearInterval(timer);
+					    count_down.html("");
+					    startTimer(leftSec, count_down);
+					  }else{
+					  	startTimer(leftSec, count_down);
+					  }
+					  
+					$("#phone_confirm_btn").click((e) =>{
+						
+						const phone_code = $("#phone_code").val();
+						console.log(phone_code);
+						if(num == phone_code){
+							alert("핸드폰 인증에 성공하였습니다.");
+							clearInterval(timer);
+						    count_down.html("");
+							$("#phoneVal").val(1);
+							console.log($("#phoneVal").val());
+						}
+						else{
+							alert("인증번호 6자리를 정확히 입력해주세요.");
+						}
+					})
+					
+				}
+				else{
+					alert("이미 가입한 전화번호입니다.");
+				}
+			},
+			error: console.log 
+		});
+		
+		function startTimer(count, display) {  
+			  var minutes, seconds;
+			  timer = setInterval(function () {
+			    minutes = parseInt(count / 60, 10);
+			    seconds = parseInt(count % 60, 10);
+
+			    minutes = minutes < 10 ? "0" + minutes : minutes;
+			    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+			    count_down.html(minutes + ":" + seconds);
+
+			    // 타이머 끝
+			    if (--count < 0) {
+			      clearInterval(timer);
+			      alert("인증시간이 만료되었습니다.");
+			      count_down.html("인증시간 만료");
+			      $(".phone_confirm_btn").attr("disabled", true);
+			      isRunning = false;
+			    }
+			  }, 1000);
+			  isRunning = true;
+		}
+	});
+	
+	
 </script>
 <script>
 
-//Get the modal
-var modal = document.getElementById("modal_1");
-
-//Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-//When the user clicks the button, open the modal 
-function open_modal(){
-	modal.style.display = "block";
-}
-//When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-	modal.style.display = "none";
-}
-
-//When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-	if (event.target == modal) {
-	 modal.style.display = "none";
+	// 체크박스 모두선택
+	// +체크박스 다 선택되면 모두선택 불들어오는것도 해야함 ㅇㅇ
+	function selectAll(selectAll)  {
+		  const checkboxes 
+		     = document.querySelectorAll('input[type="checkbox"]');
+		  
+		  checkboxes.forEach((checkbox) => {
+		    checkbox.checked = selectAll.checked
+		  })
 	}
-}
 </script>
 <script>
+	
+	//Get the modal
+	var modal = document.getElementById("modal_1");
+	
+	//Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	
+	//When the user clicks the button, open the modal 
+	function open_modal(){
+		modal.style.display = "block";
+	}
+	//When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+	
+	//When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+		if (event.target == modal) {
+		 modal.style.display = "none";
+		}
+	}
+</script>
+<script>
+	//생일, 주소 합치기
+	$("#birth_day").blur((e) => {
+		$(".addBirth").val($("#birth_year").val() + '/' + $("#birth_month").val() + '/' + $("#birth_day").val());
+		console.log($(".addBirth").val());
+	})
 	$(detailAddress).blur((e) => {
 		$(".addAddress").val($(address).val() + ' ' + $(detailAddress).val());
 		console.log($(".addAddress").val());
 	});
 </script>
+
+<!-- 다움 주소검색 API -->
 <script src="https://kit.fontawesome.com/4123702f4b.js"
 	crossorigin="anonymous"></script>
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+	function popup(){
+	    var url = '${pageContext.request.contextPath}/join/findAddress';
+	    var name = "popup test";
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);
+	}
     function findAddress() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -298,37 +486,12 @@ window.onclick = function(event) {
                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                 var addr = ''; // 주소 변수
-                var extraAddr = ''; // 참고항목 변수
-
                 //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                     addr = data.roadAddress;
                 } else { // 사용자가 지번 주소를 선택했을 경우(J)
                     addr = data.jibunAddress;
                 }
-
-                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                if(data.userSelectedType === 'R'){
-                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                        extraAddr += data.bname;
-                    }
-                    // 건물명이 있고, 공동주택일 경우 추가한다.
-                    if(data.buildingName !== '' && data.apartment === 'Y'){
-                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                    }
-                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                    if(extraAddr !== ''){
-                        extraAddr = ' (' + extraAddr + ')';
-                    }
-                    // 조합된 참고항목을 해당 필드에 넣는다.
-                    document.getElementById("extraAddress").value = extraAddr;
-                
-                } else {
-                    document.getElementById("extraAddress").value = '';
-                }
-
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 document.getElementById('postcode').value = data.zonecode;
                 document.getElementById("address").value = addr;
