@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +81,9 @@ public class LoginController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/login2")
     public void login2(){}
@@ -170,6 +174,44 @@ public class LoginController {
             throw e;
         }
         return ResponseEntity.ok(check);
+    }
+
+    @GetMapping("/findMemberInfo")
+    public void findMemberInfo(@RequestParam Map<String, Object> param, Model model){
+        try{
+            log.debug("info = {}", param);
+            Member member = loginService.selectOneMemberForFind(param);
+            model.addAttribute("member", member);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @GetMapping("/changePw")
+    public void changePw(@RequestParam Map<String, Object> param, Model model){
+        try{
+            log.debug("info = {}", param);
+            model.addAttribute("member", model);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @PostMapping("/changePw")
+    public String changePw(@RequestParam Map<String, Object> param, RedirectAttributes redirectAttr){
+        try{
+            log.debug("info = {}", param);
+            String password = bCryptPasswordEncoder.encode((String) param.get("password"));
+            param.put("password", password);
+            loginService.updatePassword(param);
+            redirectAttr.addFlashAttribute("msg", "비밀번호 변경 성공");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return "redirect:/login/login";
     }
 
     protected void authenticationPlace(Map<String, Object> userInfoMap){

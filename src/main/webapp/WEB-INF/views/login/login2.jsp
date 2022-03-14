@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>$Title$</title>
@@ -20,6 +21,12 @@
 <a href="${pageContext.request.contextPath}/login/snsLogin/naver">네이버</a><br>
 <a href="${pageContext.request.contextPath}/login/snsLogin/google">구글</a><br>
 <button id="checks">check</button>
+
+<form:form action="${pageContext.request.contextPath}/login/changePw" method="post">
+    <input type="text" name="id" value="honggd">
+    <input type="text" name="password" value="">
+    <input type="submit" value="전송">
+</form:form>
 <script>
     $(checks).click(() => {
         $.ajax({

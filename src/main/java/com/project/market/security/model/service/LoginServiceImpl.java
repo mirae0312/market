@@ -22,4 +22,9 @@ public class LoginServiceImpl implements LoginService{
     public Member selectOneMemberForFind(Map<String, Object> check) {
         return loginDao.selectOneMemberForFind(check);
     }
+
+    @Override
+    public void updatePassword(Map<String, Object> param) {
+        loginDao.updatePassword(param);
+    }
 }
