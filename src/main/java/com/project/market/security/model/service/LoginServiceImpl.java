@@ -17,4 +17,9 @@ public class LoginServiceImpl implements LoginService{
     public Member selectOneMemberById(Map<String, Object> kakaoUser) {
         return loginDao.selectOneMemberById(kakaoUser);
     }
+
+    @Override
+    public Member selectOneMemberForFind(Map<String, Object> check) {
+        return loginDao.selectOneMemberForFind(check);
+    }
 }

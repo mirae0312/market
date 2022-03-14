@@ -8,4 +8,6 @@ import java.util.Map;
 @Mapper
 public interface LoginDao {
     Member selectOneMemberById(Map<String, Object> kakaoUser);
+
+    Member selectOneMemberForFind(Map<String, Object> check);
 }

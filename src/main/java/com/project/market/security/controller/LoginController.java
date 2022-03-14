@@ -5,8 +5,10 @@ import com.project.market.security.model.service.SecurityService;
 import com.project.market.security.model.service.SnsService;
 import com.project.market.security.model.vo.Member;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -118,6 +120,21 @@ public class LoginController {
         Map<String, Object> googleUser = snsService.getSnsAccessToken(code, type);
         log.debug("googleUser = {}", googleUser);
         return snsLoginCommons(googleUser, redirectAttr);
+    }
+
+    @GetMapping("/certifiedNum")
+    public ResponseEntity<?> certifiedNum(@RequestParam Map<String, Object> check){
+        log.debug("check = {}", check);
+        Member member = loginService.selectOneMemberForFind(check);
+        if(member != null){
+            String rNum = UUID.randomUUID().toString().replace("-","").substring(0, 6);
+            check.put("num", rNum);
+            snsService.sendCertifiedNum(check);
+        }else{
+            check.put("msg", "등록되지 않은 정보입니다.");
+            return ResponseEntity.ok(check);
+        }
+        return ResponseEntity.ok(1);
     }
 
     protected void authenticationPlace(Map<String, Object> userInfoMap){
