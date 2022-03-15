@@ -94,47 +94,7 @@ public class MyPageController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/changePw")
-	public ResponseEntity<?> changePw(@RequestParam String changePw, @AuthenticationPrincipal Member member) throws ParseException
-	{
-		int result = 0;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date currentTime = new Date();
-		String date = format.format(currentTime);
-		Date nowDate = format.parse(date);
-		
-		String userId = member.getId();
-		log.debug("userId = {}", userId);
-		
-		Coupon coupon = myPageService.selectCoupon(writeCoupon);
-		
-		if(coupon != null) {
-			String checkcoupon = coupon.getCode();
-			Date checkexpiration = coupon.getExpiration();
-			log.debug("checkcoupon = {}", checkcoupon);
-			log.debug("checkexpiration = {}", checkexpiration);
-			Map<String, Object> param = new HashMap<>();
-			param.put("id",userId);
-			param.put("code",checkcoupon);
-			int compare = checkexpiration.compareTo(nowDate);
-			if(compare >= 0)
-			{
-				log.debug("compare = {}", compare);
-				int insertresult = myPageService.insertUserCoupon(param);
-				log.debug("insertresult = {}", insertresult);
-				result = 2;
-			}
-			else {
-				log.debug("compare = {}", "실패");
-				result = 1;
-			}
-			
-			
-		}
-		
-		
-		return ResponseEntity.ok(result);
-	}
+	
 	
 	@InitBinder
     public void initBinder(WebDataBinder binder) {
