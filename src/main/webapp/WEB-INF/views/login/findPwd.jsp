@@ -11,8 +11,8 @@
 </jsp:include>
 <style>
 .find_pwd{
-    padding: 50px 0;
-    background-color: white;
+     padding: 50px 0;
+     background-color: white;
 }
 .find_pwd_title{
     padding-bottom: 30px;
@@ -63,6 +63,7 @@ button {
     overflow: visible;
     background-color: transparent;
     border: none;
+    cursor: pointer;
 }
 .findFrm{
     padding: 24px 20px;
@@ -111,7 +112,7 @@ button {
 .phone_div{
     padding-bottom: 12px;
 }
-.phone_label{
+.phone_label, .email_label{
     display: inline-block;
     padding: 8px 0 11px;
     font-size: 14px;
@@ -119,7 +120,7 @@ button {
     line-height: 19px;
     color: #333;
 }
-#name, #phone{
+#name, #phone, #email{
 width: 100%;
     height: 46px;
     padding: 0 11px 1px 15px;
@@ -132,7 +133,7 @@ width: 100%;
     outline: none;
 }
 .email_btn{
-display: block;
+	display: block;
     -webkit-box-flex: 1;
     -webkit-flex-grow: 1;
     -ms-flex-positive: 1;
@@ -143,18 +144,27 @@ display: block;
     font-size: 16px;
     color: #666;
     line-height: 18px;
+    cursor: pointer;
 }
 .submit_btn{
 margin-top: 18px;
+cursor: pointer;
 }
-</style>
+#emailFrm{
+display: contents;
+}
+.email_div{
+display:none;
+}
+    </style>
     <div class="find_pwd">
         <div class="find_pwd_title">비밀번호 찾기</div>
         <div class="find_pwd_container">
             <div class="select_div">
                 <button selected="" type="button" class="phone_btn">
                     휴대폰 인증</button>
-                <button type="button" class="email_btn">이메일 인증</button>
+                <button  type="button" class="email_btn">
+                    이메일 인증</button>
             </div>
             <form class="findFrm">
                 <div class="name_div">
@@ -167,32 +177,103 @@ margin-top: 18px;
                 <div class="phone_div">
                     <label for="phone" class="phone_label">휴대폰 번호</label>
                         <div class="phone_input_div">
-                        	<input type="tel" id="phone" name="phone" value=""
+                        	<input type="tel" id="phone" name="phone" value="" pattern="[0-9]*" maxlength="11"
                                 placeholder="휴대폰 번호를 입력해 주세요" class="phone_input">
                         </div>
-                </div>
                 <button class="submit_btn" type="submit" disabled=""
                         radius="4"><span class="get_number">인증번호 받기</span></button>
+                </div>
+                        
+                <div class="email_div">
+                    <label for="email" class="email_label">이메일</label>
+                        <div class="email_input_div">
+                        	<input type="email" id="email" name="email" value=""
+                                placeholder="이메일을 입력해 주세요" class="email_input">
+                        </div>
+                <button class="submit_btn" type="submit" disabled=""
+                        radius="4"><span class="get_number">확인</span></button>
+                </div>
                 </form>
         </div>
     </div>
 <script>
 $('#name').on('input', checkInput);
 $('#phone').on('input', checkInput);
+$('#email').on('input', checkEmail);
 
 // input 입력 시에 checkInput 함수실행
 function checkInput() {
   var nameCheck = $('#name').val();   // idCheck 변수
   var phoneCheck = $('#phone').val();   // idCheck 변수
+  var emailCheck = $('#email').val();
+  
   var checkSubmit = $('.submit_btn');
 
   if (nameCheck === '' || phoneCheck === '') {
     // 기본 로그인 버튼 색상
     checkSubmit.removeClass('on');
-  } else {
+  } 
+  
+  else {
     // ID 비밀번호 입력 시에 로그인 버튼 배경색 변경
     checkSubmit.addClass('on');
   }
+  
+}
+
+</script>
+<script>
+$(".phone_btn").click((e) => {
+	const phone_div = $(".phone_div");
+	const email_div = $(".email_div");
+	const checkType = "PP";
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/login/findPwd",
+		data:{
+			checkType
+		},
+		success(resp){
+			changePP();
+			phone_div.show();
+			email_div.hide();
+		},
+		error: console.log
+	});
+});
+
+
+$(".email_btn").click((e) => {
+	const checkType = "PE";
+	const phone_div = $(".phone_div");
+	const email_div = $(".email_div");
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/login/findPwd",
+		data:{
+			checkType
+		},
+		success(resp){
+			changePE();
+			phone_div.hide();
+			email_div.show();
+		},
+		error: console.log
+	});
+});
+
+function changePP(){
+	$('.email_btn').css('color','#666');
+	$('.email_btn').css('box-shadow','none');
+	$('.phone_btn').css('color','#5f0080');
+	$('.phone_btn').css('box-shadow','inset 0px -2px 0px 0px #5f0080');
+}
+
+function changePE(){
+	$('.phone_btn').css('color','#666');
+	$('.phone_btn').css('box-shadow','none');
+	$('.email_btn').css('color','#5f0080');
+	$('.email_btn').css('box-shadow','inset 0px -2px 0px 0px #5f0080');
 }
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

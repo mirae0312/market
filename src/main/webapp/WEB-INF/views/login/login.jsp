@@ -70,31 +70,4 @@
             </div>
         </div>
     </div>
-<script>
-	/* $(".email-btn").click((e) => {
-		const type = "email";
-		const email = $("#email").val();
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkDuplicate",
-			data:{
-				type: type,
-				email: email
-			},
-			success(resp){
-				console.log(resp);
-				const {available} = resp;
-				
-				if(available){
-					alert("사용가능한 이메일입니다.");
-					$("#emailVal").val(1);
-				}
-				else{
-					alert("이미 가입한 이메일입니다.");
-				}
-			},
-			error: console.log
-		});
-	}); */
-</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
