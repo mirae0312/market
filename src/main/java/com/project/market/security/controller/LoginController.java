@@ -173,8 +173,8 @@ public class LoginController {
         return ResponseEntity.ok(check);
     }
 
-    @GetMapping("/findId")
-    public void findId(@RequestParam Map<String, Object> param, Model model){
+    @GetMapping("/findIdSuccess")
+    public void findIdSuccess(@RequestParam Map<String, Object> param, Model model){
         try{
             log.debug("info = {}", param);
             Member member = loginService.selectOneMemberForFind(param);
