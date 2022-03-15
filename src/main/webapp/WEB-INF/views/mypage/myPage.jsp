@@ -49,14 +49,14 @@
     
     <span>-----------------------------------------------</span>
     <p>개인 정보 수정</p>
-    
+    <span>아이디</span><input type="text" name="" id="" value="${userId}"/>
+    <br />
+    <span>비밀번호</span><input type="text" name="" id="changePw"/>
+    <br /> 
+    <input type="button" value="확인" id="changePwBtn"/>
 
 
 <script>
-
-
-
-
 
 $("#useCoupon").click((e) => {
 		console.log("쿠폰 등록");
@@ -81,6 +81,19 @@ $("#useCoupon").click((e) => {
 		});
 });
 
+$("#changePwBtn").click((e) => {
+	console.log("비밀번호 변경");
+	$.ajax({
+		url: '${pageContext.request.contextPath}/mypage/changePw',
+		data : {
+			changePw: $("#changePw").val()
+		},
+		success(res){
+			
+		},
+		error: console.log
+	});
+});
 
 </script>
 </body>
