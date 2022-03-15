@@ -25,7 +25,7 @@
                             <input type="password" name="password" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요">
                             
                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                       
+                       </form>  
                             
                             <div class="checkbox_save">
                                 <label class="label_checkbox">
@@ -34,19 +34,21 @@
                                 </label>
 
                                 <div class="login_search">
-                                    <a class="link" href="${pageContext.request.contextPath}/login/findId">
-                                        아이디 찾기
-                                    </a>
-                                    <span class="bar"></span>
-                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd">
-                                        비밀번호 찾기
-                                    </a>
+                                	<form action="${pageContext.request.contextPath}/login/findId">
+                                		<input type="hidden"  name="checkType" value="IP"/>
+                                		<button class="link" type="submit">아이디 찾기</button>	
+                                	</form>
+                                	<span class="bar"></span>
+                                	<form action="${pageContext.request.contextPath}/login/findPwd">
+                                		<input type="hidden"  name="checkType" value="PP"/>
+                                		<button class="link" type="submit">비밀번호 찾기</button>	
+                                	</form>
                                 </div>
                             </div>
                             <button class="btn_type1" type="submit">
                                 <span class="txt_type">로그인</span>
                             </button>
-                        </form>                    
+                                          
 					    
                         <a class="btn_type2 btn_member" href="${pageContext.request.contextPath}/join/join">
                             <span class="txt_type">회원가입</span>
