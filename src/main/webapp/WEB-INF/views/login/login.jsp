@@ -25,31 +25,29 @@
                             <input type="password" name="password" size="20" tabindex="2" placeholder="비밀번호를 입력해주세요">
                             
                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                       </form>  
+                      
                             
                             <div class="checkbox_save">
                                 <label class="label_checkbox">
                             		<input type="checkbox" id="keep_login" name="remember-me" value="y">
                                     로그인 유지
                                 </label>
-
-                                <div class="login_search">
-                                	<form action="${pageContext.request.contextPath}/login/findId">
-                                		<input type="hidden"  name="checkType" value="IP"/>
-                                		<button class="link" type="submit">아이디 찾기</button>	
-                                	</form>
-                                	<span class="bar"></span>
-                                	<form action="${pageContext.request.contextPath}/login/findPwd">
-                                		<input type="hidden"  name="checkType" value="PP"/>
-                                		<button class="link" type="submit">비밀번호 찾기</button>	
-                                	</form>
-                                </div>
+                                 <div class="login_search">
+									<a class="link" href="${pageContext.request.contextPath}/login/findId?checkType=IP">
+                                        아이디 찾기
+                                    </a>
+                                    <span class="bar"></span>
+                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd?checkType=PP">
+                                        비밀번호 찾기
+                                    </a>
+                                 
+                                 </div>
                             </div>
                             <button class="btn_type1" type="submit">
                                 <span class="txt_type">로그인</span>
                             </button>
                                           
-					    
+					     </form>  
                         <a class="btn_type2 btn_member" href="${pageContext.request.contextPath}/join/join">
                             <span class="txt_type">회원가입</span>
                         </a>
@@ -70,4 +68,31 @@
             </div>
         </div>
     </div>
+<script>
+	/* $(".email-btn").click((e) => {
+		const type = "email";
+		const email = $("#email").val();
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			data:{
+				type: type,
+				email: email
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if(available){
+					alert("사용가능한 이메일입니다.");
+					$("#emailVal").val(1);
+				}
+				else{
+					alert("이미 가입한 이메일입니다.");
+				}
+			},
+			error: console.log
+		});
+	}); */
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
