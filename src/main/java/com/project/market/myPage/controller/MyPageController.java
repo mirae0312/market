@@ -36,13 +36,19 @@ public class MyPageController {
 	private MyPageService myPageService;
 	
 	@GetMapping("/myPage")
-	public void myPage(@AuthenticationPrincipal Member member,Model model){
+	public void myPage(@AuthenticationPrincipal Member member,Model model) throws ParseException{
 		String userId = member.getId();
 		log.debug("userId = {}", userId);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date currentTime = new Date();
+		String date = format.format(currentTime);
+		Date nowDate = format.parse(date);
 		
 		List<Map<String, Object>> couponList = myPageService.selectuserCoupon(userId);
 		log.debug("couponList = {}", couponList);
 		model.addAttribute("couponList", couponList);
+		model.addAttribute("nowDate", nowDate);
+		model.addAttribute("userId", userId);
 	}
 	
 	

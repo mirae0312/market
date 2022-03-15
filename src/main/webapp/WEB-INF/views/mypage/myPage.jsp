@@ -16,16 +16,40 @@
 	<br />
 	<span>쿠폰등록</span><input type="button" value="useCoupon" id="useCoupon"/>
 	<br />
+	
+	<span>-----------------------------------------------</span>
+	<br />
 	<span>내 쿠폰</span>
 	<br />
+	
+
+	
 	<c:forEach var="list" items="${couponList }">
         <tr>
-            <td><span>쿠폰 코드 </span>${list.code }</td>
-            <td><span>할인률 </span>${list.discountRate }</td>
-            <td><span>만료일자 </span><fmt:formatDate value="${list.expiration}" pattern="yyyy/MM/dd일"/></td>
-            <br/>
+            <%-- 유효기간 남아있는 쿠폰들 --%>
+        	<c:if test="${nowDate < list.expiration}">
+	            <td><span>쿠폰 코드 </span>${list.code }</td>
+	            <td><span>할인률 </span>${list.discountRate }%</td>
+	            <td><span>만료일자 </span><fmt:formatDate value="${list.expiration}" pattern="yyyy/MM/dd일"/></td>
+	            <br/>
+            </c:if>
+            
+            <%-- 만료된 쿠폰들 --%>
+           	<div style="color:gray">
+	            <c:if test="${nowDate > list.expiration}"> 
+		            <td><span>쿠폰 코드 </span>${list.code }</td>
+		            <td><span>할인률 </span>${list.discountRate }%</td>
+		            <td><span>만료일자 </span><fmt:formatDate value="${list.expiration}" pattern="yyyy/MM/dd일"/></td>
+		            <td><span>만료된 쿠폰입니다. </span></td>
+		            <br/>
+	            </c:if>
+         	</div>
         </tr>
     </c:forEach>
+    
+    <span>-----------------------------------------------</span>
+    <p>개인 정보 수정</p>
+    
 
 
 <script>
@@ -44,6 +68,7 @@ $("#useCoupon").click((e) => {
 			success(res){
 				if(res == 2){
 					alert("쿠폰 등록 성공!");
+					location.href='${pageContext.request.contextPath}/mypage/myPage';
 				}
 				else if(res == 1){
 					alert("유효기간이 만료된 쿠폰입니다.");
