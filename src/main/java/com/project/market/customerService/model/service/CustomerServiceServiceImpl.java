@@ -3,6 +3,8 @@ package com.project.market.customerService.model.service;
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.dao.CustomerServiceDao;
 import com.project.market.customerService.model.vo.Announcement;
+import com.project.market.customerService.model.vo.Question;
+import com.project.market.security.model.vo.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +104,55 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 		return customerServiceDao.selectUserAccumulationRate(userId);
 	}
 
-    
-    
+    @Override
+    public List<Question> selectAllMyQuestion(RowBounds rowBounds, Member member) {
+        return customerServiceDao.selectAllMyQuestion(member, rowBounds);
+    }
+
+    @Override
+    public int countAllMyQuestion(Member member) {
+        return customerServiceDao.countAllMyQuestion(member);
+    }
+
+    @Override
+    public Question selectOneQuestion(Map<String, Object> boardCode) {
+        Question question = customerServiceDao.selectOneQuestion(boardCode);
+        List<Attachment> attachments = customerServiceDao.selectAllAttachments(boardCode);
+        question.setAttachments(attachments);
+        return question;
+    }
+
+    @Override
+    public void modifyQuestion(Question question) {
+        customerServiceDao.updateQuestion(question);
+        if(!question.getAttachments().isEmpty()){
+            List<Attachment> attachments = question.getAttachments();
+            if(attachments != null){
+                for(Attachment attach : attachments){
+                    attach.setCode(question.getQCode());
+                    insertAttachment(attach);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void insertQuestion(Question question) {
+        customerServiceDao.insertQuestion(question);
+        log.debug("q_code = {}", question.getQCode());
+        List<Attachment> attachments = question.getAttachments();
+        if(attachments != null){
+            for(Attachment attach : attachments){
+                attach.setCode(question.getQCode());
+                insertAttachment(attach);
+            }
+        }
+    }
+
+    @Override
+    public void deleteMyQuestion(Map<String, Object> boardCode) {
+        customerServiceDao.deleteMyQuestion(boardCode);
+    }
+
+
 }

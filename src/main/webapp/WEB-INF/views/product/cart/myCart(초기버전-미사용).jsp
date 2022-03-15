@@ -8,13 +8,8 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="장바구니" name="title"/>
 </jsp:include>
-<!DOCTYPE html>
-<html>
-<head>
 <meta charset="UTF-8">
 <title>장바구니 화면</title>
-</head>
-<body>
 <h1>장바구니</h1>
 
 <table id="fTable">
@@ -259,6 +254,3 @@
 	});
 
 </script>
-
-</body>
-</html>
