@@ -91,10 +91,10 @@ button {
     color: #333;
     outline: none;
 }
-.submit_btn:disabled{
+.submit_btn:disabled, .email_submit_btn:disabled{
     background-color: #ddd;
 }
-.submit_btn{
+.submit_btn, .email_submit_btn{
     display: block;
     padding: 0 10px;
     text-align: center;
@@ -106,7 +106,7 @@ button {
     background-color: #5f0080;
     border: 0 none;
 }
-.submit_btn.on{
+.submit_btn.on, .email_submit_btn.on{
 	background-color: #5f0080;
 }
 .phone_div{
@@ -146,7 +146,7 @@ width: 100%;
     line-height: 18px;
     cursor: pointer;
 }
-.submit_btn{
+.submit_btn, .email_submit_btn{
 margin-top: 18px;
 cursor: pointer;
 }
@@ -190,22 +190,21 @@ display:none;
                         	<input type="email" id="email" name="email" value=""
                                 placeholder="이메일을 입력해 주세요" class="email_input">
                         </div>
-                <button class="submit_btn" type="submit" disabled=""
+                <button class="email_submit_btn" type="submit" disabled=""
                         radius="4"><span class="get_number">확인</span></button>
                 </div>
                 </form>
         </div>
     </div>
 <script>
+
 $('#name').on('input', checkInput);
 $('#phone').on('input', checkInput);
 $('#email').on('input', checkEmail);
-
 // input 입력 시에 checkInput 함수실행
 function checkInput() {
   var nameCheck = $('#name').val();   // idCheck 변수
   var phoneCheck = $('#phone').val();   // idCheck 변수
-  var emailCheck = $('#email').val();
   
   var checkSubmit = $('.submit_btn');
 
@@ -220,7 +219,23 @@ function checkInput() {
   }
   
 }
+function checkEmail() {
+	  var nameCheck = $('#name').val();   // idCheck 변수
+	  var emailCheck = $('#email').val();
+	  
+	  var checkSubmit = $('.email_submit_btn');
 
+	  if (nameCheck === '' || emailCheck === '') {
+	    // 기본 로그인 버튼 색상
+	    checkSubmit.removeClass('on');
+	  } 
+	  
+	  else {
+	    // ID 비밀번호 입력 시에 로그인 버튼 배경색 변경
+	    checkSubmit.addClass('on');
+	  }
+	  
+	}
 </script>
 <script>
 $(".phone_btn").click((e) => {
