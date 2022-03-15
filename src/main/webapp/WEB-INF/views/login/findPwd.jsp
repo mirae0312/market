@@ -95,20 +95,9 @@ function checkEmail() {
 $(".phone_btn").click((e) => {
 	const phone_div = $(".phone_div");
 	const email_div = $(".email_div");
-	const checkType = "PP";
-	
-	$.ajax({
-		url: "${pageContext.request.contextPath}/login/findPwd",
-		data:{
-			checkType
-		},
-		success(resp){
-			changePP();
-			phone_div.show();
-			email_div.hide();
-		},
-		error: console.log
-	});
+	changePP();
+	phone_div.show();
+	email_div.hide();
 });
 
 
@@ -116,19 +105,9 @@ $(".email_btn").click((e) => {
 	const checkType = "PE";
 	const phone_div = $(".phone_div");
 	const email_div = $(".email_div");
-	
-	$.ajax({
-		url: "${pageContext.request.contextPath}/login/findPwd",
-		data:{
-			checkType
-		},
-		success(resp){
-			changePE();
-			phone_div.hide();
-			email_div.show();
-		},
-		error: console.log
-	});
+	changePE();
+	phone_div.hide();
+	email_div.show();
 });
 
 function changePP(){

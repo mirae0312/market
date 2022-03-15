@@ -83,7 +83,7 @@ button {
 .submit_btn:disabled, .email_submit_btn:disabled{
     background-color: #ddd;
 }
-.submit_btn , .email_submit_btn:disabled{
+.submit_btn , .email_submit_btn{
     display: block;
     padding: 0 10px;
     text-align: center;
