@@ -113,8 +113,6 @@ function checkEmail() {
 $(".phone_btn").click((e) => {
 	const phone_div = $(".phone_div");
 	const email_div = $(".email_div");
-	const checkType = "IP";
-	
 	changeIP();
 	phone_div.show();
 	email_div.hide();
