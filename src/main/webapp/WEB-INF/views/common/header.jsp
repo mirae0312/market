@@ -131,6 +131,7 @@ crossorigin="anonymous"></script>
         </div>
       </div>
     </nav>
+<script>const contextPath = "${pageContext.request.contextPath}";</script>
 <script src='${pageContext.request.contextPath}/resources/js/common/header.js'></script>
 
 <!-- 페이지 영역 -->
