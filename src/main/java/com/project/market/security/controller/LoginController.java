@@ -43,9 +43,6 @@ public class LoginController {
     @GetMapping("/login")
     public void login(){}
     
-    @GetMapping("/findId")
-    public void findId(){}
-    
     @GetMapping("/findPwd")
     public void findPwd(){}
 

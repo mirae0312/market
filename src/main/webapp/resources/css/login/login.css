@@ -91,11 +91,15 @@
 .section_login .login_search .link {
 	float: left;
 	font-size: 13px;
+	border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 .section_login .login_search {
 	float: right;
 	padding-top: 13px;
+	display: flex;
 }
 
 .section_login .checkbox_save .label_checkbox {
