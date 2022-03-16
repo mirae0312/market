@@ -91,7 +91,7 @@
 											size="6" maxlength="6" pattern="[0-9]*"
 											placeholder="인증번호 숫자 6자리">
 										<button id="phone_confirm_btn" class="btn default"
-											type="button">인증번호 확인</button>
+											type="button">재발송</button>
 										<p id="countdown" class="count_down"></p>
 									</div>
 								</td>
