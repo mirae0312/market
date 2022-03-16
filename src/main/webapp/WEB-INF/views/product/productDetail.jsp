@@ -10,9 +10,59 @@
 	<jsp:param value="상세페이지" name="title"/>
 </jsp:include>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product/productDetail.css" /> 
+
 <sec:authentication property="principal" var="loginMember"/>
-	<h1>상품상세화면입니다.</h1>
-	
+<!-- 상품 상세 -->
+<div class="product-detail-content">
+<!-- 상품 이미지 -->
+	<div class="product-img box">
+		<img src="" alt="">
+	</div>
+	<!-- 상품 상세 정보 -->
+	<div class="product-detail box">
+	  <div class="product-detail-info">
+	    <div class="share-btn"><i class="fas fa-share-alt"></i></div>
+	    <div class="product-detail-info-title">
+	      <h1 class="product-detail-title">${product.title}</h1>
+	      <span class="product-detail-sub-title">${product.subTitle}</span>
+	    </div>
+	    <div class="product-detail-info-price">
+	    	<div class="product-detail-price">
+	          <span class="product-detail-orginal-price">4,200원</span>
+	          <span class="product-detail-dc-rate">10%</span>
+	        </div>
+	        <div class="product-detail-reward division-underline">
+	          <span class="product-detail-grade">웰컴 5%</span>
+	          <span class="product-detail-point">개당 210원 적립</span>
+	        </div>
+	    </div>
+	    <div class="product-detail-info-more">
+	    	<div class="product-unit p-flex division-underline">
+	          <div class="p-d-box box">
+	         	<c:if test="${product.salesUnit != null }">
+                  <div class="p-info-title p-d-common">
+                    <span class="text-g">판매단위</span>
+                  </div>
+                  <div class="p-d-common p-info-detail">
+                    <span>${product.salesUnit }</span>
+                  </div>
+				</c:if>
+				<c:if test="${product.weightCapacity != null }">
+				  <div class="p-info-title p-d-common">
+                    <span class="text-g">중량/용량</span>
+                  </div>
+                  <div class="p-d-common p-info-detail">
+                    <span>${product.weightCapacity}</span>
+                  </div>
+				</c:if>
+               </div>
+	        </div>
+	     </div>
+      </div>
+    </div>
+</div>
+<%-- 	
 	<span>${product.title }</span>
 	<br />
 	<span>${product.subTitle }</span>
@@ -121,7 +171,7 @@
 	<input type="button" value="addWishList" id="addWishList" />
 	<input type="button" value="notifyBtn" id="notify"/>
 	<input type="button" value="장바구니 담기" id="addCart" />
-	
+	 --%>
 	<script>
 		/* 구매수량 -> 상품금액 반영 script */
 		$("#countMinus").click((e) => {
