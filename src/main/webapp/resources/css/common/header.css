@@ -156,6 +156,7 @@ a {
   width : 100%;
   text-align: center;
   font-size : large;
+  position : relative;
 }
 
 .mainLogo a {
@@ -165,6 +166,13 @@ a {
 .mainLogo h1 {
   cursor: pointer;
   display : inline-block;
+}
+
+ .logo-img {
+	width : 200px;
+	height : 100px;
+	position : relative;
+	top : -15px;
 }
 
 .category {

@@ -20,6 +20,8 @@
 src="https://code.jquery.com/jquery-3.6.0.min.js" 
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
 crossorigin="anonymous"></script>
+<!-- 파비콘 -->
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/common/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <!-- 전체 영역 -->
@@ -78,7 +80,7 @@ crossorigin="anonymous"></script>
       <!-- 로고 -->
       <div class="mainLogo">
       <a href="${pageContext.request.contextPath}">
-        <h1>마켓</h1>
+        <img class="logo-img" src="${pageContext.request.contextPath}/resources/images/common/logo2.png">
       </a>
       </div>
    	</header>

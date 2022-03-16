@@ -159,7 +159,7 @@ const allCategory = $('.product-category-list-all');
 const largeCList = $('.large-category-list');
 const largeC = $('.large-category');
 
-allCategory.mouseover(function() {
+/*allCategory.mouseover(function() {
 	console.log(this);
 	//호버했을 때 콜백 함수
 		let mainCategory = `<div class="large-category-list">
@@ -183,4 +183,4 @@ allCategory.mouseover(function() {
 			//allCategory.children('div').remove();			
 		});
 
-});
+});*/
