@@ -20,6 +20,7 @@
 <a href="${pageContext.request.contextPath}/login/snsLogin/kakao">카카오</a><br>
 <a href="${pageContext.request.contextPath}/login/snsLogin/naver">네이버</a><br>
 <a href="${pageContext.request.contextPath}/login/snsLogin/google">구글</a><br>
+<a href="${pageContext.request.contextPath}/service/view/test">test</a><br>
 <button id="checks">check</button>
 
 <form:form action="${pageContext.request.contextPath}/login/changePw" method="post">
