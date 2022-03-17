@@ -48,7 +48,7 @@ public interface CustomerServiceDao {
     @Update("update mk_question set title = #{title}, question_category = #{questionCategory}, receive_email = #{receiveEmail}, receive_phone = #{receivePhone}, content = #{content}, reg_date = sysdate where q_code = #{qCode}")
     void updateQuestion(Question question);
 
-    @Insert("insert into mk_question values(concat('qe-', seq_mk_question_no.nextval), #{title}, #{questionCategory}, null, #{writer}, #{phone}, #{email}, #{receiveEmail}, #{receivePhone}, #{content}, default, null, null, null, null)")
+    @Insert("insert into mk_question values(concat('ques-', seq_mk_question_no.nextval), #{title}, #{questionCategory}, null, #{writer}, #{phone}, #{email}, #{receiveEmail}, #{receivePhone}, #{content}, default, null, null, null, null)")
     void insertQuestion(Question question);
 
     @Delete("delete from mk_question where q_code = #{code}")
