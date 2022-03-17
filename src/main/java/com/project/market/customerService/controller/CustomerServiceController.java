@@ -131,98 +131,98 @@ public class CustomerServiceController {
 //        return "redirect:/service/announcement";
 //    }
 
-    @PostMapping("/enrollAnnouncement")
-    public String enrollAnnouncement(Announcement announcement, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
-                                     RedirectAttributes redirectAttr) throws IOException {
-        try{
-            log.debug("announcement = {}", announcement);
+//    @PostMapping("/enrollAnnouncement")
+//    public String enrollAnnouncement(Announcement announcement, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
+//                                     RedirectAttributes redirectAttr) throws IOException {
+//        try{
+//            log.debug("announcement = {}", announcement);
+//
+//            String saveDirectory = application.getRealPath("/resources/upload/announce");
+//            List<Attachment> attachments = new ArrayList<>();
+//
+//            for(int i = 0; i < upFiles.length; i++){
+//                MultipartFile upFile = upFiles[i];
+//                if(!upFile.isEmpty()){
+//                    String originalFilename = upFile.getOriginalFilename();
+//                    String renamedFilename = MarketUtils.renamePolicy(originalFilename);
+//                    File dest = new File(saveDirectory, renamedFilename);
+//                    upFile.transferTo(dest);
+//
+//                    Attachment attach = new Attachment();
+//                    attach.setOriginalFilename(originalFilename);
+//                    attach.setRenamedFilename(renamedFilename);
+//                    attachments.add(attach);
+//                }
+//            }
+//
+//            if(!attachments.isEmpty())
+//                announcement.setAttachments(attachments);
+//            log.debug("announcement + attach = {}", announcement);
+//            customerServiceService.insertAnnouncement(announcement);
+//
+//            redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//        return "redirect:/service/announcement";
+//    }
 
-            String saveDirectory = application.getRealPath("/resources/upload/announce");
-            List<Attachment> attachments = new ArrayList<>();
+//    @GetMapping("/announcementDetail")
+//    public void announcementDetail(@RequestParam String code, Model model, @CookieValue(value="announceCount", required = false, defaultValue = "0") String value,
+//                                     HttpServletRequest request, HttpServletResponse response){
+//        try{
+//            Map<String, Object> boardCode = new HashMap<>();
+//            boardCode.put("code", code);
+//            log.debug("value = {}", value);
+//            if("0".equals(value)){
+//                customerServiceService.updateAnnouncementReadCount(boardCode);
+//                value = "[" + code + "]";
+//            }else if(!value.contains("[" + code + "]")){
+//                customerServiceService.updateAnnouncementReadCount(boardCode);
+//                value += "[" + code + "]";
+//            }
+//            Cookie cookie = new Cookie("announceCount", value);
+//            cookie.setMaxAge(60 * 60 * 24 * 30);
+//            cookie.setPath(request.getContextPath() + "/service/announcementDetail");
+//            response.addCookie(cookie);
+//
+//            Announcement announcement = customerServiceService.selectOneAnnouncement(boardCode);
+//            log.debug("announcement = {}", announcement);
+//            model.addAttribute("announce", announcement);
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//    }
 
-            for(int i = 0; i < upFiles.length; i++){
-                MultipartFile upFile = upFiles[i];
-                if(!upFile.isEmpty()){
-                    String originalFilename = upFile.getOriginalFilename();
-                    String renamedFilename = MarketUtils.renamePolicy(originalFilename);
-                    File dest = new File(saveDirectory, renamedFilename);
-                    upFile.transferTo(dest);
-
-                    Attachment attach = new Attachment();
-                    attach.setOriginalFilename(originalFilename);
-                    attach.setRenamedFilename(renamedFilename);
-                    attachments.add(attach);
-                }
-            }
-
-            if(!attachments.isEmpty())
-                announcement.setAttachments(attachments);
-            log.debug("announcement + attach = {}", announcement);
-            customerServiceService.insertAnnouncement(announcement);
-
-            redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return "redirect:/service/announcement";
-    }
-
-    @GetMapping("/announcementDetail")
-    public void announcementDetail(@RequestParam String code, Model model, @CookieValue(value="announceCount", required = false, defaultValue = "0") String value,
-                                     HttpServletRequest request, HttpServletResponse response){
-        try{
-            Map<String, Object> boardCode = new HashMap<>();
-            boardCode.put("code", code);
-            log.debug("value = {}", value);
-            if("0".equals(value)){
-                customerServiceService.updateAnnouncementReadCount(boardCode);
-                value = "[" + code + "]";
-            }else if(!value.contains("[" + code + "]")){
-                customerServiceService.updateAnnouncementReadCount(boardCode);
-                value += "[" + code + "]";
-            }
-            Cookie cookie = new Cookie("announceCount", value);
-            cookie.setMaxAge(60 * 60 * 24 * 30);
-            cookie.setPath(request.getContextPath() + "/service/announcementDetail");
-            response.addCookie(cookie);
-
-            Announcement announcement = customerServiceService.selectOneAnnouncement(boardCode);
-            log.debug("announcement = {}", announcement);
-            model.addAttribute("announce", announcement);
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    @PostMapping("/deleteAnnouncement")
-    public String deleteAnnouncement(@RequestParam String code, RedirectAttributes redirectAttr){
-        try{
-            String directory = "";
-            log.debug("code = {}", code);
-            Map<String, Object> boardCode = new HashMap<>();
-            boardCode.put("code", code);
-            List<Attachment> attachments = customerServiceService.selectAllAttachments(boardCode);
-            if(attachments != null && !attachments.isEmpty()){
-                for(Attachment attachment : attachments){
-                    directory = application.getRealPath("/resources/upload/announce/" + attachment.getRenamedFilename());
-                    File file = new File(directory);
-                    boolean deleteFile = file.delete();
-                    log.debug("deleteFile = {}", deleteFile);
-                }
-            }
-
-            customerServiceService.deleteAnnouncement(boardCode);
-
-            redirectAttr.addFlashAttribute("msg", "공지사항 삭제 성공");
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-
-        return "redirect:/service/announcement";
-    }
+//    @PostMapping("/deleteAnnouncement")
+//    public String deleteAnnouncement(@RequestParam String code, RedirectAttributes redirectAttr){
+//        try{
+//            String directory = "";
+//            log.debug("code = {}", code);
+//            Map<String, Object> boardCode = new HashMap<>();
+//            boardCode.put("code", code);
+//            List<Attachment> attachments = customerServiceService.selectAllAttachments(boardCode);
+//            if(attachments != null && !attachments.isEmpty()){
+//                for(Attachment attachment : attachments){
+//                    directory = application.getRealPath("/resources/upload/announce/" + attachment.getRenamedFilename());
+//                    File file = new File(directory);
+//                    boolean deleteFile = file.delete();
+//                    log.debug("deleteFile = {}", deleteFile);
+//                }
+//            }
+//
+//            customerServiceService.deleteAnnouncement(boardCode);
+//
+//            redirectAttr.addFlashAttribute("msg", "공지사항 삭제 성공");
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//
+//        return "redirect:/service/announcement";
+//    }
 
     // --------------------------------------- question
 
@@ -233,7 +233,7 @@ public class CustomerServiceController {
             int totalContent = 0;
             Map<String, Object> commonThings = new HashMap<>();
             switch (boardId){
-                case "myQuestion":
+                case "question":
                     totalContent = customerServiceService.countAllMyQuestion(member);
                     log.debug("totalContent = {}", totalContent);
 
@@ -265,17 +265,17 @@ public class CustomerServiceController {
     }
 
     @GetMapping("/enroll/{boardId}")
-    public String enrollFrm(@PathVariable(required = true) String boardId, @RequestParam Map<String, Object> param, Model model){
+    public String enrollBoard(@PathVariable(required = true) String boardId, @RequestParam Map<String, Object> param, Model model){
         try{
             log.debug("param = {}", param);
             switch (boardId){
-                case "questionEnrollForm":
+                case "question":
                     if("modify".equals((String) param.get("type"))){
                         Question question = customerServiceService.selectOneQuestion(param);
                         model.addAttribute("question", question);
                     }
                     break;
-                case "announceEnrollForm":
+                case "announcement":
                     if("modify".equals((String) param.get("type"))){
                         Announcement announce = customerServiceService.selectOneAnnouncement(param);
                         model.addAttribute("announce", announce);
@@ -290,26 +290,9 @@ public class CustomerServiceController {
         return "service/enroll/" + boardId;
     }
 
-    private void deleteAttachment(List<Attachment> attachments, String path) {
-        try{
-            if(!attachments.isEmpty()){
-                for(Attachment attach : attachments){
-                    String directory = application.getRealPath(path + attach.getRenamedFilename());
-                    File deleteFile = new File(directory);
-                    boolean deleteBool = deleteFile.delete();
-                    log.debug("deleteFile = {}", deleteBool);
-                }
-            }
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-    }
-
     @PostMapping("/modify/{boardId}")
     public String modifyBoard(@PathVariable(required = true) String boardId, @RequestParam Question question, @RequestParam Announcement announcement,
                               @RequestParam(name = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr) throws IOException {
-        String redirectDest = "";
         String path = "";
         String directory = "";
         Map<String, Object> boardCode = new HashMap<>();
@@ -317,7 +300,7 @@ public class CustomerServiceController {
         try{
             log.debug("boardId = {}", boardId);
             switch (boardId){
-                case "modifyQuestion":
+                case "question":
                     log.debug("question = {}", question);
                     path = "/resources/upload/question/";
                     directory = application.getRealPath(path);
@@ -338,9 +321,8 @@ public class CustomerServiceController {
                     customerServiceService.modifyQuestion(question);
 
                     redirectAttr.addFlashAttribute("msg", "질문 수정 완료!");
-                    redirectDest = "myQuestion";
                     break;
-                case "modifyAnnouncement":
+                case "announcement":
                     log.debug("announcement = {}", announcement);
                     path = "/resources/upload/announce/";
                     directory = application.getRealPath(path);
@@ -361,14 +343,131 @@ public class CustomerServiceController {
                     customerServiceService.modifyAnnouncement(announcement);
 
                     redirectAttr.addFlashAttribute("msg", "공지 수정 완료!");
-                    redirectDest = "announcement";
                     break;
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
         }
-        return "redirect:/service/view/" + redirectDest;
+        return "redirect:/service/view/" + boardId;
+    }
+
+    @GetMapping("/detail/{boardId}")
+    public String boardDetail(@PathVariable(required = true) String boardId, @RequestParam String code, Model model, @CookieValue(value="announceCount", required = false, defaultValue = "0") String value,
+                              HttpServletRequest request, HttpServletResponse response){
+        Map<String, Object> boardCode = new HashMap<>();
+        try{
+            switch (boardId){
+                case "announcement":
+                    boardCode.put("code", code);
+                    log.debug("value = {}", value);
+                    if("0".equals(value)){
+                        customerServiceService.updateAnnouncementReadCount(boardCode);
+                        value = "[" + code + "]";
+                    }else if(!value.contains("[" + code + "]")){
+                        customerServiceService.updateAnnouncementReadCount(boardCode);
+                        value += "[" + code + "]";
+                    }
+                    Cookie cookie = new Cookie("announceCount", value);
+                    cookie.setMaxAge(60 * 60 * 24 * 30);
+                    cookie.setPath(request.getContextPath() + "/service/announcementDetail");
+                    response.addCookie(cookie);
+
+                    Announcement announcement = customerServiceService.selectOneAnnouncement(boardCode);
+                    log.debug("announcement = {}", announcement);
+                    model.addAttribute("announce", announcement);
+                    break;
+                case "question":
+                    boardCode.put("code", code);
+                    Question question = customerServiceService.selectOneQuestion(boardCode);
+                    log.debug("question = {}", question);
+                    model.addAttribute("question", question);
+                    break;
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return "/service/detail/" + boardId;
+    }
+
+    @PostMapping("/delete/{boardId}")
+    public String deleteBoard(@PathVariable(required = true) String boardId, @RequestParam String code, RedirectAttributes redirectAttr){
+        try{
+            String path = "";
+            Map<String, Object> boardCode = new HashMap<>();
+            List<Attachment> attachments = new ArrayList<>();
+
+            switch (boardId){
+                case "announcement":
+                    boardCode.put("code", code);
+                    attachments = customerServiceService.selectAllAttachments(boardCode);
+                    path = "/resources/upload/announce/";
+                    deleteAttachment(attachments, path);
+
+                    customerServiceService.deleteAnnouncement(boardCode);
+
+                    redirectAttr.addFlashAttribute("msg", "공지사항 삭제 성공");
+                    break;
+                case "question":
+                    boardCode.put("code", code);
+                    attachments = customerServiceService.selectAllAttachments(boardCode);
+                    path = "/resources/upload/question/";
+                    deleteAttachment(attachments, path);
+
+                    customerServiceService.deleteMyQuestion(boardCode);
+
+                    redirectAttr.addFlashAttribute("msg", "질문 삭제 성공");
+                    break;
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return "redirect/service/view/" + boardId;
+    }
+
+    @PostMapping("/enroll/{boardId}")
+    public String enrollBoard(@PathVariable(required = true) String boardId, @RequestParam Announcement announcement, @RequestParam Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
+                              RedirectAttributes redirectAttr) throws IOException {
+        List<Attachment> attachments = new ArrayList<>();
+        String saveDirectory = "";
+        try{
+            switch (boardId){
+                case "announcement":
+                    log.debug("announcement = {}", announcement);
+
+                    saveDirectory = application.getRealPath("/resources/upload/announce");
+
+                    if(upFiles.length > 0){
+                        attachments = commonAttachment(upFiles, saveDirectory);
+                    }
+
+                    if(!attachments.isEmpty())
+                        announcement.setAttachments(attachments);
+                    log.debug("announcement + attach = {}", announcement);
+                    customerServiceService.insertAnnouncement(announcement);
+                    break;
+                case "question":
+                    log.debug("question = {}", question);
+                    saveDirectory = application.getRealPath("/resources/upload/question");
+
+                    if(upFiles.length > 0){
+                        attachments = commonAttachment(upFiles, saveDirectory);
+                    }
+
+                    if(!attachments.isEmpty())
+                        question.setAttachments(attachments);
+                    log.debug("question + attach = {}", question);
+                    customerServiceService.insertQuestion(question);
+                    break;
+            }
+            redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return "redirect:/service/view/" + boardId;
     }
 
 //    @GetMapping("/myQuestion")
@@ -456,73 +555,73 @@ public class CustomerServiceController {
 //        return "redirect:/service/myQuestion";
 //    }
 
-    @PostMapping("/enrollQuestion")
-    public String enrollQuestion(Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
-                                     RedirectAttributes redirectAttr) throws IOException {
-        try{
-            log.debug("question = {}", question);
-            String saveDirectory = application.getRealPath("/resources/upload/question");
+//    @PostMapping("/enrollQuestion")
+//    public String enrollQuestion(Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
+//                                     RedirectAttributes redirectAttr) throws IOException {
+//        try{
+//            log.debug("question = {}", question);
+//            String saveDirectory = application.getRealPath("/resources/upload/question");
+//
+//            List<Attachment> attachments = new ArrayList<>();
+//            if(upFiles.length > 0){
+//                attachments = commonAttachment(upFiles, saveDirectory);
+//            }
+//
+//            if(!attachments.isEmpty())
+//                question.setAttachments(attachments);
+//            log.debug("question + attach = {}", question);
+//            customerServiceService.insertQuestion(question);
+//
+//            redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//        return "redirect:/service/myQuestion";
+//    }
 
-            List<Attachment> attachments = new ArrayList<>();
-            if(upFiles.length > 0){
-                attachments = commonAttachment(upFiles, saveDirectory);
-            }
+//    @GetMapping("/questionDetail")
+//    public void questionDetail(@RequestParam String code, Model model){
+//        try{
+//            Map<String, Object> boardCode = new HashMap<>();
+//            boardCode.put("code", code);
+//
+//            Question question = customerServiceService.selectOneQuestion(boardCode);
+//            log.debug("question = {}", question);
+//            model.addAttribute("question", question);
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//    }
 
-            if(!attachments.isEmpty())
-                question.setAttachments(attachments);
-            log.debug("question + attach = {}", question);
-            customerServiceService.insertQuestion(question);
-
-            redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return "redirect:/service/myQuestion";
-    }
-
-    @GetMapping("/questionDetail")
-    public void questionDetail(@RequestParam String code, Model model){
-        try{
-            Map<String, Object> boardCode = new HashMap<>();
-            boardCode.put("code", code);
-
-            Question question = customerServiceService.selectOneQuestion(boardCode);
-            log.debug("question = {}", question);
-            model.addAttribute("question", question);
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-    }
-
-    @PostMapping("/deleteMyQuestion")
-    public String deleteMyQuestion(@RequestParam String code, RedirectAttributes redirectAttr){
-        try{
-            String directory = "";
-            log.debug("code = {}", code);
-            Map<String, Object> boardCode = new HashMap<>();
-            boardCode.put("code", code);
-            List<Attachment> attachments = customerServiceService.selectAllAttachments(boardCode);
-            if(attachments != null && !attachments.isEmpty()){
-                for(Attachment attachment : attachments){
-                    directory = application.getRealPath("/resources/upload/question/" + attachment.getRenamedFilename());
-                    File file = new File(directory);
-                    boolean deleteFile = file.delete();
-                    log.debug("deleteFile = {}", deleteFile);
-                }
-            }
-
-            customerServiceService.deleteMyQuestion(boardCode);
-
-            redirectAttr.addFlashAttribute("msg", "질문 삭제 성공");
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-
-        return "redirect:/service/myQuestion";
-    }
+//    @PostMapping("/deleteMyQuestion")
+//    public String deleteMyQuestion(@RequestParam String code, RedirectAttributes redirectAttr){
+//        try{
+//            String directory = "";
+//            log.debug("code = {}", code);
+//            Map<String, Object> boardCode = new HashMap<>();
+//            boardCode.put("code", code);
+//            List<Attachment> attachments = customerServiceService.selectAllAttachments(boardCode);
+//            if(attachments != null && !attachments.isEmpty()){
+//                for(Attachment attachment : attachments){
+//                    directory = application.getRealPath("/resources/upload/question/" + attachment.getRenamedFilename());
+//                    File file = new File(directory);
+//                    boolean deleteFile = file.delete();
+//                    log.debug("deleteFile = {}", deleteFile);
+//                }
+//            }
+//
+//            customerServiceService.deleteMyQuestion(boardCode);
+//
+//            redirectAttr.addFlashAttribute("msg", "질문 삭제 성공");
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//
+//        return "redirect:/service/myQuestion";
+//    }
 
     //------------------------------------------------request product
 
@@ -583,6 +682,22 @@ public class CustomerServiceController {
             throw e;
         }
         return attachments;
+    }
+
+    private void deleteAttachment(List<Attachment> attachments, String path) {
+        try{
+            if(!attachments.isEmpty()){
+                for(Attachment attach : attachments){
+                    String directory = application.getRealPath(path + attach.getRenamedFilename());
+                    File deleteFile = new File(directory);
+                    boolean deleteBool = deleteFile.delete();
+                    log.debug("deleteFile = {}", deleteBool);
+                }
+            }
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
 }
