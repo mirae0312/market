@@ -238,6 +238,9 @@ display: inline-block;
     border: 1px solid #f2f2f2;
     background-color: #fafafa;
 }
+.amount-div span{
+	float: left;
+}
 .amount-div input{
 	width: 50%;
     float: right;
@@ -446,7 +449,7 @@ display: inline-block;
 		      <!-- discount price -->
 		      <input type="text" name="" id="dcAmount" value="${dcp }" /> <br /> 
 		      <span>배송비</span>
-		      <input type="text" name="" id="deliveryAmount" /> <br /> 
+		      <input type="text" name="" id="deliveryAmount" />
 		      <span>결제예정금액</span>
 		      <br />
 		      <!-- 최종결제 금액 original - discount price -->
