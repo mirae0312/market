@@ -43,9 +43,6 @@ public class LoginController {
     @GetMapping("/login")
     public void login(){}
     
-    @GetMapping("/findId")
-    public void findId(){}
-    
     @GetMapping("/findPwd")
     public void findPwd(){}
 
@@ -160,8 +157,6 @@ public class LoginController {
             log.debug("check = {}", check);
             String checkType = (String) check.get("checkType");
             Member member = loginService.selectOneMemberForFind(check);
-            log.debug("member={}",member);
-            log.debug("checkType={}",CheckType.IP.toString().equals(checkType));
             if(member != null && (CheckType.IP.toString().equals(checkType) || CheckType.PP.toString().equals(checkType))) {
                 smsService.sendCheckNum(check);
             }else if(member != null && (CheckType.IE.toString().equals(checkType)) || CheckType.PE.toString().equals(checkType)){
