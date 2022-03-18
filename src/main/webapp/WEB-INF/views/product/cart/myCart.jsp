@@ -173,9 +173,75 @@ padding-left: 6px;
     line-height: 24px;
     text-align: right;
 }
-.address-wrapper::after{
-	content: "";
-	clear: both;
+.mycart-wrapper{
+	margin-bottom: 200px;
+}
+#empty-txt{
+	width: 100%;
+    margin-top: 0;
+    padding: 115px 0 116px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+.address-container{
+	display: block;
+    position: relative;
+    float: right;
+}
+#address-tit{
+    padding-left: 24px;
+    /* font-weight: 700; */
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -.3px;
+    background-image: url(https://res.kurly.com/pc/service/cart/2007/ico_location.svg);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 0 50%;
+}
+.cart-delivery{
+    padding: 23px 19px 20px;
+    border: 1px solid #f2f2f2;
+    border-bottom: 0;
+}
+#searchAddress, #changeAddress{
+    margin-top: 17px;
+    display: block;
+    width: 100%;
+    height: 36px;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 34px;
+    border: 1px solid #5f0080;
+    background-color: #fff;
+    border-radius: 6px;
+    color: #5f0080;
+}
+/*주소검색 ico*/
+.address-ico{
+display: inline-block;
+    width: 21px;
+    height: 20px;
+    margin-left: -14px;
+    background-image: url(https://res.kurly.com/pc/service/cart/2007/ico_search.svg);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 21px 20px;
+    background-position: 0 50%;
+    vertical-align: -5px;
+}
+.amount-div{
+    padding: 9px 18px 18px 20px;
+    border: 1px solid #f2f2f2;
+    background-color: #fafafa;
+}
+.amount-div input{
+	width: 50%;
+    float: right;
+    text-align: right;
 }
 </style>
 <div class="title">
@@ -192,6 +258,11 @@ padding-left: 6px;
       <br />
       
       <div class="cart-list">
+      	 <c:if test="${empty cartList}">
+	      	 <div class="empty-div">
+	            <p id="empty-txt">장바구니에 담긴 상품이 없습니다.</p>      	 
+	      	 </div>
+         </c:if>
          <table id="fTable">
             <thead>
                <tr>
@@ -199,6 +270,7 @@ padding-left: 6px;
             </thead>
             <tbody>
                <c:forEach items="${cartList }" var="product">
+               	  
                   <c:if test="${product.TEM_CODE.equals('F') }">
                      <tr>
                         <td>
@@ -312,13 +384,11 @@ padding-left: 6px;
                               <span id="${product.P_CODE }_amount"> <fmt:formatNumber
                                     type="number" pattern="#########"
                                     value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} " />
-                                 원
                               </span>
                               <br />
                            </c:if> <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
                                  type="number" pattern="#########"
                                  value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
-                              원
                         </span></td>
                         <td><input type="button" value="" class="deleteBtn"
                            data-delete-code="${product.P_CODE }" /></td>
@@ -330,68 +400,77 @@ padding-left: 6px;
       
       </div>
    </div>
-   <div class="address-wrapper">
-      <span>배송지</span> <br /> <span> 
-      
-      <!-- 배송지 있을때 --> 
-      <c:if test="${address != null }">   
-	      <div id="address">
-	      ${address.ADDRESS }
+   <div class="address-container">
+	   <div class="address-wrapper">
+	      <div class="cart-delivery"> 
+	      <span id="address-tit">배송지</span> <br /> 
+	      
+	      <!-- 배송지 있을때 --> 
+	      <c:if test="${address != null }">   
+		      <div id="address">
+		      ${address.ADDRESS }
+		      </div>
+		      <div id="detailAddress">
+		      ${address.DETAIL_ADDRESS }
+		      </div>
+	      </c:if> 
+	      <!-- 배송지 없을때 --> 
+	      <c:if test="${address == null }">
+	         <span style="color: #5f0080;">배송지를 입력</span>
+	         하고<br />
+	         배송유형을 확인해 보세요!
+	      </c:if>
+	      
+	      <br /> <span> 
+	      <!-- 샛별배송~ --> ${address.DELIVERY_TYPE }
+	      </span> <br />
+	      <!-- 로그인했을때 => 배송지변경 -->
+	      <sec:authorize access="isAuthenticated()">
+	      	<button type="button" id="changeAddress" onclick="findAddress()"><span class="address-ico"></span>배송지변경</button>
+	      </sec:authorize>
+	   
+	      <!-- 로그인 x => 주소검색 -->
+	      <sec:authorize access="isAnonymous()">
+	      	<button type="button" id="searchAddress" onclick="findAddress()"><span class="address-ico"></span>주소 검색</button>
+	      </sec:authorize>
+	      <br />
+	      <br />
+	   </div> 
+	      <!-- 담은 상품 있으면 총금액, 할인금액 등 계산해줌 -->
+	      <div class="amount-div">
+		      <span>상품금액</span>
+		      <!-- original price -->
+		      <input type="text" name="" id="allAmount" value="${ogp }" >
+		       <br />
+		      <span>상품할인금액</span>
+		      <!-- discount price -->
+		      <input type="text" name="" id="dcAmount" value="${dcp }" /> <br /> 
+		      <span>배송비</span>
+		      <input type="text" name="" id="deliveryAmount" /> <br /> 
+		      <span>결제예정금액</span>
+		      <br />
+		      <!-- 최종결제 금액 original - discount price -->
+		      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }" />
+		      <br />
+		      <!-- 로그인했을시 적립 포인트  -->
+		      <sec:authorize access="isAuthenticated()">
+		         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
+		      </sec:authorize>
 	      </div>
-	      <div id="detailAddress">
-	      ${address.DETAIL_ADDRESS }
-	      </div>
-      </c:if> 
-      <!-- 배송지 없을때 --> 
-      <c:if test="${address == null }">
-         배송지를 입력하고<br />
-         배송유형을 확인해 보세요!
-      </c:if>
-      </span> <br /> <span> 
-      <!-- 샛별배송~ --> ${address.DELIVERY_TYPE }
-      </span> <br />
-      <!-- 로그인했을때 => 배송지변경 -->
-      <sec:authorize access="isAuthenticated()">
-         <input type="button" value="배송지 변경" id="changeAddress" onclick="findAddress()" />
-      </sec:authorize>
-   
-      <!-- 로그인 x => 주소검색 -->
-      <sec:authorize access="isAnonymous()">
-         <input type="button" value="주소 검색" id="searchAddress" />
-      </sec:authorize>
-      <br />
-      <br />
-   
-      <!-- 담은 상품 있으면 총금액, 할인금액 등 계산해줌 -->
-      <span>상품금액</span> <br />
-      <!-- original price -->
-      <input type="text" name="" id="allAmount" value="${ogp }" /> <br /> <span>상품할인금액</span>
-      <br />
-      <!-- discount price -->
-      <input type="text" name="" id="dcAmount" value="${dcp }" /> <br /> <span>배송비</span>
-      <br /> <input type="text" name="" id="deliveryAmount" /> <br /> <span>결제예정금액</span>
-      <br />
-      <!-- 최종결제 금액 original - discount price -->
-      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }" />
-      <br />
-      <!-- 로그인했을시 적립 포인트  -->
-      <sec:authorize access="isAuthenticated()">
-         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
-      </sec:authorize>
-      <br />
-      <br />
-      <!-- cartList 있을 때 주문하기 버튼 -->
-      <c:if test="${cartList != null }">
-         <input type="button" value="주문하기" id="reqOrder" />
-      </c:if>
-      <!-- cartList 없으면 상품 담아주세요 -->
-      <c:if test="${cartList == null }">
-         <input type="button" value="상품을 담아주세요" disabled />
-      </c:if>
-   </div>
-	<div class="test" style="clear: both;"></div>
+	      <br />
+	      <br />
+	      <!-- cartList 있을 때 주문하기 버튼 -->
+	      <c:if test="${cartList != null }">
+	         <input type="button" value="주문하기" id="reqOrder" />
+	      </c:if>
+	      <!-- cartList 없으면 상품 담아주세요 -->
+	      <c:if test="${cartList == null }">
+	         <input type="button" value="상품을 담아주세요" id="reqOrder" disabled />
+	      </c:if>
+	   </div>
+	</div>
+		<div class="test" style="clear: both;"></div>
 </div>
-
 <script>
 	
 	$(() => {
@@ -606,3 +685,4 @@ padding-left: 6px;
 		applyCartUpdate(targetId, 1);
 	});
 </script>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
