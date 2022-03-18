@@ -82,7 +82,7 @@
 									<div class="phone_num">
 										<input type="text" value="01021443418" pattern="[0-9]*"
 											name="phone" id="phone" placeholder="숫자만 입력해주세요">
-										<input type="hidden" name="phoneVal" id="phoneVal" value="0" />
+										<input type="hidden" name="phoneVal" id="phoneVal" value="1" />
 										<button type="button" class="white-btn phone-btn">인증번호
 											받기</button>
 									</div>

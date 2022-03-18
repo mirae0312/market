@@ -10,236 +10,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="마켓" name="title" />
 </jsp:include>
-<style>
-.find_id {
-	padding: 50px 0;
-	background-color: white;
-}
-
-.find_id_title {
-	padding-bottom: 30px;
-	font-weight: 500;
-	font-size: 28px;
-	text-align: center;
-}
-
-.find_id_container {
-	max-width: 400px;
-	padding: 0 10px 6px 10px;
-	margin: auto;
-	position: relative;
-	background-color: white;
-}
-
-.select_div {
-	background-color: white;
-	padding: 0 15px 0 15px;
-	margin: 0;
-	box-shadow: inset 0 -0.5px 0 0 #ddd;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-flex-wrap: nowrap;
-	-webkit-flex-wrap: nowrap;
-	-ms-flex-wrap: nowrap;
-	flex-wrap: nowrap;
-	text-align: center;
-}
-
-.phone_btn {
-	display: block;
-	-webkit-box-flex: 1;
-	-webkit-flex-grow: 1;
-	-ms-flex-positive: 1;
-	flex-grow: 1;
-	position: relative;
-	height: 48px;
-	font-weight: 500;
-	font-size: 16px;
-	color: #5f0080;
-	line-height: 18px;
-	box-shadow: inset 0px -2px 0px 0px #5f0080;
-}
-
-button, select {
-	text-transform: none;
-}
-
-button {
-	overflow: visible;
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-}
-
-.findFrm {
-	padding: 24px 20px;
-}
-
-.name_div {
-	padding-bottom: 12px;
-}
-
-.name_label {
-	display: inline-block;
-	padding: 8px 0 11px;
-	font-size: 14px;
-	font-weight: 500;
-	line-height: 19px;
-	color: #333;
-}
-
-.form_name {
-	width: 100%;
-	height: 46px;
-	padding: 0 11px 1px 15px;
-	border: none;
-	border-radius: 4px;
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 1.5;
-	color: #333;
-	outline: none;
-}
-
-.submit_btn:disabled, .email_submit_btn:disabled {
-	background-color: #ddd;
-}
-
-.submit_btn, .email_submit_btn {
-	display: block;
-	padding: 0 10px;
-	text-align: center;
-	overflow: hidden;
-	width: 100%;
-	height: 52px;
-	border-radius: 4px;
-	color: #fff;
-	background-color: #5f0080;
-	border: 0 none;
-}
-
-.submit_btn.on, .email_submit_btn.on {
-	background-color: #5f0080;
-}
-
-.phone_div {
-	padding-bottom: 12px;
-}
-
-.phone_label, .email_label, .code_label {
-	display: inline-block;
-	padding: 8px 0 11px;
-	font-size: 14px;
-	font-weight: 500;
-	line-height: 19px;
-	color: #333;
-}
-
-#name, #phone, #email, #code {
-	width: 100%;
-	height: 46px;
-	padding: 0 11px 1px 15px;
-	border-radius: 4px;
-	border: 1px solid #ddd;
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 1.5;
-	color: #333;
-	outline: none;
-}
-
-.email_btn {
-	display: block;
-	-webkit-box-flex: 1;
-	-webkit-flex-grow: 1;
-	-ms-flex-positive: 1;
-	flex-grow: 1;
-	position: relative;
-	height: 48px;
-	font-weight: 400;
-	font-size: 16px;
-	color: #666;
-	line-height: 18px;
-	cursor: pointer;
-}
-
-.submit_btn, .email_submit_btn {
-	margin-top: 18px;
-	cursor: pointer;
-}
-
-#emailFrm {
-	display: contents;
-}
-
-.email_div {
-	display: none;
-}
-
-
-.count_down{
-position: absolute;
-    left: 170px;
-    top: 14px;
-    /* width: 100px; */
-    font-size: 14px;
-    color: #b3130b;
-    line-height: 20px;
-    text-align: right;
-    letter-spacing: -.5px;
-}
-.code_num {
-	position: relative;
-	padding-top: 10px;
-}
-
-.code_div {
-	display: flex;
-	align-items: flex-end;
-	position: relative;
-}
-
-.re_code_btn {
-	display: block;
-	padding: 0px 10px;
-	text-align: center;
-	overflow: hidden;
-	width: 100px;
-	height: 48px;
-	border-radius: 4px;
-	color: rgb(51, 51, 51);
-	background-color: rgb(255, 255, 255);
-	border: 1px solid rgb(221, 221, 221);
-	margin-left: 12px;
-	flex-shrink: 0;
-}
-#final_id_btn, .phone_code{
-	display: none;
-}
-
-/*타이머*/
-.member_join .field_phone .code_num .count_down {
-    position: absolute;
-    left: 216px;
-    top: 21px;
-    width: 100px;
-    font-size: 14px;
-    color: #b3130b;
-    line-height: 20px;
-    text-align: right;
-    letter-spacing: -.5px;
-}
-
-.member_join .field_phone .code_num {
-    position: relative;
-    padding-top: 10px;
-}
-.code_num{
-	display:none;
-}
-</style>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/login/findId.css" />
 <div class="find_id">
@@ -300,6 +70,25 @@ position: absolute;
 	</div>
 </div>
 <script>
+$(".email_submit_btn").click((e) => {
+	const checkType = "IE";
+	const name = $("[name=name]").val();
+	const email = $("[name=email]").val();
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/login/certifiedNum",
+		data:{
+			checkType,
+			name,
+			email
+		},
+		success(resp){
+			console.log(resp);
+			
+		},
+		error: console.log
+	});
+});
 $("#phone_confirm_btn").click((e) => {
 	const checkType = "IP";
 	const button1 = $("#phone_confirm_btn");

@@ -30,7 +30,7 @@
                             <div class="checkbox_save">
                                 <label class="label_checkbox">
                             		<input type="checkbox" id="keep_login" name="remember-me" value="y">
-                                    로그인 유지
+                                    아이디 저장
                                 </label>
                                  <div class="login_search">
 									<a class="link" href="${pageContext.request.contextPath}/login/findId">
