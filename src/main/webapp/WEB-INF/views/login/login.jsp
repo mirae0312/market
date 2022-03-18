@@ -33,11 +33,11 @@
                                     로그인 유지
                                 </label>
                                  <div class="login_search">
-									<a class="link" href="${pageContext.request.contextPath}/login/findId?checkType=IP">
+									<a class="link" href="${pageContext.request.contextPath}/login/findId">
                                         아이디 찾기
                                     </a>
                                     <span class="bar"></span>
-                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd?checkType=PP">
+                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd">
                                         비밀번호 찾기
                                     </a>
                                  
