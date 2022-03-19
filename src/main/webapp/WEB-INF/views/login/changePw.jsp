@@ -75,21 +75,39 @@ padding: 24px 20px;
 	    		<p>비밀번호 재설정</p>
 	    	</div>
 	    	<div class="new_pw_div">
-	    	${member}
-	    		<form action="">
+	    		<form id="changePw">
 	    			<div class="new_pw1">
 	    				<label for="">새 비밀번호 등록</label>
-	    				<input type="text" name="pwd1" id="pwd1" placeholder="새 비밀번호를 입력해 주세요"/>
+	    				<input type="text" name="password" id="pwd1" placeholder="새 비밀번호를 입력해 주세요"/>
 	    			</div>
 	    			<div class="new_pw2">
 	    				<label for="">새 비밀번호 확인</label>
 	    				<input type="text" name="pwd2" id="pwd2" placeholder="새 비밀번호를 한 번 더 입력해 주세요"/>
 	    			</div>
+		    		<input id="token" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 	    			<button disabled type="submit" class="submit_btn">확인</button>
 	    		</form>
 	    	</div>
     	</div>	
     </div>
+<script>
+$(changePw).submit((e) => {
+	e.preventDefault();
+	
+	const password = $("#pwd1").val();
+	$.ajax({
+		url: "${pageContext.request.contextPath}/login/changePw",
+		method: "POST",
+		data:{
+			password
+		},
+		success(resp){
+			console.log(resp);
+		},
+		error: console.log
+	});
+});
+</script>
 <script>
 $('#pwd1').on('input', checkInput);
 $('#pwd2').on('input', checkInput);
