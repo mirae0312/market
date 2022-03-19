@@ -289,6 +289,9 @@
 			$passwordCheck.focus();
 			return false;
 		}
+		
+		alert("회원가입 성공!")
+		return true;
 	});
 	
 
