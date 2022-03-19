@@ -91,6 +91,8 @@ $(".email_submit_btn").click((e) => {
 });
 
 $("#phone_confirm_btn").click((e) => {
+	e.preventDefault();
+	
 	const checkType = "IP";
 	const button1 = $("#phone_confirm_btn");
 	const button2 = $("#final_id_btn");
@@ -114,6 +116,7 @@ $("#phone_confirm_btn").click((e) => {
 	count_down.show();
 	
 	$(".re_code_btn").click((e)=> {
+		e.preventDefault();
 		$(".submit_btn").addClass('on');
 		var leftSec = 60;
 		 if (isRunning){ 
@@ -155,6 +158,7 @@ $("#phone_confirm_btn").click((e) => {
 				}
 				else{
 					alert("핸드폰 인증 실패");
+					return false;
 				}
 			})
 		},

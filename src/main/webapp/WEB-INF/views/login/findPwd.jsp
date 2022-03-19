@@ -19,10 +19,10 @@
 			<button selected="" type="button" class="phone_btn">휴대폰 인증</button>
 			<button type="button" class="email_btn">이메일 인증</button>
 		</div>
-		<form class="findFrm">
+		<form class="findFrm" action="${pageContext.request.contextPath}/login/changePw">
 			<div class="id_div">
-				<label for="name" class="name_label">아이디</label>
-				<div class="name_input_div">
+				<label for="id" class="name_label">아이디</label>
+				<div class="id_input_div">
 					<input type="text" id="id" name="id" value=""
 						placeholder="아이디를 입력해 주세요" class="id_input">
 				</div>
@@ -41,17 +41,17 @@
 							<input type="text" id="code" name="code" value=""
 								placeholder="인증번호 숫자 6자리" maxlength="6" />
 						</div>
-						<button class="re_code_btn">시간 연장</button>
+						<button class="re_code_btn" type="button">시간 연장</button>
 						<p id="countdown" class="count_down"></p>
 					</div>
 				</div>
-				<button class="submit_btn" id="phone_confirm_btn" type="submit"
+				
+				<button class="submit_btn" id="phone_confirm_btn" type="button"
 					disabled radius="4">
 					<span class="get_number">인증번호 받기</span>
 				</button>
-				<button class="submit_btn" id="final_id_btn" type="button"
+				<button class="submit_btn" id="final_id_btn" type="submit"
 					disabled radius="4">
-					${member}
 					<span class="get_number">확인</span>
 				</button>
 			</div>
@@ -61,34 +61,35 @@
 					<input type="email" id="email" name="email" value=""
 						placeholder="이메일을 입력해 주세요" class="email_input">
 				</div>
-				<button class="email_submit_btn" type="button" disabled
+				<button class="email_submit_btn" type="submit" disabled
 					radius="4">
 					<span class="get_number">확인</span>
 				</button>
 			</div>
+			<input type="hidden" id="checkType" name="checkType" value="" />
 		</form>
 	</div>
 </div>
 <script>
 $(".email_submit_btn").click((e) => {
-	const checkType = "PE";
 	const id = $("[name=id]").val();
 	const email = $("[name=email]").val();
+
+	$("#checkType").val("PE");
 	
 	$.ajax({
 		url: "${pageContext.request.contextPath}/login/certifiedNum",
 		data:{
-			checkType,
 			id,
 			email
 		},
 		success(resp){
 			console.log(resp);
-			
 		},
 		error: console.log
 	});
 });
+
 $("#phone_confirm_btn").click((e) => {
 	const checkType = "PP";
 	const button1 = $("#phone_confirm_btn");
@@ -109,8 +110,20 @@ $("#phone_confirm_btn").click((e) => {
 	var count_down = $(".count_down");
 	var timer = null;
 	var isRunning = false;
+	
 	count_down.show();
-	console.log(id);
+	
+	$(".re_code_btn").click((e)=> {
+		$(".submit_btn").addClass('on');
+		var leftSec = 60;
+		 if (isRunning){ 
+			    clearInterval(timer);
+			    count_down.html("");
+			    startTimer(leftSec, count_down);
+			  }else{
+			  	startTimer(leftSec, count_down);
+			  }
+	});
 	
 	$.ajax({
 		url: "${pageContext.request.contextPath}/login/certifiedNum",
@@ -122,8 +135,8 @@ $("#phone_confirm_btn").click((e) => {
 		success(resp){
 			console.log(resp);
 			const {num} = resp;
-
 			var leftSec = 180;
+			
 			// 버튼 클릭 시 시간 연장
 			  if (isRunning){ 
 			    clearInterval(timer);
@@ -135,26 +148,14 @@ $("#phone_confirm_btn").click((e) => {
 			
 			$("#final_id_btn").click((e) => {
 				const code = $("#code").val();
-				const re_code = $(".re_code_btn");
-				
 				
 				if(num == code){
-					$.ajax({
-						url: "${pageContext.request.contextPath}/login/findIdSuccess",
-						data:{
-							checkType,
-							name,
-							phone
-						},
-						success(resp){
-							alert("핸드폰 인증에 성공하였습니다.");
-							console.log(resp);
-						},
-						error: console.log
-					});
+					$("#checkType").val("PP");
+					alert("핸드폰 인증에 성공하였습니다.");
 				}
 				else{
-					alert(msg);
+					alert("핸드폰 인증 실패");
+					return false;
 				}
 			})
 		},
@@ -186,17 +187,17 @@ $("#phone_confirm_btn").click((e) => {
 });
 </script>
 <script>
-$('#name').on('input', checkInput);
+$('#id').on('input', checkInput);
 $('#phone').on('input', checkInput);
 $('#email').on('input', checkEmail);
 // input 입력 시에 checkInput 함수실행
 function checkInput() {
-	  var nameCheck = $('#name').val();   // idCheck 변수
+	  var idCheck = $('#id').val();   // idCheck 변수
 	  var phoneCheck = $('#phone').val();   // idCheck 변수
 	  
 	  var checkSubmit = $('.submit_btn');
 	
-	  if (nameCheck === '' || phoneCheck === '') {
+	  if (idCheck === '' || phoneCheck === '') {
 	    // 기본 로그인 버튼 색상
 	    checkSubmit.removeClass('on');
 	  }
@@ -208,12 +209,12 @@ function checkInput() {
   
 }
 function checkEmail() {
-	  var nameCheck = $('#name').val();   // idCheck 변수
+	  var idCheck = $('#id').val();   // idCheck 변수
 	  var emailCheck = $('#email').val();
 	  
 	  var checkSubmit = $('.email_submit_btn');
 
-	  if (nameCheck === '' || emailCheck === '') {
+	  if (idCheck === '' || emailCheck === '') {
 	    // 기본 로그인 버튼 색상
 	    checkSubmit.removeClass('on');
 	  }
