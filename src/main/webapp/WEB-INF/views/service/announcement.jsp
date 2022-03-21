@@ -23,7 +23,7 @@
             /* float: left; */
         }
         .leftSide a{
-            display: block;
+            /* display: block; */
             overflow: hidden;
             padding: 14px 0 16px 20px;
             /* background: #fff; */
@@ -78,6 +78,22 @@
             font-weight: 700;
             font-size: 14px;
         }
+        /* leftside on */
+ 		.leftSide-list #userClick, .leftSide-list #userClick a, .leftSide-list #userClick i, .leftSide-list li:hover, .leftSide-list li a:hover, .leftSide-list li:hover > .fa-chevron-right{
+            background: #fafafa;
+            font-weight: 700;
+            color: #5f0080;
+        }
+        .leftsideQuestion-div{
+        	position:relative;
+        }
+        .leftsideQuestion-div i{
+        	text-align: center; */
+			position: absolute;
+    		right: 18px;
+    		bottom: 23px;
+    		color:var(--purple);
+        }
 
         /* csBoard */
         .csPage-section{
@@ -111,6 +127,17 @@
         .csTable{
             border-top: 2px solid var(--purple);
             width: 880px;
+            border-collapse: collapse;
+            font-size: 12px;
+            
+        }
+        
+        .csTable tr td{
+        	padding: 12px;
+    		border-bottom: 1px solid #f4f4f4;
+    		text-align: center;
+    		vertical-align: middle;
+    		word-wrap: break-word;
         }
         /* .csTable thead tr {
         	border-bottom: 1px solid black;
@@ -123,12 +150,23 @@
     		font-weight: 500;
         }
         
+        .csTable tr td{
+        	padding: 12px;
+    		border-top: 1px solid #f4f4f4;
+    		text-align: center;
+    		vertical-align: middle;
+    		word-wrap: break-word;
+        }
+        .csTable tbody tr:first-child td{
+        	border-top: 1px solid #333;
+        }
 
         /* csBoard-search */
         .csSearch-section{
             height: 80px;
             padding: 0;
             border-top: 1px solid var(--purple);
+            margin-top: 30px;
         }
 
         .csSearch-section form{
@@ -153,12 +191,7 @@
 			margin-right: 5px;
 		}
 		
-        .pagenation{
-            text-align: center;
-        }
-        .pagenation ul{
-        	list-style-type: none;
-        }
+        
         .csSearch-section input[type=text]{
             height: 34px;
             line-height: 34px;
@@ -183,12 +216,24 @@
         #cs-mainTitle{
         	padding-bottom: 30px;
         }
-        /* leftside on */
- 		.leftSide-list #userClick, .leftSide-list #userClick a, .leftSide-list #userClick i, .leftSide-list li:hover, .leftSide-list li a:hover, .leftSide-list li:hover > .fa-chevron-right{
-            background: #fafafa;
-            font-weight: 700;
-            color: #5f0080;
+        
+        /* pagenation */
+        .pagenation{
+            text-align: center;
+            margin: 60px 0 0;
         }
+        .pagenation ul{
+        	list-style-type: none;
+        }
+        .pagenation li{
+        	display: inline-block;
+			/*width: 34px; */
+    		height: 34px;
+    		border: 1px solid #ddd;
+    		/* border-left: 0; */
+    		vertical-align: top;
+        }
+        
  </style>
  
     <!-- cs page --> 
@@ -226,8 +271,10 @@
         </div>
         
         <!-- leftSide chatbot? 1:1 문의하기 -->
-        <div>
-            <a href="${pageContext.request.contextPath}/cs/notice" id="leftSide-inquire"><span class="">도움이 필요하신가요?</span>1:1 문의하기</a><i class="fa-solid fa-angle-right"></i>
+        <div class="leftsideQuestion-div">
+            <a href="${pageContext.request.contextPath}/service/myQuetion" id="leftSide-inquire">
+            <span class="">도움이 필요하신가요?</span>1:1 문의하기</a>
+            <!-- <i class="fas fa-chevron-right"></i> -->
         </div>
     </div>
     
@@ -252,11 +299,11 @@
                 <tbody>
                 	<c:forEach var="board" items="announceList">
                     <tr>
-                        <td></td>
-                        <td><a href=""></a></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>1</td>
+                        <td><a href="${pageContext.request.contextPath}/service/announcementDetail">테스트</a></td>
+                        <td>마켓갈래</td>
+                        <td>2022</td>
+                        <td>2</td>
                     </tr>
                     </c:forEach>
                 </tbody>

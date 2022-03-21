@@ -192,7 +192,7 @@
         
         /* inquire page */
         .page-section{
-
+			padding-left: 30px;
         }
 
         /* inquire-title */
@@ -247,7 +247,7 @@
             
         }
         .board-write dd{
-            text-indent: -30px;
+            text-indent: 10px;
         }
         #write-textarea{
             width: 100%;
@@ -274,7 +274,9 @@
             float: right;
             margin-left: 2px;
             font-size: 13px;
-            font-weight: 600;
+        }
+        .board-submitBtn:hover{
+        	background-color: #5f0080;
         }
  </style>
  
@@ -417,7 +419,7 @@
                                             <td>1</td>
                                             <td>
                                                 <input type="file">
-                                                <a href=""><i class="fa-solid fa-plus">+</i><span>업로드추가</span></a>
+                                                <a href=""><i class="fas fa-plus"></i><span>업로드추가</span></a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -439,5 +441,5 @@
     <!-- cs page 끝 -->
     </div>
 
-  
+  <i class="fas fa-minus"></i>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
