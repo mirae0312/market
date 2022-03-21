@@ -94,6 +94,15 @@ public class MyPageController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping("/addAddr")
+	public ResponseEntity<?> addAddr(@RequestParam String member_post, @RequestParam String member_addr, @RequestParam String member_detail_addr, @AuthenticationPrincipal Member member) throws ParseException
+	{
+		int result = 0;
+		String phone = member.getPhone();
+		
+		
+		return ResponseEntity.ok(result);
+	}
 	
 	
 	@InitBinder

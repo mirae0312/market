@@ -63,8 +63,8 @@
 	<br />
 	<input id="member_addr" type="text" placeholder="Address" readonly>
 	<br />
-	<input type="text" placeholder="Detailed Address">
-    
+	<input type="text" id="member_detail_addr" placeholder="Detailed Address">
+    <input type="button" value="등록" id="addAddr"/>
     
 
 
@@ -129,6 +129,22 @@ function findAddr(){
         }
     }).open();
 }
+
+$("#addAddr").click((e) => {
+	console.log("배송지 등록");
+	$.ajax({
+		url: '${pageContext.request.contextPath}/mypage/addAddr',
+		data : {
+			member_post: $("#member_post").val(),
+			member_addr: $("#member_addr").val(),
+			member_detail_addr: $("#member_detail_addr").val()
+		},
+		success(res){
+			
+		},
+		error: console.log
+	});
+});
 
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
