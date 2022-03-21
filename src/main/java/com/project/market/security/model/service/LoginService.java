@@ -8,4 +8,7 @@ public interface LoginService {
 
     Member selectOneMemberById(Map<String, Object> kakaoUser);
 
+    Member selectOneMemberForFind(Map<String, Object> check);
+
+    void updatePassword(Map<String, Object> param);
 }

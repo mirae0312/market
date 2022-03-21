@@ -37,6 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.authorizeRequests()
 				.antMatchers("/market").permitAll()
+				.antMatchers("/login/snsLogin").permitAll()
 			.and()
 				.formLogin()
 				.loginPage("/login/login")
@@ -70,7 +71,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/login/snsLogin");
+//		web.ignoring().antMatchers("/login/snsLogin");
 	}
 	
 	

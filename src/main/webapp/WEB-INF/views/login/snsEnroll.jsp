@@ -37,12 +37,14 @@
 										label="이름" readonly placeholder="이름을 입력해주세요"></td>
 								</tr>
 							</c:if>
-							<tr>
-								<th>이름<span class="ico">*<span class="screen_out">필수항목</span></span></th>
-								<td><input type="text" name="name" value="희연" required=""
-									fld_esssential="" label="이름" placeholder="이름을 입력해주세요">
-								</td>
-							</tr>
+							<c:if test="${userInfo.type eq 'kakao'}">
+								<tr>
+									<th>이름<span class="ico">*<span class="screen_out">필수항목</span></span></th>
+									<td><input type="text" name="name" value="희연" required=""
+										fld_esssential="" label="이름" placeholder="이름을 입력해주세요">
+									</td>
+								</tr>
+							</c:if>
 							<c:if test="${userInfo.type eq 'naver' || 'google'}">
 								<tr>
 									<th>이메일<span class="ico">*<span class="screen_out">필수항목</span></span></th>
@@ -54,6 +56,7 @@
 									</td>
 								</tr>
 							</c:if>
+							<c:if test="${userInfo.type eq 'kakao'}">
 							<tr>
 								<th>이메일<span class="ico">*<span class="screen_out">필수항목</span></span></th>
 								<td><input type="text" name="email" id="email"
@@ -64,6 +67,7 @@
 									<button type="button" class="white-btn email-btn">중복확인</button>
 								</td>
 							</tr>
+							</c:if>
 							<c:if test="${userInfo.type eq 'naver'}">
 								<tr class="field_phone">
 									<th>휴대폰<span class="ico">*<span class="screen_out">필수항목</span></span></th>
@@ -75,6 +79,7 @@
 									</td>
 								</tr>
 							</c:if>
+							<c:if test="${userInfo.type eq 'kakao'}">
 							<tr class="field_phone">
 								<th>휴대폰<span class="ico">*<span class="screen_out">필수항목</span></span></th>
 								<td>
@@ -95,6 +100,7 @@
 									</div>
 								</td>
 							</tr>
+							</c:if>
 							<tr>
 								<th>주소<span class="ico">*<span class="screen_out">필수항목</span></span></th>
 								<td class="field_address"><input type="text" id="postcode"
@@ -501,5 +507,18 @@
         }).open();
     }
 </script>
+<script>
+function noEvent() {
+    if (event.keyCode == 116) {
+        event.keyCode= 2;
+        return false;
+    }
+    else if(event.ctrlKey && (event.keyCode==78 || event.keyCode == 82))
+    {
+        return false;
+    }
+}
+document.onkeydown = noEvent;
 
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
