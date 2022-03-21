@@ -51,6 +51,21 @@ padding: 24px 20px;
     line-height: 1.5;
     color: #333;
     outline: none;
+    position: relative;
+}
+.new_pw1 i{
+    position: absolute;
+    right: 70px;
+    color: gray;
+    bottom: 255px;
+    font-size: 15px;
+}
+.new_pw2 i{
+	    position: absolute;
+    right: 70px;
+    color: gray;
+    bottom: 173px;
+    font-size: 15px;
 }
 .submit_btn{
 	display: block;
@@ -78,13 +93,16 @@ padding: 24px 20px;
 	    		<form id="changePw">
 	    			<div class="new_pw1">
 	    				<label for="">새 비밀번호 등록</label>
-	    				<input type="text" name="password" id="pwd1" placeholder="새 비밀번호를 입력해 주세요"/>
+	    				<input type="password" name="password" id="pwd1" placeholder="새 비밀번호를 입력해 주세요 "/>
+	    				<i class="fa fa-eye-slash fa-lg"></i>
 	    			</div>
 	    			<div class="new_pw2">
 	    				<label for="">새 비밀번호 확인</label>
-	    				<input type="text" name="pwd2" id="pwd2" placeholder="새 비밀번호를 한 번 더 입력해 주세요"/>
+	    				<input type="password" name="pwd2" id="pwd2" placeholder="새 비밀번호를 한 번 더 입력해 주세요"/>
+	    				<i class="fa fa-eye-slash fa-lg"></i>
 	    			</div>
 		    		<input id="token" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		    		<input type="hidden" name="id" id="id" value="${member.id}"/>
 	    			<button disabled type="submit" class="submit_btn">확인</button>
 	    		</form>
 	    	</div>
@@ -94,15 +112,38 @@ padding: 24px 20px;
 $(changePw).submit((e) => {
 	e.preventDefault();
 	
+	const csrfHeader = "${_csrf.headerName}";
+    const csrfToken = "${_csrf.token}";
+    const headers = {};
+    headers[csrfHeader] = csrfToken;
+    
+    const id ="${member.id}";
 	const password = $("#pwd1").val();
+	const password2 = $("#pwd2").val();
+	
+	// 비밀번호	
+	if(! /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(password)){
+        alert("비밀번호는 숫자와 영문이 포함된 8~15자리입니다");
+		$("#pwd1").focus();
+		return false;
+    }
+	// 비밀번호 일치 확인
+	if(password != password2){
+    	alert("비밀번호가 일치하지 않습니다.");
+		$("#pwd2").focus();
+		return false;
+	}
 	$.ajax({
 		url: "${pageContext.request.contextPath}/login/changePw",
 		method: "POST",
+		headers : headers,
 		data:{
-			password
+			password,
+			id
 		},
 		success(resp){
-			console.log(resp);
+			alert("비밀번호 변경 성공! 로그인 페이지로 이동합니다.");
+			location.href = "${pageContext.request.contextPath}/login/login";
 		},
 		error: console.log
 	});
@@ -129,5 +170,25 @@ function checkInput() {
 	  }
   
 }
+$(".new_pw1 i").on('click', function(){
+	 $('#pwd1').toggleClass('active');
+     if($('#pwd1').hasClass('active')){
+         $(this).attr('class',"fa fa-eye fa-lg")
+         .prev('#pwd1').attr('type',"text");
+     }else{
+         $(this).attr('class',"fa fa-eye-slash fa-lg")
+         .prev('#pwd1').attr('type','password');
+     }
+});
+$(".new_pw2 i").on('click', function(){
+	 $('#pwd2').toggleClass('active');
+    if($('#pwd2').hasClass('active')){
+        $(this).attr('class',"fa fa-eye fa-lg")
+        .prev('#pwd2').attr('type',"text");
+    }else{
+        $(this).attr('class',"fa fa-eye-slash fa-lg")
+        .prev('#pwd2').attr('type','password');
+    }
+});
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
