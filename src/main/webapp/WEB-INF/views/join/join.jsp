@@ -82,7 +82,7 @@
 									<div class="phone_num">
 										<input type="text" value="01021443418" pattern="[0-9]*"
 											name="phone" id="phone" placeholder="숫자만 입력해주세요">
-										<input type="hidden" name="phoneVal" id="phoneVal" value="0" />
+										<input type="hidden" name="phoneVal" id="phoneVal" value="1" />
 										<button type="button" class="white-btn phone-btn">인증번호
 											받기</button>
 									</div>
@@ -91,7 +91,7 @@
 											size="6" maxlength="6" pattern="[0-9]*"
 											placeholder="인증번호 숫자 6자리">
 										<button id="phone_confirm_btn" class="btn default"
-											type="button">인증번호 확인</button>
+											type="button">재발송</button>
 										<p id="countdown" class="count_down"></p>
 									</div>
 								</td>
@@ -289,6 +289,9 @@
 			$passwordCheck.focus();
 			return false;
 		}
+		
+		alert("회원가입 성공!")
+		return true;
 	});
 	
 
@@ -491,7 +494,7 @@
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	function popup(){
-	    var url = '${pageContext.request.contextPath}/join/findAddress';
+	    var url = '${pageContext.request.contextPath}/product/cart/findAddress';
 	    var name = "popup test";
 	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
 	    window.open(url, name, option);

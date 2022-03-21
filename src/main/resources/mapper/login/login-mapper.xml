@@ -29,7 +29,7 @@
             <if test="checkType == 'PE'">
                 id = #{id} and email = #{email}
             </if>
-            <if test="checkType == 'PE'">
+            <if test="checkType == 'PP'">
                 id = #{id} and phone = #{phone}
             </if>
         </where>

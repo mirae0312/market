@@ -43,6 +43,9 @@ public class LoginController {
     @GetMapping("/login")
     public void login(){}
     
+    @GetMapping("/findId")
+    public void findId(){}
+
     @GetMapping("/findPwd")
     public void findPwd(){}
 
@@ -157,6 +160,7 @@ public class LoginController {
             log.debug("check = {}", check);
             String checkType = (String) check.get("checkType");
             Member member = loginService.selectOneMemberForFind(check);
+            /*
             if(member != null && (CheckType.IP.toString().equals(checkType) || CheckType.PP.toString().equals(checkType))) {
                 smsService.sendCheckNum(check);
             }else if(member != null && (CheckType.IE.toString().equals(checkType)) || CheckType.PE.toString().equals(checkType)){
@@ -165,7 +169,7 @@ public class LoginController {
                 check.put("msg", "등록되지 않은 정보입니다.");
                 check.put("check", "N");
                 return ResponseEntity.ok(check);
-            }
+            }*/
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw e;
