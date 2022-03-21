@@ -15,9 +15,11 @@
 	style="border: 0 none; margin: 0; width: 100%; height: 70%; min-width: 300px; overflow: hidden; padding: 0"></iframe>
 <div class="address_search" style="display: block;">
 	<div class="layer_prev">
-		<img
+		<!-- <img
 			src="https://res.kurly.com/mobile/service/common/1908/ico_prev_333_100x100.png"
-			alt="" class="ico"><span class="tit">주소 재검색</span>
+			alt="" class="ico">-->
+			<h3>주소 재검색</h3>
+	${address}
 	</div>
 </div>
 <script src="https://kit.fontawesome.com/4123702f4b.js"

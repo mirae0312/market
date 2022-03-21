@@ -237,6 +237,7 @@ display: inline-block;
     padding: 9px 18px 18px 20px;
     border: 1px solid #f2f2f2;
     background-color: #fafafa;
+    font-size: 20px;
 }
 .amount-div span{
 	float: left;
@@ -245,6 +246,20 @@ display: inline-block;
 	width: 50%;
     float: right;
     text-align: right;
+    border: none;
+    background-color: #fafafa;
+    font-size: 20px;
+}
+.amount-div input:focus{
+	border: none;
+	outline: none;
+}
+.point{
+	margin-top: 20px;
+	display: inline-block;
+}
+.point span{
+	float: none;
 }
 </style>
 <div class="title">
@@ -429,12 +444,12 @@ display: inline-block;
 	      </span> <br />
 	      <!-- 로그인했을때 => 배송지변경 -->
 	      <sec:authorize access="isAuthenticated()">
-	      	<button type="button" id="changeAddress" onclick="findAddress()"><span class="address-ico"></span>배송지변경</button>
+	      	<button type="button" id="changeAddress" onclick="popup()"><span class="address-ico"></span>배송지변경</button>
 	      </sec:authorize>
 	   
 	      <!-- 로그인 x => 주소검색 -->
 	      <sec:authorize access="isAnonymous()">
-	      	<button type="button" id="searchAddress" onclick="findAddress()"><span class="address-ico"></span>주소 검색</button>
+	      	<button type="button" id="searchAddress" onclick="popup()"><span class="address-ico"></span>주소 검색</button>
 	      </sec:authorize>
 	      <br />
 	      <br />
@@ -443,21 +458,22 @@ display: inline-block;
 	      <div class="amount-div">
 		      <span>상품금액</span>
 		      <!-- original price -->
-		      <input type="text" name="" id="allAmount" value="${ogp }" >
+		      <input type="text" name="" id="allAmount" value="${ogp }원" readonly>
 		       <br />
 		      <span>상품할인금액</span>
 		      <!-- discount price -->
-		      <input type="text" name="" id="dcAmount" value="${dcp }" /> <br /> 
+		      <input type="text" name="" id="dcAmount" value="${dcp }원"  readonly/> <br /> 
 		      <span>배송비</span>
-		      <input type="text" name="" id="deliveryAmount" />
+		      <input type="text" name="" id="deliveryAmount" readonly /><br />
 		      <span>결제예정금액</span>
-		      <br />
 		      <!-- 최종결제 금액 original - discount price -->
-		      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }" />
+		      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }원"  readonly/>
 		      <br />
 		      <!-- 로그인했을시 적립 포인트  -->
 		      <sec:authorize access="isAuthenticated()">
+		      <div class="point">
 		         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
+		      </div>
 		      </sec:authorize>
 	      </div>
 	      <br />
@@ -687,5 +703,40 @@ display: inline-block;
 		
 		applyCartUpdate(targetId, 1);
 	});
+</script>
+<!-- 다움 주소검색 API -->
+<script src="https://kit.fontawesome.com/4123702f4b.js"
+	crossorigin="anonymous"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+	function popup(){
+	    var url = '${pageContext.request.contextPath}/product/cart/findAddress';
+	    var name = "popup test";
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);
+	}
+    function findAddress() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("detailAddress").focus();
+            }
+        }).open();
+    }
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

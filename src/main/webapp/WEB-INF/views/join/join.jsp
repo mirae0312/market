@@ -494,7 +494,7 @@
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	function popup(){
-	    var url = '${pageContext.request.contextPath}/join/findAddress';
+	    var url = '${pageContext.request.contextPath}/product/cart/findAddress';
 	    var name = "popup test";
 	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
 	    window.open(url, name, option);
