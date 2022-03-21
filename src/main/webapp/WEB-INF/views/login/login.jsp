@@ -30,14 +30,14 @@
                             <div class="checkbox_save">
                                 <label class="label_checkbox">
                             		<input type="checkbox" id="keep_login" name="remember-me" value="y">
-                                    로그인 유지
+                                    아이디 저장
                                 </label>
                                  <div class="login_search">
-									<a class="link" href="${pageContext.request.contextPath}/login/findId?checkType=IP">
+									<a class="link" href="${pageContext.request.contextPath}/login/findId">
                                         아이디 찾기
                                     </a>
                                     <span class="bar"></span>
-                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd?checkType=PP">
+                                    <a class="link" href="${pageContext.request.contextPath}/login/findPwd">
                                         비밀번호 찾기
                                     </a>
                                  
@@ -68,31 +68,4 @@
             </div>
         </div>
     </div>
-<script>
-	/* $(".email-btn").click((e) => {
-		const type = "email";
-		const email = $("#email").val();
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkDuplicate",
-			data:{
-				type: type,
-				email: email
-			},
-			success(resp){
-				console.log(resp);
-				const {available} = resp;
-				
-				if(available){
-					alert("사용가능한 이메일입니다.");
-					$("#emailVal").val(1);
-				}
-				else{
-					alert("이미 가입한 이메일입니다.");
-				}
-			},
-			error: console.log
-		});
-	}); */
-</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
