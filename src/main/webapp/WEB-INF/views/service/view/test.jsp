@@ -11,6 +11,7 @@
     <title>$Title$</title>
 </head>
 <body>
-<h1>hi</h1>
+<a href="${pageContext.request.contextPath}/service/view/echoProposal">echo</a>
+<a href="${pageContext.request.contextPath}/service/enroll/echoProposal">echo enroll</a>
 </body>
 </html>

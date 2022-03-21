@@ -20,7 +20,11 @@ public class Question implements Serializable {
     private String qCode;
     private String title;
     private String questionCategory;
-    private String pCode;
+    private String uid; // 결제정보
+    private Date orderDate; // 주문일자
+    private String orderName; // 상품명 ex) 필라델피아 크림치즈_외 6건
+    private String orderNum; // 수량
+    private String orderPrice; // 주문금액
     private String writer;
     private String phone;
     private String email;
