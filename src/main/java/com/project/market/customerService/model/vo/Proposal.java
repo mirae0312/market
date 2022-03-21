@@ -14,17 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Announcement implements Serializable {
+public class Proposal implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String anCode;
+    private String code;
+    private String category;
     private String title;
     private String writer;
-    private Date regDate;
-    private int readCount;
     private String content;
-    private String announce; // A:항상위에 '공지'로 등록, D:일반공지
+    private Date regDate;
+    private String name; // 대량 신청자
+    private String phone; // 대량 신청자번호
+    private String email; // 대량 신청자 이메일
+    private Date receiveDate; // 대량 신청자 배송지(여러 곳: M or한 곳: O)
+    private String delivery;
     private List<Attachment> attachments;
 
 }
