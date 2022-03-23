@@ -338,7 +338,7 @@ public class CustomerServiceController {
             switch (boardId){
                 case ANNO:
                     log.debug("announcement = {}", announcement);
-                    saveDirectory = application.getRealPath("/resources/upload/announce");
+                    saveDirectory = application.getRealPath(annoPath);
 
                     if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
@@ -349,7 +349,7 @@ public class CustomerServiceController {
                     break;
                 case QUES:
                     log.debug("question = {}", question);
-                    saveDirectory = application.getRealPath("/resources/upload/question");
+                    saveDirectory = application.getRealPath(quesPath);
 
                     if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
@@ -360,7 +360,7 @@ public class CustomerServiceController {
                     break;
                 case PRPR:
                     log.debug("productProposal = {}", proposal);
-                    saveDirectory = application.getRealPath("/resources/upload/productProposal");
+                    saveDirectory = application.getRealPath(prprPath);
 
                     if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
@@ -371,7 +371,7 @@ public class CustomerServiceController {
                     break;
                 case ECPR:
                     log.debug("echoProposal = {}", proposal);
-                    saveDirectory = application.getRealPath("/resources/upload/echoProposal");
+                    saveDirectory = application.getRealPath(ecprPath);
 
                     if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
@@ -382,7 +382,7 @@ public class CustomerServiceController {
                     break;
                 case LAPR:
                     log.debug("largeProposal = {}", proposal);
-                    saveDirectory = application.getRealPath("/resources/upload/largeProposal");
+                    saveDirectory = application.getRealPath(laprPath);
 
                     if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);

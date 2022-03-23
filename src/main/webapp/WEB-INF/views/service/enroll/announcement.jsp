@@ -13,7 +13,7 @@
 </head>
 <body>
 
-    <form:form action="${pageContext.request.contextPath}/service/enroll/announcement" method="post">
+    <form:form action="${pageContext.request.contextPath}/service/enroll/announcement?${_csrf.parameterName}=${_csrf.token}" method="post" enctype="multipart/form-data">
         <input type="text" name="title" value="hi">
         <input type="text" name="writer" value="honggd">
         <input type="text" name="content" value="test">
