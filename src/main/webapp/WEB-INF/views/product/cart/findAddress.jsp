@@ -23,13 +23,14 @@
 </style>
 <div class="address_search" style="display: block;">
 	<div class="layer_prev">
-		<p>
-			<span class="purple">${address.DELIVERY_TYPE}</span>
-			<span class="basic">지역입니다.</span>
-			<br />
-			<span>매일 아침, 문 앞까지 신선함을 전해드려요.</span>
-		</p>
-			<br />
+		<c:if test="${address != null }">
+			<p>
+				<span class="purple">${address.DELIVERY_TYPE}</span>
+				<span class="basic">지역입니다.</span>
+				<br />
+				<span>매일 아침, 문 앞까지 신선함을 전해드려요.</span>
+			</p>
+		</c:if>
 		<c:if test="${address != null }">
 				<input type="text" id="address" placeholder="주소" value="${address.ADDRESS}">
 				<input type="button" onclick="execDaumPostcode()" value="주소 검색"><br>
@@ -43,6 +44,8 @@
 		<div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
 			<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
 		</div>
+		<br />
+		<button>저장</button>
 	</div>
 </div>
 
