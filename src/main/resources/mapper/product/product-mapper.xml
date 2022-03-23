@@ -23,11 +23,14 @@
 		    on p.p_code = d.p_code
 		    left join mk_product_price pp
 		    on p.p_code = pp.p_code
+            left join mk_product_option o
+            on p.p_code = o.p_code
 		where
 			p.large_category = #{largeCategory}
 			and
 			p.small_category = #{smallCategory}
-			 
+			and
+            o.show = 'T'
 	</select>
 	
 	<select id="selectProductDetail" parameterType="string" resultType="product">
@@ -51,6 +54,32 @@
 		    on p.p_code = pp.p_code
 		where
 		    p.p_code = #{pcode}
+	</select>
+	
+	<select id="selectProductOptionsDetail" parameterType="string" resultType="product">
+		select
+		    p.*,
+		    i.*,
+		    b.title "brandTitle",
+		    b.sub_title "brandSubTitle",
+		    b.content "brandContent",
+		    d.discount_rate,
+		    pp.price
+		from
+		    mk_product p inner join mk_product_info i
+		    on p.p_code = i.p_code
+		    inner join mk_brand b
+		    on p.brand_code = b.code
+		    left join product_discount d
+		    on p.p_code = d.p_code
+		    left join mk_product_price pp
+		    on p.p_code = pp.p_code
+            left join mk_product_option o
+            on p.p_code = o.p_code
+		where
+            o.show = 'F'
+            and
+            o.p_group = #{pcode}
 	</select>
 	
 	<insert id="insertCart" parameterType="map">
@@ -100,6 +129,8 @@
 		    c.user_id,
 		    c.p_code,
 		    c.count,
+		    b.title "BRANDTITLE",
+		    i.title,
 		    p.price,
 		    d.discount_rate
 		from
@@ -107,6 +138,12 @@
 		    on c.p_code = p.p_code
 		    left join product_discount d
 		    on c.p_code = d.p_code
+		    left join mk_product m
+		    on c.p_code = m.p_code
+		    left join mk_brand b
+		    on m.brand_code = b.code
+		    left join mk_product_info i
+		    on c.p_code = i.p_code
 		where
 		    c.p_code = #{pcode}
 		    and

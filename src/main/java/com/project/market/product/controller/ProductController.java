@@ -60,6 +60,28 @@ public class ProductController {
 			model.addAttribute("accAmount", accAmount);
 		}
 		
+		List<Product> hasOption = productService.selectProductOptionsDetail(pcode);
+		
+		if(hasOption.size() != 0) {
+			List<Map<String, Object>> optionList = new ArrayList<>();
+			
+			for(Product optPdt : hasOption) {
+				Map<String, Object> option = new HashMap<>();
+				option.put("brand", optPdt.getBrandTitle());
+				option.put("title", optPdt.getTitle());
+				option.put("price", optPdt.getPrice());
+				option.put("pcode", optPdt.getPcode());
+				
+				int dcPrice = optPdt.getPrice()/100 * (100 - optPdt.getDiscountRate());
+				option.put("dcPrice", dcPrice);
+				
+				log.debug("option = {}", option);
+				optionList.add(option);
+			}
+			
+			model.addAttribute("optionList", optionList);
+		}
+		
 		model.addAttribute("product", pdt);
 	}
 	

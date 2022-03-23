@@ -16,7 +16,25 @@
 <title>주문하기</title>
 </head>
 <body>
-	<h1>주문하기</h1>
+	<h1>주문서</h1>
+	
+	<table id="orderProductTable">
+		<thead>
+			<tr>
+				<th>주문 상품</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach items="${cartList }" var="cart">
+				<tr>
+					<td>image</td>
+					<td>
+						[${cart.BRANDTITLE }] ${cart.TITLE }
+					</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 	
 </body>
 </html>

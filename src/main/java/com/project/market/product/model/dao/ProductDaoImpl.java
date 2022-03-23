@@ -27,6 +27,11 @@ public class ProductDaoImpl implements ProductDao {
 	public Product selectProductDetail(String pcode) {
 		return session.selectOne("product.selectProductDetail", pcode);
 	}
+	
+	@Override
+	public List<Product> selectProductOptionsDetail(String pcode) {
+		return session.selectList("product.selectProductOptionsDetail", pcode);
+	}
 
 	@Override
 	public int insertCart(Map<String, Object> cartInfo) {

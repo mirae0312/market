@@ -94,10 +94,44 @@
 	<span>안내사항 : ${product.commonInfo }</span>
 	<hr />
 	</c:if>
-	<span>구매 수량</span>
-	<input type="button" value="-" id="countMinus"/>
-	<input type="text" name="" id="pdtCount" value="1" readonly/>
-	<input type="button" value="+" id="countPlus"/>
+	
+	<c:if test="${optionList != null }">
+	<br />
+	<hr />
+		<span>상품 선택</span>
+		<br />
+		<c:forEach items="${optionList }" var="option">
+			<span>
+				<input type="checkbox" name="" id="${option.pcode }" />
+				<span>
+					[${option.brand }] ${option.title }
+				</span>
+				<span>
+					<c:if test="${option.dcPrice != option.price }">
+					<span class="dcPrice">
+						${option.price }원
+					</span>
+					</c:if>
+					${option.dcPrice }원
+				</span>
+				<span>
+					<input type="button" value="-" class="optionCountMinus" data-val="${option.dcPrice }"/>
+					<input type="text" name="" class="optionCount" value="1" readonly/>
+					<input type="button" value="+" class="optionCountPlus" data-val="${option.dcPrice }"/>	
+				</span>
+			</span>
+			<br />
+		</c:forEach>
+	</c:if>
+	
+	<c:if test="${optionList == null }">
+		<br />
+		<hr />
+		<span>구매 수량</span>
+		<input type="button" value="-" id="countMinus"/>
+		<input type="text" name="" id="pdtCount" value="1" readonly/>
+		<input type="button" value="+" id="countPlus"/>
+	</c:if>
 	<br />
 	<br />
 	<hr />
@@ -105,13 +139,23 @@
 		총 상품금액 : 
 		<sec:authorize access="isAuthenticated()">
 			<span id="finalPrice">
-			<fmt:formatNumber type="number" pattern="########" value="${product.price/100 * (100 - product.discountRate)} "/>
+				<c:if test="${optionList == null }">
+					<fmt:formatNumber type="number" pattern="########" value="${product.price/100 * (100 - product.discountRate)} "/>
+				</c:if>
+				<c:if test="${optionList != null }">
+					0
+				</c:if>
 			원
 			</span>
 		</sec:authorize>
 		<sec:authorize access="isAnonymous()">
 			<span id="finalPrice">
-			<fmt:formatNumber type="number" pattern="########" value="${product.price/1} "/>
+				<c:if test="${optionList == null }">
+					<fmt:formatNumber type="number" pattern="########" value="${product.price/1} "/>				
+				</c:if>
+				<c:if test="${optionList != null }">
+					0원
+				</c:if>
 			원
 			</span>
 		</sec:authorize>
