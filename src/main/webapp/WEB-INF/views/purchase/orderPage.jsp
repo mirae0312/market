@@ -111,6 +111,20 @@ td{
 .kakaoPay, .creditCard, .simplePay, .phonePay{
 	padding-bottom: 20px;
 }
+.productTbl thead{
+	position: relative;
+}
+#slide_btn{
+	overflow: hidden;
+    position: absolute;
+    right: 4px;
+    background-color: transparent;
+    border: none;
+    width: 30px;
+}
+.productTbl tbody {
+    display: none;
+}
 </style>
 	<div class="tit">
 		<h2>주문서</h2>
@@ -121,11 +135,15 @@ td{
 				<table>
 					<thead>
 						<tr>
-							<th colspan="4">주문상품</th>
+							<th colspan="4">주문상품
+							<button id="slide_btn" type="button">
+							<div><img class="slide_img" src="https://res.kurly.com/pc/service/cart/2007/ico_dropup.svg" style="transform: rotate(180deg);" alt="" /></div>
+							</button>
+						</th>
 						</tr>
 					</thead>
-					<tbody>
-					<tr>
+					<tbody class="cart_slide">
+					<tr >
 						<c:forEach items="${cartList}" var="product">
 							<tr>
 								<td class="tbl_sub">image</td>
@@ -159,7 +177,7 @@ td{
 					</tbody>
 				</table>
 				<div>
-					<p>${cartList[0].P_CODE} 외 ${fn:length(cartList)-1}개 상품을 주문합니다.</p>
+					<p id="guide">${cartList[0].P_CODE} 외 ${fn:length(cartList)-1}개 상품을 주문합니다.</p>
 				</div>
 			</div>
 			<div class="userInfoTbl">
@@ -246,16 +264,16 @@ td{
 						<td class="tbl_sub">결제 수단</td>
 						<td>
 						<div class="kakaoPay">
-							<label ><input type="radio" name="payment">카카오 페이</label>			
+							<label class="p_radio"><input type="radio" name="payment">카카오 페이</label>			
 						</div>
 						<div class="creditCard">
-							<label ><input type="radio" name="payment"/>신용카드</label>						
+							<label  class="p_radio"><input type="radio" name="payment"/>신용카드</label>						
 						</div>
 						<div class="simplePay">
-							<label ><input type="radio" name="payment"/>간편결제</label>						
+							<label class="p_radio" ><input type="radio" name="payment"/>간편결제</label>						
 						</div>
 						<div class="phonePay">
-							<label ><input type="radio" name="payment"/>휴대폰</label>						
+							<label  class="p_radio"><input type="radio" name="payment"/>휴대폰</label>						
 						</div>
 						</td>
 					</tr>
@@ -267,4 +285,12 @@ td{
 		</form>
 	</div>
 	<div class="test" style="clear: both;"></div>
+<script>
+$(()=> {
+	$("#slide_btn").click((e) => {
+		$(".cart_slide").slideToggle(); 
+	});
+})
+	
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
