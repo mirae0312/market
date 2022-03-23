@@ -288,7 +288,6 @@ display: inline-block;
             </thead>
             <tbody>
                <c:forEach items="${cartList }" var="product">
-               	  
                   <c:if test="${product.TEM_CODE.equals('F') }">
                      <tr>
                         <td>
@@ -311,19 +310,27 @@ display: inline-block;
                         </td>
                         <td>
                         <!-- 할인율 있으면  -->
-                        <c:if test="${product.DISCOUNT_RATE != null }">
+                       	 <c:if test="${product.DISCOUNT_RATE != null }">
                               <span id="${product.P_CODE }_amount" class="discount_price"> <fmt:formatNumber
                                     type="number" pattern="#########"
                                     value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} " />
                                  원
                               </span>
                               <br />
-                           </c:if> 
-                           <span id="${product.P_CODE }_ogp" class="original_price"> <fmt:formatNumber
+                               <span id="${product.P_CODE }_ogp" class="original_price"> <fmt:formatNumber
                                  type="number" pattern="#########"
                                  value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
                               원
-                        </span>
+                       		</span>
+                           </c:if> 
+                           <c:if test="${product.DISCOUNT_RATE == null }">
+                            <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
+                                 type="number" pattern="#########"
+                                 value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
+                              원
+                       		</span>
+                           </c:if>
+                          
                         </td>
                         <td><input type="button" value="" class="deleteBtn"
                            data-delete-code="${product.P_CODE }" /></td>
@@ -355,18 +362,27 @@ display: inline-block;
                            id="${product.P_CODE }" value="${product.COUNT }" /> <input
                            type="button" value="+" class="plusBtn"
                            data-pdt-id="${product.P_CODE }" /></td>
-                        <td><c:if test="${product.DISCOUNT_RATE != null }">
-                              <span id="${product.P_CODE }_amount"> <fmt:formatNumber
+                        <td><!-- 할인율 있으면  -->
+                       	 <c:if test="${product.DISCOUNT_RATE != null }">
+                              <span id="${product.P_CODE }_amount" class="discount_price"> <fmt:formatNumber
                                     type="number" pattern="#########"
                                     value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} " />
                                  원
                               </span>
                               <br />
-                           </c:if> <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
+                               <span id="${product.P_CODE }_ogp" class="original_price"> <fmt:formatNumber
                                  type="number" pattern="#########"
                                  value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
                               원
-                        </span></td>
+                       		</span>
+                           </c:if> 
+                           <c:if test="${product.DISCOUNT_RATE == null }">
+                            <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
+                                 type="number" pattern="#########"
+                                 value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
+                              원
+                       		</span>
+                           </c:if></td>
                         <td><input type="button" value="" class="deleteBtn"
                            data-delete-code="${product.P_CODE }" /></td>
                      </tr>
@@ -398,16 +414,27 @@ display: inline-block;
                            id="${product.P_CODE }" value="${product.COUNT }" /> <input
                            type="button" value="+" class="plusBtn"
                            data-pdt-id="${product.P_CODE }" /></td>
-                        <td><c:if test="${product.DISCOUNT_RATE != null }">
-                              <span id="${product.P_CODE }_amount"> <fmt:formatNumber
+                        <td><!-- 할인율 있으면  -->
+                       	 <c:if test="${product.DISCOUNT_RATE != null }">
+                              <span id="${product.P_CODE }_amount" class="discount_price"> <fmt:formatNumber
                                     type="number" pattern="#########"
                                     value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} " />
+                                 원
                               </span>
                               <br />
-                           </c:if> <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
+                               <span id="${product.P_CODE }_ogp" class="original_price"> <fmt:formatNumber
                                  type="number" pattern="#########"
                                  value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
-                        </span></td>
+                              원
+                       		</span>
+                           </c:if> 
+                           <c:if test="${product.DISCOUNT_RATE == null }">
+                            <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
+                                 type="number" pattern="#########"
+                                 value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
+                              원
+                       		</span>
+                           </c:if></td>
                         <td><input type="button" value="" class="deleteBtn"
                            data-delete-code="${product.P_CODE }" /></td>
                      </tr>

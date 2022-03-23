@@ -13,6 +13,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -51,7 +52,7 @@ public class PurchaseController {
 	}
 	
 	@GetMapping("/orderPage")
-	public void orderPage(@RequestParam List<String> orderArr, @AuthenticationPrincipal Member member) {
+	public void orderPage(@RequestParam List<String> orderArr, @AuthenticationPrincipal Member member, Model model) {
 		String userId = member.getId();
 		
 		List<Map<String, Object>> cartList = new ArrayList<>();
@@ -65,7 +66,8 @@ public class PurchaseController {
 			log.debug("cart = {}", cartMap);
 			cartList.add(cartMap);
 		}
-				
+		
+		model.addAttribute("cartList", cartList);
 		log.debug("cartList = {}", cartList);
 	}
 	
