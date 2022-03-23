@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -9,13 +8,21 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="마켓" name="title"/>
 </jsp:include>
+<sec:authentication property="principal" var="loginMember" />
+<meta id="_csrf" name="_csrf" content="${_csrf.token}" />
+<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}" />
     <meta charset="UTF-8">
     <title>Announcement</title>
     
  <style>
+ 		#content{
+ 			min-width: 1050px;
+    		padding-bottom: 60px;
+ 		}
  		.csPage{
             padding-top: 65px;
             margin: 0 auto;
+            width: 1050px;
             display: flex;
         }
         
@@ -83,8 +90,8 @@
         .csPage-section{
             /* float: right; */
             padding-left: 30px;
-           
         }
+        .head-article{padding: 5px 0 34px;}
         .csPage-aticle{
             padding: 5px 0 34px;
         }
@@ -104,54 +111,7 @@
             letter-spacing: -.3px;
             vertical-align: 3px;
         }
-        /* csBoard */
-        .csBoard{
-        	
-        }
-        .csTable{
-            border-top: 2px solid var(--purple);
-            width: 880px;
-        }
-        /* .csTable thead tr {
-        	border-bottom: 1px solid black;
-        } */
         
-        .csTable thead th {
-        	padding: 20px 0;
-    		vertical-align: middle;
-    		font-size: 12px;
-    		font-weight: 500;
-        }
-        
-
-        /* csBoard-search */
-        .csSearch-section{
-            height: 80px;
-            padding: 0;
-            border-top: 1px solid var(--purple);
-        }
-
-        .csSearch-section form{
-            display: flex;
-            padding-top: 30px;
-            font-size:14px;
-        }
-        .csSearch-section form span{
-            padding-right: 30px;
-            margin:auto 0;
-        }
-
-		.search-checkbox{
-			padding-right: 60px;
-			margin:auto;
-		}
-		
-		.search-checkbox label{
-			padding-right: 10px;
-		}
-		.search-checkbox label input[type=checkbox]{
-			margin-right: 5px;
-		}
 		
         .pagenation{
             text-align: center;
@@ -159,22 +119,7 @@
         .pagenation ul{
         	list-style-type: none;
         }
-        .csSearch-section input[type=text]{
-            height: 34px;
-            line-height: 34px;
-            width: 220px;
-            border: 1px solid #bfbfbf;
-            color: #000;
-            /* float: right; */
-            padding: 4px;
-        }
-        .csSearch-section button {
-            color: var(--purple);
-            background-color: var(--purple);
-    		color: white;
-    		padding: 9px;
-    		border: none;
-        }
+        
         
         /* title */
         .cs-title{
@@ -204,10 +149,16 @@
             color: #333;
             letter-spacing: -.5px;
         }
-
+		
+        
+        
         /* board-table */
         .board-write{
             font-size: 12px;
+        }
+        .writeTable{
+        	border-top: 2px solid #333;
+        	border-collapse: collapse;
         }
         .board-write table input[type=text], .board-write table select{
             height: 30px;
@@ -262,7 +213,7 @@
             padding: 0 3px;
             border-left: 1px dashed;
         }
-        .board-submitBtn{
+        .board-btn{
             width: 150px;
             display: inline-block;
             line-height: 40px;
@@ -275,11 +226,20 @@
             margin-left: 2px;
             font-size: 13px;
         }
-        .board-submitBtn:hover{
+        .board-btn:hover{
         	background-color: #5f0080;
         }
+        .board-btn.orderBtn{
+        	float: none;
+    		line-height: 27px;
+    		width: 100px;
+        }
+        .board-btn.submitBtn{
+        	margin-top: 5px;
+        }
  </style>
- 
+
+<div id="content"> 
     <!-- cs page --> 
 <div class="csPage">
     <!-- 고객센터 왼쪽 사이드바 -->
@@ -287,28 +247,28 @@
         <div class="leftSide-csTitle"><h2 class="cs-title" id="cs-mainTitle">고객센터</h2></div>
         <div class="leftSide-listDiv">
             <ul class="leftSide-list">
-                <li id="userClick">
+                <li >
                     <a href="${pageContext.request.contextPath}/service/view/announcement" id="" onclick="" >공지사항</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >자주하는 질문</a>
+                <li class="" >
+                    <a href="${pageContext.request.contextPath}/service/view/question" onclick="" >자주하는 질문</a>
+                    <i class="fas fa-chevron-right"></i>
+                </li>
+                <li class="" id="userClick">
+                    <a href="${pageContext.request.contextPath}/service/view/productReview" onclick="" >1:1 문의</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
                 <li class="">
-                    <a href="${pageContext.request.contextPath}/service/view/question" onclick="" >1:1 문의</a>
+                    <a href="${pageContext.request.contextPath}/service/view/largeProposal" onclick="" >대량주문 문의</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >대량주문 문의</a>
+                <li class="" >
+                    <a href="${pageContext.request.contextPath}/service/view/productProposal" onclick="" >상품 제안</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >상품 제안</a>
-                    <i class="fas fa-chevron-right"></i>
-                </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >에코포장 피드백</a>
+                <li class="" >
+                    <a href="${pageContext.request.contextPath}/service/view/echoProposal" onclick="" >에코포장 피드백</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
             </ul>
@@ -322,10 +282,12 @@
     
     <!-- insert section -->
     <div class="page-section">
-        <h2 class="insert-title">1:1문의</h2>
+    	<div class="head-article">
+	        <h2 class="insert-title">상품 제안</h2>
+    	</div>
         <div class="board-write">
             <form action="">
-                <table class="">
+                <table class="writeTable">
                     <colgroup>
                         
                     </colgroup>
@@ -348,23 +310,22 @@
                                     <option value="">기타문의</option>
                                 </select>
                                 <br>
-                                <input type="text">
+                                <input type="text" name="" >
                             </td>
                         </tr>
                         <tr>
                             <th>주문번호</th>
                             <td>
                                 <input type="text">
-                                <button class="board-submitBtn">주문번호</button>
+                                <button class="board-btn orderBtn">주문번호</button>
                             </td>
                         </tr>
                         <tr>
                             <th>이메일</th>
                             <td>
-                                <input type="text" name="email" value="email">
+                                <input type="text" name="email" value="${member.email}">
                                 <label for="agree-checkbox">
-                                    <input type="checkbox" id="agree-checkbox">
-                                    답변수신을 이메일로 받겠습니다.
+                                    <input type="checkbox" id="agree-checkbox">답변수신을 이메일로 받겠습니다.
                                 </label>
                             </td>
                         </tr>
@@ -372,9 +333,8 @@
                             <th>문자메세지</th>
                             <td>
                                 <input type="text" name="sms" value="sms">
-                                <label for="agree-checkbox">
-                                    <input type="checkbox" id="agree-checkbox">
-                                    답변수신을 문자로 받겠습니다.
+                                <label for="agree-checkbox-sms">
+                                    <input type="checkbox" id="agree-checkbox-sms">답변수신을 문자로 받겠습니다.
                                 </label>
                             </td>
                         </tr>
@@ -431,7 +391,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <button class="board-submitBtn" name="" value="">저장</button>
+                <button class="board-btn submitBtn" name="" value="">저장</button>
             </form>
         </div> 
 
@@ -440,6 +400,72 @@
        
     <!-- cs page 끝 -->
     </div>
+ </div>
 
   <i class="fas fa-minus"></i>
+  
+  
+  
+  
+  <script>
+  function order_open(){
+      KurlyTracker.setAction('select_personal_inquiry_order_list').sendData();
+
+      var divEl = document.getElementById('ifm_order');
+      divEl.style.display = "block";
+      if( divEl.src == '' ) divEl.src = "mypage_qna_order.php";
+
+      // KM-1483 Amplitude 연동
+      KurlyTracker.setScreenName('personal_inquiry_writing_order_history_selection');
+  }
+
+  function order_close(){
+      var divEl = document.getElementById('ifm_order');
+      divEl.style.display = "none";
+  }
+
+  function order_put( ordno ){
+      // KMF-299 선택한 주문번호가 기존 주문 번호와 다를때만 트래킹 처리
+      if (parseInt(document.fm.ordno.value, 10) !== parseInt(ordno, 10)) {
+        KurlyTracker.setAction('select_personal_inquriry_order_number').sendData();
+      }
+
+      document.fm.ordno.value = ordno;
+      order_close();
+  }
+
+  function add(){
+      var table = document.getElementById('table');
+      var reviewFileNum = "5";
+      if (table.rows.length>=parseInt(reviewFileNum)){
+          alert("업로드는 최대 "+reviewFileNum+"개만 지원합니다");
+          return;
+      }
+      var tr_num = table.rows.length;
+      oTr		= table.insertRow( table.rows.length );
+      oTr.id	= "tr_"+(tr_num);
+      oTd1		= oTr.insertCell(0);
+      oTd1.style.textAlign = "center";
+      oTd2		= oTr.insertCell(1);
+      tmpHTML = "<input type=file name='file[]' style='width:50%' class=line> <a href=\"javascript:del('"+"tr_"+(tr_num)+"')\"><i class="fas fa-minus"></i></a>";
+      oTd2.innerHTML = tmpHTML;
+      calcul();
+  }
+  function del(index,ncode)
+  {
+      var table = document.getElementById('table');
+      for (i=0;i<table.rows.length;i++) if (index==table.rows[i].id) table.deleteRow(i);
+      calcul();
+  }
+  function calcul()
+  {
+      var table = document.getElementById('table');
+      for (var i=0;i<table.rows.length;i++){
+          table.rows[i].cells[0].innerHTML = i+1;
+      }
+  }
+
+  // KM-1483 Amplitude 연동
+  KurlyTracker.setScreenName('personal_inquiry_writing');
+  </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
