@@ -288,7 +288,7 @@
         <div class="leftSide-listDiv">
             <ul class="leftSide-list">
                 <li id="userClick">
-                    <a href="${pageContext.request.contextPath}/service/announcement" id="" onclick="" >공지사항</a>
+                    <a href="${pageContext.request.contextPath}/service/view/announcement" id="" onclick="" >공지사항</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
                 <li class="">
@@ -296,7 +296,7 @@
                     <i class="fas fa-chevron-right"></i>
                 </li>
                 <li class="">
-                    <a href="${pageContext.request.contextPath}/service/myQuestion" onclick="" >1:1 문의</a>
+                    <a href="${pageContext.request.contextPath}/service/view/question" onclick="" >1:1 문의</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
                 <li class="">

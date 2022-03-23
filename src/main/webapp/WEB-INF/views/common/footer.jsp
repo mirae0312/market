@@ -34,7 +34,7 @@
 					</div>
 					<div class="cc_view cc_qna">
 						<h3 class="footer-h3">
-							<a href="${pageContext.request.contextPath}/service/questionEnrollForm"
+							<a href="${pageContext.request.contextPath}/service/enroll/question"
 								class="tit footer-a">1:1 문의</a>
 						</h3>
 						<dl class="list footer-dl">
@@ -44,7 +44,7 @@
 					</div>
 					<div class="cc_view cc_bulkorder">
 						<h3 class="footer-h3">
-							<a href="/shop/main/html.php?htmid=mypage/bulk_order.htm"
+							<a href="${pageContext.request.contextPath}/service/enroll/largeProposal"
 								class="tit footer-a">대량주문 문의</a>
 						</h3>
 						<p class="txt">비회원의 경우 메일로 문의 바랍니다.</p>
