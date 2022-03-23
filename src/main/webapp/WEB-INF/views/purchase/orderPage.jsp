@@ -99,7 +99,7 @@ th{
 	
 }
 td{
-	padding: 10px;
+	padding: 20px;
 }
 .tbl_sub{
 	width: 190px;
@@ -107,7 +107,9 @@ td{
     color: #333;
     line-height: 24px;
     letter-spacing: -0.32px;
-    vertical-align: top;
+}
+.kakaoPay, .creditCard, .simplePay, .phonePay{
+	padding-bottom: 20px;
 }
 </style>
 	<div class="tit">
@@ -151,12 +153,14 @@ td{
 	                              원
 	                       		</span>
 	                           </c:if>
-	                          
 	                           </td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
+				<div>
+					<p>${cartList[0].P_CODE} 외 ${fn:length(cartList)-1}개 상품을 주문합니다.</p>
+				</div>
 			</div>
 			<div class="userInfoTbl">
 				<table>
@@ -242,16 +246,16 @@ td{
 						<td class="tbl_sub">결제 수단</td>
 						<td>
 						<div class="kakaoPay">
-							<label for=""><input type="radio">카카오 페이</label>			
+							<label ><input type="radio" name="payment">카카오 페이</label>			
 						</div>
 						<div class="creditCard">
-							<label for=""><input type="radio" />신용카드</label>						
+							<label ><input type="radio" name="payment"/>신용카드</label>						
 						</div>
 						<div class="simplePay">
-							<label for=""><input type="radio" />간편결제</label>						
+							<label ><input type="radio" name="payment"/>간편결제</label>						
 						</div>
 						<div class="phonePay">
-							<label for=""><input type="radio" />휴대폰</label>						
+							<label ><input type="radio" name="payment"/>휴대폰</label>						
 						</div>
 						</td>
 					</tr>
