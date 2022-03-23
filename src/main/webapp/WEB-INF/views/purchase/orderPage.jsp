@@ -171,17 +171,17 @@ td{
 					</thead>
 					<tbody>
 						<tr>
-							<td class="tbl_sub">보내는 분</td>
-							<td>희연</td>
+							<td class="tbl_sub">받는 분</td>
+							<td>${address.RECEIVER}</td>
 						</tr>
 						<tr>
 							<td class="tbl_sub">휴대폰</td>
-							<td>010-2144-3418</td>
+							<td>${address.PHONE}</td>
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td class="tbl_sub">이메일</td>
 							<td>sp5na92@gmail.com</td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 			</div>
@@ -195,7 +195,7 @@ td{
 					<tbody>
 						<tr>
 							<td class="tbl_sub">배송지</td>
-							<td>경기도 성남시 어쩌구</td>
+							<td>${address.ADDRESS} ${address.DETAIL_ADDRESS }</td>
 						</tr>
 						<tr>
 							<td class="tbl_sub">상세 정보</td>
