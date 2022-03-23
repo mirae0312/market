@@ -18,6 +18,8 @@ import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequestMapping("/service")
+@PropertySource("classpath:filePath.properties")
 public class CustomerServiceController {
 
     @Autowired
@@ -42,6 +45,21 @@ public class CustomerServiceController {
 
     @Autowired
     private ServletContext application;
+
+    @Value("${board.anno.path}")
+    private String annoPath;
+
+    @Value("${board.ques.path}")
+    private String quesPath;
+
+    @Value("${board.prpr.path}")
+    private String prprPath;
+
+    @Value("${board.ecpr.path}")
+    private String ecprPath;
+
+    @Value("${board.lapr.path}")
+    private String laprPath;
 
     private final String QUES = "question";
     private final String ANNO = "announcement";
@@ -145,7 +163,6 @@ public class CustomerServiceController {
     @PostMapping("/modify/{boardId}")
     public String modifyBoard(@PathVariable(required = true) String boardId, Question question, Proposal proposal, Announcement announcement,
                               @RequestParam(name = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr) throws IOException {
-        String path = "";
         String directory = "";
         Map<String, Object> boardCode = new HashMap<>();
         List<Attachment> newAttachments = new ArrayList<>();
@@ -154,13 +171,12 @@ public class CustomerServiceController {
             switch (boardId){
                 case QUES:
                     log.debug("question = {}", question);
-                    path = "/resources/upload/question/";
-                    directory = application.getRealPath(path);
+                    directory = application.getRealPath(quesPath);
                     boardCode.put("code", question.getQCode());
                     Question oldQuestion = customerServiceService.selectOneQuestion(boardCode);
-                    if(upFiles.length > 0){
+                    if(upFiles != null && upFiles.length > 0){
                         if(!oldQuestion.getAttachments().isEmpty()){
-                            deleteAttachment(oldQuestion.getAttachments(), path);
+                            deleteAttachment(oldQuestion.getAttachments(), quesPath);
                             customerServiceService.deleteAttachments(boardCode);
                         }
 
@@ -176,13 +192,12 @@ public class CustomerServiceController {
                     break;
                 case ANNO:
                     log.debug("announcement = {}", announcement);
-                    path = "/resources/upload/announce/";
-                    directory = application.getRealPath(path);
+                    directory = application.getRealPath(annoPath);
                     boardCode.put("code", announcement.getAnCode());
                     Announcement oldAnnounce = customerServiceService.selectOneAnnouncement(boardCode);
-                    if(upFiles.length > 0){
+                    if(upFiles != null && upFiles.length > 0){
                         if(!oldAnnounce.getAttachments().isEmpty()){
-                            deleteAttachment(oldAnnounce.getAttachments(), path);
+                            deleteAttachment(oldAnnounce.getAttachments(), annoPath);
                             customerServiceService.deleteAttachments(boardCode);
                         }
 
@@ -261,47 +276,41 @@ public class CustomerServiceController {
     @PostMapping("/delete/{boardId}")
     public String deleteBoard(@PathVariable(required = true) String boardId, @RequestParam String code, RedirectAttributes redirectAttr){
         try{
-            String path = "";
             Map<String, Object> boardCode = new HashMap<>();
             boardCode.put("code", code);
             List<Attachment> attachments = customerServiceService.selectAllAttachments(boardCode);
 
             switch (boardId){
                 case ANNO:
-                    path = "/resources/upload/announce/";
-                    deleteAttachment(attachments, path);
+                    deleteAttachment(attachments, annoPath);
 
                     customerServiceService.deleteAnnouncement(boardCode);
 
                     redirectAttr.addFlashAttribute("msg", "공지사항 삭제 성공");
                     break;
                 case QUES:
-                    path = "/resources/upload/question/";
-                    deleteAttachment(attachments, path);
+                    deleteAttachment(attachments, quesPath);
 
                     customerServiceService.deleteMyQuestion(boardCode);
 
                     redirectAttr.addFlashAttribute("msg", "질문 삭제 성공");
                     break;
                 case PRPR:
-                    path = "/resources/upload/productProposal/";
-                    deleteAttachment(attachments, path);
+                    deleteAttachment(attachments, prprPath);
 
                     customerServiceService.deleteOneProductProposal(boardCode);
 
                     redirectAttr.addFlashAttribute("msg", "제안 삭제 성공");
                     break;
                 case ECPR:
-                    path = "resources/upload/echoProposal/";
-                    deleteAttachment(attachments, path);
+                    deleteAttachment(attachments, ecprPath);
 
                     customerServiceService.deleteOneEchoProposal(boardCode);
 
                     redirectAttr.addFlashAttribute("msg", "에코포장 피드백 삭제 성공");
                     break;
                 case LAPR:
-                    path = "resources/upload/largeProposal/";
-                    deleteAttachment(attachments, path);
+                    deleteAttachment(attachments, laprPath);
 
                     customerServiceService.deleteOneLargeProposal(boardCode);
 
@@ -321,6 +330,7 @@ public class CustomerServiceController {
         log.debug("proposal = {}", proposal);
         log.debug("announcement = {}", announcement);
         log.debug("question = {}", question);
+        log.debug("upfiles = {}", upFiles);
 
         List<Attachment> attachments = new ArrayList<>();
         String saveDirectory = "";
@@ -328,9 +338,9 @@ public class CustomerServiceController {
             switch (boardId){
                 case ANNO:
                     log.debug("announcement = {}", announcement);
-                    saveDirectory = application.getRealPath("/resources/upload/announce");
+                    saveDirectory = application.getRealPath(annoPath);
 
-                    if(upFiles.length > 0)
+                    if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
                     if(!attachments.isEmpty())
                         announcement.setAttachments(attachments);
@@ -339,9 +349,9 @@ public class CustomerServiceController {
                     break;
                 case QUES:
                     log.debug("question = {}", question);
-                    saveDirectory = application.getRealPath("/resources/upload/question");
+                    saveDirectory = application.getRealPath(quesPath);
 
-                    if(upFiles.length > 0)
+                    if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
                     if(!attachments.isEmpty())
                         question.setAttachments(attachments);
@@ -350,9 +360,9 @@ public class CustomerServiceController {
                     break;
                 case PRPR:
                     log.debug("productProposal = {}", proposal);
-                    saveDirectory = application.getRealPath("/resources/upload/productProposal");
+                    saveDirectory = application.getRealPath(prprPath);
 
-                    if(upFiles.length > 0)
+                    if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
                     if(!attachments.isEmpty())
                         proposal.setAttachments(attachments);
@@ -361,9 +371,9 @@ public class CustomerServiceController {
                     break;
                 case ECPR:
                     log.debug("echoProposal = {}", proposal);
-                    saveDirectory = application.getRealPath("/resources/upload/echoProposal");
+                    saveDirectory = application.getRealPath(ecprPath);
 
-                    if(upFiles.length > 0)
+                    if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
                     if(!attachments.isEmpty())
                         proposal.setAttachments(attachments);
@@ -372,9 +382,9 @@ public class CustomerServiceController {
                     break;
                 case LAPR:
                     log.debug("largeProposal = {}", proposal);
-                    saveDirectory = application.getRealPath("/resources/upload/largeProposal");
+                    saveDirectory = application.getRealPath(laprPath);
 
-                    if(upFiles.length > 0)
+                    if(upFiles != null && upFiles.length > 0)
                         attachments = commonAttachment(upFiles, saveDirectory);
                     if(!attachments.isEmpty())
                         proposal.setAttachments(attachments);

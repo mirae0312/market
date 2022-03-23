@@ -12,6 +12,6 @@
 </head>
 <body>
 <a href="${pageContext.request.contextPath}/service/view/echoProposal">echo</a>
-<a href="${pageContext.request.contextPath}/service/enroll/echoProposal">echo enroll</a>
+<a href="${pageContext.request.contextPath}/service/enroll/announcement">공지등록</a>
 </body>
 </html>
