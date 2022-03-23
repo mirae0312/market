@@ -173,6 +173,94 @@ padding-left: 6px;
     line-height: 24px;
     text-align: right;
 }
+.mycart-wrapper{
+	margin-bottom: 200px;
+}
+#empty-txt{
+	width: 100%;
+    margin-top: 0;
+    padding: 115px 0 116px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+}
+.address-container{
+	display: block;
+    position: relative;
+    float: right;
+}
+#address-tit{
+    padding-left: 24px;
+    /* font-weight: 700; */
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -.3px;
+    background-image: url(https://res.kurly.com/pc/service/cart/2007/ico_location.svg);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 0 50%;
+}
+.cart-delivery{
+    padding: 23px 19px 20px;
+    border: 1px solid #f2f2f2;
+    border-bottom: 0;
+}
+#searchAddress, #changeAddress{
+    margin-top: 17px;
+    display: block;
+    width: 100%;
+    height: 36px;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 34px;
+    border: 1px solid #5f0080;
+    background-color: #fff;
+    border-radius: 6px;
+    color: #5f0080;
+}
+/*주소검색 ico*/
+.address-ico{
+display: inline-block;
+    width: 21px;
+    height: 20px;
+    margin-left: -14px;
+    background-image: url(https://res.kurly.com/pc/service/cart/2007/ico_search.svg);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 21px 20px;
+    background-position: 0 50%;
+    vertical-align: -5px;
+}
+.amount-div{
+    padding: 9px 18px 18px 20px;
+    border: 1px solid #f2f2f2;
+    background-color: #fafafa;
+    font-size: 20px;
+}
+.amount-div span{
+	float: left;
+}
+.amount-div input{
+	width: 50%;
+    float: right;
+    text-align: right;
+    border: none;
+    background-color: #fafafa;
+    font-size: 20px;
+}
+.amount-div input:focus{
+	border: none;
+	outline: none;
+}
+.point{
+	margin-top: 20px;
+	display: inline-block;
+}
+.point span{
+	float: none;
+}
 </style>
 <div class="title">
    <h2>장바구니</h2>
@@ -188,6 +276,11 @@ padding-left: 6px;
       <br />
       
       <div class="cart-list">
+      	 <c:if test="${empty cartList}">
+	      	 <div class="empty-div">
+	            <p id="empty-txt">장바구니에 담긴 상품이 없습니다.</p>      	 
+	      	 </div>
+         </c:if>
          <table id="fTable">
             <thead>
                <tr>
@@ -195,6 +288,7 @@ padding-left: 6px;
             </thead>
             <tbody>
                <c:forEach items="${cartList }" var="product">
+               	  
                   <c:if test="${product.TEM_CODE.equals('F') }">
                      <tr>
                         <td>
@@ -308,13 +402,11 @@ padding-left: 6px;
                               <span id="${product.P_CODE }_amount"> <fmt:formatNumber
                                     type="number" pattern="#########"
                                     value="${Integer.parseInt(product.PRICE)/100 * (100 - Integer.parseInt(product.DISCOUNT_RATE)) * Integer.parseInt(product.COUNT)} " />
-                                 원
                               </span>
                               <br />
                            </c:if> <span id="${product.P_CODE }_ogp"> <fmt:formatNumber
                                  type="number" pattern="#########"
                                  value="${Integer.parseInt(product.PRICE) * Integer.parseInt(product.COUNT) }" />
-                              원
                         </span></td>
                         <td><input type="button" value="" class="deleteBtn"
                            data-delete-code="${product.P_CODE }" /></td>
@@ -326,59 +418,78 @@ padding-left: 6px;
       
       </div>
    </div>
-   <div class="address-wrapper">
-      <span>배송지</span> <br /> <span> <!-- 배송지 있을때 --> <c:if
-            test="${address != null }">   
-         ${address.ADDRESS },
-         ${address.DETAIL_ADDRESS }
-      </c:if> <!-- 배송지 없을때 --> <c:if test="${address == null }">
-         배송지를 입력하고<br />
-         배송유형을 확인해 보세요!
-      </c:if>
-      </span> <br /> <span> <!-- 샛별배송~ --> ${address.DELIVERY_TYPE }
-      </span> <br />
-      <!-- 로그인했을때 => 배송지변경 -->
-      <sec:authorize access="isAuthenticated()">
-         <input type="button" value="배송지 변경" id="changeAddress" />
-      </sec:authorize>
-   
-      <!-- 로그인 x => 주소검색 -->
-      <sec:authorize access="isAnonymous()">
-         <input type="button" value="주소 검색" id="searchAddress" />
-      </sec:authorize>
-      <br />
-      <br />
-   
-      <!-- 담은 상품 있으면 총금액, 할인금액 등 계산해줌 -->
-      <span>상품금액</span> <br />
-      <!-- original price -->
-      <input type="text" name="" id="allAmount" value="${ogp }" /> <br /> <span>상품할인금액</span>
-      <br />
-      <!-- discount price -->
-      <input type="text" name="" id="dcAmount" value="${dcp }" /> <br /> <span>배송비</span>
-      <br /> <input type="text" name="" id="deliveryAmount" /> <br /> <span>결제예정금액</span>
-      <br />
-      <!-- 최종결제 금액 original - discount price -->
-      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }" />
-      <br />
-      <!-- 로그인했을시 적립 포인트  -->
-      <sec:authorize access="isAuthenticated()">
-         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
-      </sec:authorize>
-      <br />
-      <br />
-      <!-- cartList 있을 때 주문하기 버튼 -->
-      <c:if test="${cartList != null }">
-         <input type="button" value="주문하기" id="reqOrder" />
-      </c:if>
-      <!-- cartList 없으면 상품 담아주세요 -->
-      <c:if test="${cartList == null }">
-         <input type="button" value="상품을 담아주세요" disabled />
-      </c:if>
-   </div>
-
+   <div class="address-container">
+	   <div class="address-wrapper">
+	      <div class="cart-delivery"> 
+	      <span id="address-tit">배송지</span> <br /> 
+	      
+	      <!-- 배송지 있을때 --> 
+	      <c:if test="${address != null }">   
+		      <div id="address">
+		      ${address.ADDRESS }
+		      </div>
+		      <div id="detailAddress">
+		      ${address.DETAIL_ADDRESS }
+		      </div>
+	      </c:if> 
+	      <!-- 배송지 없을때 --> 
+	      <c:if test="${address == null }">
+	         <span style="color: #5f0080;">배송지를 입력</span>
+	         하고<br />
+	         배송유형을 확인해 보세요!
+	      </c:if>
+	      
+	      <br /> <span> 
+	      <!-- 샛별배송~ --> ${address.DELIVERY_TYPE }
+	      </span> <br />
+	      <!-- 로그인했을때 => 배송지변경 -->
+	      <sec:authorize access="isAuthenticated()">
+	      	<button type="button" id="changeAddress" onclick="popup()"><span class="address-ico"></span>배송지변경</button>
+	      </sec:authorize>
+	   
+	      <!-- 로그인 x => 주소검색 -->
+	      <sec:authorize access="isAnonymous()">
+	      	<button type="button" id="searchAddress" onclick="popup()"><span class="address-ico"></span>주소 검색</button>
+	      </sec:authorize>
+	      <br />
+	      <br />
+	   </div> 
+	      <!-- 담은 상품 있으면 총금액, 할인금액 등 계산해줌 -->
+	      <div class="amount-div">
+		      <span>상품금액</span>
+		      <!-- original price -->
+		      <input type="text" name="" id="allAmount" value="${ogp }원" readonly>
+		       <br />
+		      <span>상품할인금액</span>
+		      <!-- discount price -->
+		      <input type="text" name="" id="dcAmount" value="${dcp }원"  readonly/> <br /> 
+		      <span>배송비</span>
+		      <input type="text" name="" id="deliveryAmount" readonly /><br />
+		      <span>결제예정금액</span>
+		      <!-- 최종결제 금액 original - discount price -->
+		      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }원"  readonly/>
+		      <br />
+		      <!-- 로그인했을시 적립 포인트  -->
+		      <sec:authorize access="isAuthenticated()">
+		      <div class="point">
+		         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
+		      </div>
+		      </sec:authorize>
+	      </div>
+	      <br />
+	      <br />
+	      <!-- cartList 있을 때 주문하기 버튼 -->
+	      <c:if test="${cartList != null }">
+	         <input type="button" value="주문하기" id="reqOrder" />
+	      </c:if>
+	      <!-- cartList 없으면 상품 담아주세요 -->
+	      <c:if test="${cartList == null }">
+	         <input type="button" value="상품을 담아주세요" id="reqOrder" disabled />
+	      </c:if>
+	   </div>
+	</div>
+		<div class="test" style="clear: both;"></div>
 </div>
-
 <script>
 	
 	$(() => {
@@ -387,13 +498,19 @@ padding-left: 6px;
 		let bool3 = $("#iTable tbody").find('tr').length;
 		
 		if(bool != 0){
+			$("#fTable thead tr").append('<th colspan="6"></th>');
 			$("#fTable thead th").append('냉동상품');
+			$("#fTable thead th").append('<span class="ico"></span>');
 		}
 		if(bool2 != 0){
-			$("#rTable thead th").append('냉장상품');
+			$("#rTable thead tr").append('<th colspan="6"></th>');
+	        $("#rTable thead th").append('냉장상품');
+	        $("#rTable thead th").append('<span class="ico"></span>');
 		}
 		if(bool3 != 0){
-			$("#iTable thead th").append('상온상품');
+			$("#iTable thead tr").append('<th colspan="6"></th>');
+	        $("#iTable thead th").append('상온상품');
+	        $("#iTable thead th").append('<span class="ico"></span>');
 		}
 		
 		/* 체크박스 기본 선택 */
@@ -587,4 +704,39 @@ padding-left: 6px;
 		applyCartUpdate(targetId, 1);
 	});
 </script>
-    
+<!-- 다움 주소검색 API -->
+<script src="https://kit.fontawesome.com/4123702f4b.js"
+	crossorigin="anonymous"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+	function popup(){
+	    var url = '${pageContext.request.contextPath}/product/cart/findAddress';
+	    var name = "popup test";
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);
+	}
+    function findAddress() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("detailAddress").focus();
+            }
+        }).open();
+    }
+</script>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />

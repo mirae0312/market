@@ -86,7 +86,7 @@ public class JoinController {
 
     @GetMapping("/checkPhone")
     public ResponseEntity<?> checkPhone(@RequestParam Map<String, Object> infoPhone){
-        try{
+        /*try{
             log.debug("phone = {}", infoPhone);
 
             infoPhone.put("type", "phone");
@@ -103,7 +103,7 @@ public class JoinController {
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw e;
-        }
+        }*/
 
         return ResponseEntity.ok(infoPhone);
     }
