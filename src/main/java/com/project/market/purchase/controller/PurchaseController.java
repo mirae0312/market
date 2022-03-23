@@ -13,12 +13,14 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.project.market.customerService.model.service.CustomerServiceService;
 import com.project.market.product.model.service.ProductService;
 import com.project.market.purchase.model.service.PurchaseService;
 import com.project.market.purchase.model.vo.Coupon;
@@ -36,6 +38,9 @@ public class PurchaseController {
 	
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private CustomerServiceService customerService;
 	
 	@GetMapping("/tarr4hMain")
 	public void tarr4hMain() {
@@ -51,7 +56,7 @@ public class PurchaseController {
 	}
 	
 	@GetMapping("/orderPage")
-	public void orderPage(@RequestParam List<String> orderArr, @AuthenticationPrincipal Member member) {
+	public void orderPage(@RequestParam List<String> orderArr, @AuthenticationPrincipal Member member, Model model) {
 		String userId = member.getId();
 		
 		List<Map<String, Object>> cartList = new ArrayList<>();
@@ -65,8 +70,13 @@ public class PurchaseController {
 			log.debug("cart = {}", cartMap);
 			cartList.add(cartMap);
 		}
-				
+		
+		model.addAttribute("cartList", cartList);
 		log.debug("cartList = {}", cartList);
+		
+		Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
+		model.addAttribute("address", addressMap);	
+		log.debug("address = {}", addressMap);
 	}
 	
 	
