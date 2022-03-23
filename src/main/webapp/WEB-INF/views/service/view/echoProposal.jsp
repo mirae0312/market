@@ -10,7 +10,7 @@
 	<jsp:param value="마켓" name="title"/>
 </jsp:include>
     <meta charset="UTF-8">
-    <title>Announcement</title>
+    <title>question</title>
     
  <style>
  		.csPage{
@@ -18,6 +18,11 @@
             margin: 0 auto;
             display: flex;
         }
+        /* leftside-title */
+        .cs-title{
+        	font-weight: 500;
+        }
+        #cs-mainTitle {padding-bottom: 30px}
         
         .leftSide{
             /* float: left; */
@@ -161,61 +166,52 @@
         	border-top: 1px solid #333;
         }
 
-        /* csBoard-search */
-        .csSearch-section{
+        /* write-section */
+        .write-section{
             height: 80px;
             padding: 0;
-            border-top: 1px solid var(--purple);
+            border-top: 1px solid #e6e6e6;
             margin-top: 30px;
+            
         }
-
-        .csSearch-section form{
-            display: flex;
-            padding-top: 30px;
-            font-size:14px;
-        }
-        .csSearch-section form span{
-            padding-right: 30px;
-            margin:auto 0;
-        }
-
-		.search-checkbox{
-			padding-right: 60px;
-			margin:auto;
+		.write-section .writeBox{
+			float: right;
+    		padding-top: 60px;
 		}
-		
-		.search-checkbox label{
-			padding-right: 10px;
-		}
-		.search-checkbox label input[type=checkbox]{
-			margin-right: 5px;
-		}
-		
         
-        .csSearch-section input[type=text]{
-            height: 34px;
-            line-height: 34px;
-            width: 220px;
-            border: 1px solid #bfbfbf;
-            color: #000;
-            /* float: right; */
-            padding: 4px;
+        .write-section button {
+            width: 100px;
+    		display: inline-block;
+    		line-height: 30px;
+    		text-align: center;
+    		background-color: #795b8f;
+    		border: 1px solid #5f0080;
+    		color: #fff;
+    		font-size: 15px;
+    		float: right;
+    		margin-left: 2px;
+    		font-size: 13px;
         }
-        .csSearch-section button {
-            color: var(--purple);
-            background-color: var(--purple);
-    		color: white;
-    		padding: 9px;
-    		border: none;
+        .write-section button:hover{
+        	background-color: var(--white);
+        	color: var(--purple);
+        	border: 1px solid var(--purple);
         }
         
         /* title */
-        .cs-title{
-        	font-weight: 500;
+        .csPage-section .list-title{
+        	padding-bottom: 33px;
+    		padding-left: 20px;
+    		font-size: small;
+    	}
+        .csPage-section .list-title p{
+        	overflow: hidden;
+    		font-size: 14px;
+    		color: #333;
+    		line-height: 22px;
+    		letter-spacing: -.3px;
         }
-        #cs-mainTitle{
-        	padding-bottom: 30px;
-        }
+        
         
         /* pagenation */
         .pagenation{
@@ -238,33 +234,33 @@
  
     <!-- cs page --> 
 <div class="csPage">
-    <!-- 고객센터 왼쪽 사이드바 -->
+    <!--  왼쪽 사이드바 -->
     <div class="leftSide">
         <div class="leftSide-csTitle"><h2 class="cs-title" id="cs-mainTitle">고객센터</h2></div>
         <div class="leftSide-listDiv">
             <ul class="leftSide-list">
-                <li id="userClick">
-                    <a href="${pageContext.request.contextPath}/service/announcement" id="" onclick="" >공지사항</a>
+                <li >
+                    <a href="${pageContext.request.contextPath}/service/view/announcement" id="" onclick="" >공지사항</a>
+                    <i class="fas fa-chevron-right"></i>
+                </li>
+                <li class="" >
+                    <a href="${pageContext.request.contextPath}/service/view/productReview" onclick="" >자주하는 질문</a>
+                    <i class="fas fa-chevron-right"></i>
+                </li>
+                <li class="" >
+                    <a href="${pageContext.request.contextPath}/service/view/question" onclick="" >1:1 문의</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
                 <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >자주하는 질문</a>
+                    <a href="${pageContext.request.contextPath}/service/view/largeProposal" onclick="" >대량주문 문의</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
                 <li class="">
-                    <a href="${pageContext.request.contextPath}/service/myQuestion" onclick="" >1:1 문의</a>
+                    <a href="${pageContext.request.contextPath}/service/view/productProposal" onclick="" >상품 제안</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >대량주문 문의</a>
-                    <i class="fas fa-chevron-right"></i>
-                </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >상품 제안</a>
-                    <i class="fas fa-chevron-right"></i>
-                </li>
-                <li class="">
-                    <a href="${pageContext.request.contextPath}/cs/notice" onclick="" >에코포장 피드백</a>
+                <li class="" id="userClick">
+                    <a href="${pageContext.request.contextPath}/service/view/echoProposal" onclick="" >에코포장 피드백</a>
                     <i class="fas fa-chevron-right"></i>
                 </li>
             </ul>
@@ -272,28 +268,33 @@
         
         <!-- leftSide chatbot? 1:1 문의하기 -->
         <div class="leftsideQuestion-div">
-            <a href="${pageContext.request.contextPath}/service/myQuetion" id="leftSide-inquire">
+            <a href="${pageContext.request.contextPath}/service/enroll/question" id="leftSide-inquire">
             <span class="">도움이 필요하신가요?</span>1:1 문의하기</a>
             <!-- <i class="fas fa-chevron-right"></i> -->
         </div>
     </div>
     
-    <!-- 공지사항 시작 -->  
+    <!-- 에코포장 피드백 시작 -->  
     <div class="csPage-section">
         <div class="csPage-aticle">
-            <h2 class="cs-title">공지사항 <span class="cs-title">컬리의 새로운 소식들과 유용한 정보들을 한곳에서 확인하세요.</span></h2>
+            <h2 class="cs-title">에코포장피드백</h2>
         </div>
-        
+        <ul class="list-title">
+        	<li><p>에코 박스에 대한 피드백이나 새로운 포장재에 대한 제안을 남겨주세요.</p></li>
+        	<li><p>더욱 세심하게 포장되었으면 하는 상품이 있다면 언제든 말씀주세요.</p></li>
+        	<li><p>제안해 주신 의견은 담당자가 실시간으로 모니터링할 예정이나 별도 답변 안내는 되지 않음을 양해 부탁드립니다.</p></li>
+        	<li><p>배손관련, 주문(취소/교환/환불)관련 문의 및 요청 사항은 1:1문의/카카오톡/고객센터(1644-1107)로 문의 바랍니다.</p></li>
+        </ul>
         <!-- 게시판 -->
         <div class="csBoard">
             <table class="csTable">
                 <thead>
                     <tr>
                         <th>번호</th>
+                        <th>카테고리</th>
                         <th>제목</th>
                         <th>작성자</th>
                         <th>작성일</th>
-                        <th>조회</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -313,30 +314,11 @@
             	${pagebar}
             </div>
 
-            <!-- 검색 테이블 -->
-            <div class="csSearch-section">
-                <form action="">
-                    <span>검색어</span>
-                    <div class="search-checkbox">
-                    <label for="search-name">
-                        <input type="checkbox" id="search-name" name="name"/>이름
-                    </label>
-                    <label for="search-title">
-                        <input type="checkbox" id="search-title" name="title"/>제목
-                    </label>
-                    <label for="search-content">
-                        <input type="checkbox" id="search-content" name="content"/>내용
-                    </label>
-                </div>
-
-
-                
-                    <div class="search-section">
-                        <input type="text" name="keyword"/><button type="submit">
-                        <i class="fas fa-search"></i></button>
+            <!-- 글쓰기 -->
+            <div class="write-section">
+                    <div class="writeBox">
+                        <button type="submit">글쓰기</button>
                     </div>
-                </form>
-                
             </div>
             
             
