@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +46,11 @@ public class MyPageController {
 		Date nowDate = format.parse(date);
 		
 		List<Map<String, Object>> couponList = myPageService.selectuserCoupon(userId);
+		List<Map<String, Object>> addressList = myPageService.selectmkAddress(userId);
 		log.debug("couponList = {}", couponList);
+		log.debug("addressList = {}", addressList);
 		model.addAttribute("couponList", couponList);
+		model.addAttribute("addressList", addressList);
 		model.addAttribute("nowDate", nowDate);
 		model.addAttribute("userId", userId);
 	}
@@ -98,12 +102,74 @@ public class MyPageController {
 	public ResponseEntity<?> addAddr(@RequestParam String member_post, @RequestParam String member_addr, @RequestParam String member_detail_addr, @AuthenticationPrincipal Member member) throws ParseException
 	{
 		int result = 0;
+		String id = member.getId();
 		String phone = member.getPhone();
+		String receiver = member.getName();
+		String deliveryType1 = "샛별배송";
+		String deliveryType2 = "택배배송";
+		char defAdd1 = 'X';
+		char defAdd2 = 'D';
 		
+		Map<String, Object> checkParam = new HashMap<>();
+		checkParam.put("id", id);
+		checkParam.put("defaultAddress", defAdd2);
+		
+		int addressCheck = myPageService.selectmkAddressCheck(checkParam);
+		
+		log.debug("addressCheck = {}", addressCheck);
+		
+		LinkedHashMap<String, Object> param = new LinkedHashMap<>();
+		
+	
+		
+		param.put("id", id);
+		param.put("zipCode", member_post);
+		param.put("address", member_addr);
+		param.put("detailAddress", member_detail_addr);
+		
+		if(member_addr.substring(0,2).equals("서울")) 
+		{
+			param.put("deliveryType", deliveryType1);
+		}
+		else 
+		{
+			param.put("deliveryType", deliveryType2);
+		}
+		
+		param.put("receiver", receiver);
+		param.put("phone", phone);
+		if(addressCheck == 0) {
+			param.put("defaultAddress", defAdd2);
+		}
+		else if(addressCheck == 1) {
+			
+			param.put("defaultAddress", defAdd1);
+		}
+		
+		log.debug("param = {}", param);
+		int insertresult = myPageService.insertAddress(param);
+		log.debug("insertresult = {}", insertresult);
+		
+		return ResponseEntity.ok(insertresult);
+	}
+	
+	@GetMapping("/updateAddr")
+	public ResponseEntity<?> updateAddr(@RequestParam String changeaddr, @AuthenticationPrincipal Member member) throws ParseException
+	{
+		int result = 0;
+		log.debug("changeaddr = {}", changeaddr);
 		
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping("/changePw")
+	public ResponseEntity<?> changePw(@RequestParam String changePw, @AuthenticationPrincipal Member member) throws ParseException
+	{
+		int result = 0;
+		log.debug("changePw = {}", changePw);
+		
+		return ResponseEntity.ok(result);
+	}
 	
 	@InitBinder
     public void initBinder(WebDataBinder binder) {

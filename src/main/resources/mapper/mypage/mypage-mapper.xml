@@ -13,6 +13,7 @@
 		where
 			id = #{id}
 	</select>
+	
 	<select id="selectCoupon" parameterType="String" resultType="coupon">
 		select
 			*
@@ -21,10 +22,48 @@
 		where
 			code = #{code}
 	</select>
+	
+	<select id="selectmkAddress" parameterType="String" resultMap="addressMap">
+			select
+			*
+		from
+			mk_address
+		where
+			id = #{id}
+		order by default_address asc , no asc
+	</select>
+	
+	<select id="selectmkAddressCheck" parameterType="map" resultType="int">
+			select
+			count(*)
+		from
+			mk_address
+		where
+			id = #{id} and default_address = #{defaultAddress}
+	</select>
+
 	<insert id="insertUserCoupon" parameterType="map">
 		insert into user_coupon
 		values(#{id}, #{code})
 	</insert>
+	
+	<insert id="insertAddress" parameterType="map">
+		insert into mk_address
+		values(mk_address_no.nextval, #{id}, #{zipCode}, #{address}, #{detailAddress}, #{deliveryType}, #{receiver}, #{phone}, #{defaultAddress})
+	</insert>
+	
+	<resultMap type="address" id="addressMap">
+		<id column="no" property="no"/>
+		<result column="id" property="id"/>
+		<result column="zip_code" property="zipCode"/>
+		<result column="address" property="address"/>
+		<result column="detail_address" property="detailAddress"/>
+		<result column="delivery_type" property="deliveryType"/>
+		<result column="receiver" property="receiver"/>
+		<result column="phone" property="phone"/>
+		<result column="default_address" property="defaultAddress"/>
+	</resultMap>
+	
 	
 	
 </mapper>

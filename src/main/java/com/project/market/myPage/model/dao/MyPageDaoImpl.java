@@ -1,5 +1,6 @@
 package com.project.market.myPage.model.dao;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,24 @@ public class MyPageDaoImpl implements MyPageDao {
 	public List<Map<String, Object>> selectuserCoupon(String userId) {
 		
 		return session.selectList("selectuserCoupon", userId);
+	}
+
+	@Override
+	public int insertAddress(LinkedHashMap<String, Object> param) {
+		
+		return session.insert("insertAddress", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectmkAddress(String userId) {
+		
+		return session.selectList("selectmkAddress", userId);
+	}
+
+	@Override
+	public int selectmkAddressCheck(Map<String, Object> checkParam) {
+		
+		return session.selectOne("selectmkAddressCheck",checkParam);
 	}
 
 }

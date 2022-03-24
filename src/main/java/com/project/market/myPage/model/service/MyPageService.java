@@ -1,5 +1,6 @@
 package com.project.market.myPage.model.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,5 +14,11 @@ public interface MyPageService {
 	int insertUserCoupon(Map<String, Object> param);
 
 	List<Map<String, Object>> selectuserCoupon(String userId);
+
+	int insertAddress(LinkedHashMap<String, Object> param);
+
+	List<Map<String, Object>> selectmkAddress(String userId);
+
+	int selectmkAddressCheck(Map<String, Object> checkParam);
 
 }

@@ -1,5 +1,6 @@
 package com.project.market.myPage.model.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,24 @@ public class MyPageServiceImpl implements MyPageService {
 	public List<Map<String, Object>> selectuserCoupon(String userId) {
 		
 		return mypageDao.selectuserCoupon(userId);
+	}
+
+	@Override
+	public int insertAddress(LinkedHashMap<String, Object> param) {
+		
+		return mypageDao.insertAddress(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectmkAddress(String userId) {
+		
+		return mypageDao.selectmkAddress(userId);
+	}
+
+	@Override
+	public int selectmkAddressCheck(Map<String, Object> checkParam) {
+		
+		return mypageDao.selectmkAddressCheck(checkParam);
 	}
 
 	

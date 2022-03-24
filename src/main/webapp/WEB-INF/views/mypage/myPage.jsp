@@ -63,8 +63,39 @@
 	<br />
 	<input id="member_addr" type="text" placeholder="Address" readonly>
 	<br />
-	<input type="text" id="member_detail_addr" placeholder="Detailed Address">
+	<input type="text" id="member_detail_addr" placeholder="Detailed Address" required>
     <input type="button" value="등록" id="addAddr"/>
+    
+    <span>-----------------------------------------------</span>
+	<br />
+	<span>내 배송지목록</span>
+	<br />
+	
+	
+	<c:forEach var="listaddr" items="${addressList }" varStatus="status">
+        <tr>
+         
+        	<c:if test="${listaddr.defaultAddress eq 'D'.charAt(0)}">
+        	   <div style="color:gray">
+	           	<td><span>기본 배송지</span></td>
+	           </div>
+	           	<td>${listaddr.zipCode} ${listaddr.address} ${listaddr.detailAddress}</td>
+	            <td>${listaddr.deliveryType }</td>
+	            <td><input type="button" value="수정" class="updateAddr"/></td>
+	            <input type="hidden" class="changeAddr${status.index}" name = "changeAddr" value="${listaddr.detailAddress}" />
+	            <br/>
+            </c:if>
+   
+	           <c:if test="${listaddr.defaultAddress eq 'X'.charAt(0)}">
+		           <td>${listaddr.zipCode} ${listaddr.address} ${listaddr.detailAddress}</td>
+	           	   <td>${listaddr.deliveryType }</td>
+	           	   <td><input type="button" value="수정" class="updateAddr"/></td>
+	           	   <input type="hidden" class="changeAddr${status.index}" name = "changeAddr" value="${listaddr.detailAddress}"/>
+		            <br/>
+	           </c:if>
+         
+        </tr>
+    </c:forEach>
     
 
 
@@ -131,13 +162,51 @@ function findAddr(){
 }
 
 $("#addAddr").click((e) => {
+
 	console.log("배송지 등록");
+	var member_post_check = $("#member_post").val();
+	if(member_post_check == ''){
+
+		alert("새 배송지 추가 버튼을 먼저 눌러주세요!.");
+	
+	}
+	else{
+		
+		$.ajax({
+			url: '${pageContext.request.contextPath}/mypage/addAddr',
+			data : {
+				member_post: $("#member_post").val(),
+				member_addr: $("#member_addr").val(),
+				member_detail_addr: $("#member_detail_addr").val()
+			},
+			success(res){
+				
+				if(res == 1){
+					alert("배송지 등록 성공!");
+					location.href='${pageContext.request.contextPath}/mypage/myPage';
+				}
+				else if(res == 0){
+					alert("배송지 등록 실패!");
+				}
+			
+				
+			},
+			error: console.log
+		});
+		
+	}
+});
+
+$(".updateAddr").click((e) => {
+	console.log("배송지 수정");
+	
+	var changeaddr = $(".changeAddr").val();
+	
+	console.log(changeaddr);
 	$.ajax({
-		url: '${pageContext.request.contextPath}/mypage/addAddr',
+		url: '${pageContext.request.contextPath}/mypage/updateAddr',
 		data : {
-			member_post: $("#member_post").val(),
-			member_addr: $("#member_addr").val(),
-			member_detail_addr: $("#member_detail_addr").val()
+			changeaddr
 		},
 		success(res){
 			
@@ -145,6 +214,8 @@ $("#addAddr").click((e) => {
 		error: console.log
 	});
 });
+
+
 
 </script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
