@@ -126,8 +126,15 @@ $("#useCoupon").click((e) => {
 
 $("#changePwBtn").click((e) => {
 	console.log("비밀번호 변경");
+	const csrfHeader = "${_csrf.headerName}";
+    const csrfToken = "${_csrf.token}";
+    const headers = {};
+    headers[csrfHeader] = csrfToken;
+    
 	$.ajax({
 		url: '${pageContext.request.contextPath}/mypage/changePw',
+		method: "POST",
+		headers : headers,
 		data : {
 			changePw: $("#changePw").val()
 		},
