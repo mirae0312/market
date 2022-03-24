@@ -12,7 +12,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -35,6 +37,12 @@ public class MyPageController {
 	
 	@Autowired
 	private MyPageService myPageService;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	 
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/myPage")
 	public void myPage(@AuthenticationPrincipal Member member,Model model) throws ParseException{
@@ -170,6 +178,7 @@ public class MyPageController {
 		
 		return ResponseEntity.ok(result);
 	}
+	
 	
 	@InitBinder
     public void initBinder(WebDataBinder binder) {
