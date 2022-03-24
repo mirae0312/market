@@ -3,6 +3,7 @@ package com.project.market.customerService.model.service;
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.dao.CustomerServiceDao;
 import com.project.market.customerService.model.vo.Announcement;
+import com.project.market.customerService.model.vo.FrequentlyQuestion;
 import com.project.market.customerService.model.vo.Proposal;
 import com.project.market.customerService.model.vo.Question;
 import com.project.market.security.model.vo.Member;
@@ -232,6 +233,48 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         log.debug("code = {}", proposal.getCode());
         String code = proposal.getCode();
         List<Attachment> attachments = proposal.getAttachments();
+        commonAttachInsert(code, attachments);
+    }
+
+    @Override
+    public int countAllFrequentlyQuestion() {
+        return customerServiceDao.countAllFrequentlyQuestion();
+    }
+
+    @Override
+    public List<FrequentlyQuestion> selectAllFrequentlyQuestion(RowBounds rowBounds) {
+        return customerServiceDao.selectAllFrequentlyQuestion(rowBounds);
+    }
+
+    @Override
+    public FrequentlyQuestion selectOneFrequentlyQuestion(Map<String, Object> boardCode) {
+        FrequentlyQuestion frequentlyQuestion = customerServiceDao.selectOneFrequentlyQuestion(boardCode);
+        List<Attachment> attachments = customerServiceDao.selectAllAttachments(boardCode);
+        frequentlyQuestion.setAttachments(attachments);
+        return frequentlyQuestion;
+    }
+
+    @Override
+    public void modifyFrequentlyQuestion(FrequentlyQuestion frequence) {
+        customerServiceDao.updateFrequentlyQuestion(frequence);
+        if(!frequence.getAttachments().isEmpty()){
+            String code = frequence.getCode();
+            List<Attachment> attachments = frequence.getAttachments();
+            commonAttachInsert(code, attachments);
+        }
+    }
+
+    @Override
+    public void deleteOneFrequentlyQuestion(Map<String, Object> boardCode) {
+        customerServiceDao.deleteOneFrequentlyQuestion(boardCode);
+    }
+
+    @Override
+    public void insertFrequentlyQuestion(FrequentlyQuestion frequence) {
+        customerServiceDao.insertFrequentlyQuestion(frequence);
+        log.debug("code = {}", frequence.getCode());
+        String code = frequence.getCode();
+        List<Attachment> attachments = frequence.getAttachments();
         commonAttachInsert(code, attachments);
     }
 
