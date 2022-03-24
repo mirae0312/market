@@ -216,4 +216,14 @@ public class ProductController {
 		
 		return accAmountAll;
 	}
+
+	@GetMapping("/cart/findAddress")
+	public void findAddress(@AuthenticationPrincipal Member member, Model model) {
+		if(member != null) {
+			String userId = member.getId();
+			Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
+			model.addAttribute("address", addressMap);			
+		}
+	}
+	
 }

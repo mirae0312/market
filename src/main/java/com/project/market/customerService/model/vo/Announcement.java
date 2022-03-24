@@ -24,7 +24,7 @@ public class Announcement implements Serializable {
     private Date regDate;
     private int readCount;
     private String content;
-    private String announce;
+    private String announce; // A:항상위에 '공지'로 등록, D:일반공지
     private List<Attachment> attachments;
 
 }
