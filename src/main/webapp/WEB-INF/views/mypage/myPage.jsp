@@ -53,6 +53,7 @@
     <br />
     <span>비밀번호</span><input type="text" name="" id="changePw"/>
     <br /> 
+    <input id="token" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <input type="button" value="확인" id="changePwBtn"/>
     
     <span>-----------------------------------------------</span>
@@ -130,6 +131,13 @@ $("#changePwBtn").click((e) => {
     const csrfToken = "${_csrf.token}";
     const headers = {};
     headers[csrfHeader] = csrfToken;
+    const changePw = $("#changePw").val();
+    
+    if(! /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(changePw)){
+        alert("비밀번호는 숫자와 영문이 포함된 8~15자리입니다");
+		$("#changePw").focus();
+		return false;
+    }
     
 	$.ajax({
 		url: '${pageContext.request.contextPath}/mypage/changePw',

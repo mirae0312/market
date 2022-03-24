@@ -20,12 +20,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.market.myPage.model.service.MyPageService;
 import com.project.market.myPage.model.vo.UserCoupon;
 import com.project.market.purchase.model.vo.Coupon;
+import com.project.market.security.model.service.LoginService;
 import com.project.market.security.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,9 @@ public class MyPageController {
 	 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+    private LoginService loginService;
 	
 	@GetMapping("/myPage")
 	public void myPage(@AuthenticationPrincipal Member member,Model model) throws ParseException{
@@ -170,12 +175,21 @@ public class MyPageController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/changePw")
+	@PostMapping("/changePw")
 	public ResponseEntity<?> changePw(@RequestParam String changePw, @AuthenticationPrincipal Member member) throws ParseException
 	{
 		int result = 0;
 		log.debug("changePw = {}", changePw);
-		
+		  try{
+	          
+	            String password = bCryptPasswordEncoder.encode(changePw);
+	            param.put("password", password);
+	            loginService.updatePassword(param);
+	          
+	        }catch(Exception e){
+	            log.error(e.getMessage(), e);
+	            throw e;
+	        }
 		return ResponseEntity.ok(result);
 	}
 	
