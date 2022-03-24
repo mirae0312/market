@@ -180,11 +180,13 @@ public class MyPageController {
 	{
 		int result = 0;
 		log.debug("changePw = {}", changePw);
+		Map<String, Object> param = new HashMap<>();
 		  try{
 	          
 	            String password = bCryptPasswordEncoder.encode(changePw);
 	            param.put("password", password);
 	            loginService.updatePassword(param);
+	            
 	          
 	        }catch(Exception e){
 	            log.error(e.getMessage(), e);
