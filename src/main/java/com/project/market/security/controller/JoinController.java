@@ -1,6 +1,7 @@
 package com.project.market.security.controller;
 
 import com.project.market.security.model.service.JoinService;
+import com.project.market.security.model.service.LoginService;
 import com.project.market.security.model.service.SmsService;
 import com.project.market.security.model.vo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.beans.PropertyEditor;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
