@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.project.market.customerService.model.vo.FrequentlyQuestion;
 import com.project.market.customerService.model.vo.Proposal;
 import com.project.market.customerService.model.vo.Question;
 import com.project.market.product.model.vo.Product;
@@ -61,11 +62,15 @@ public class CustomerServiceController {
     @Value("${board.lapr.path}")
     private String laprPath;
 
+    @Value("${board.frqu.path}")
+    private String frquPath;
+
     private final String QUES = "question";
     private final String ANNO = "announcement";
     private final String PRPR = "productProposal";
     private final String ECPR = "echoProposal";
     private final String LAPR = "largeProposal";
+    private final String FRQU = "frequentlyQuestion";
     private final String PRRE = "productReview";
 
     @GetMapping("/view/{boardId}")
@@ -125,6 +130,16 @@ public class CustomerServiceController {
 
                     model.addAttribute("largeProposal", laprList);
                     break;
+                case FRQU:
+                    totalContent = customerServiceService.countAllFrequentlyQuestion();
+                    log.debug("totalContent = {}", totalContent);
+
+                    commonThings = commonUtils(cPage, totalContent, request);
+                    List<FrequentlyQuestion> frquList = customerServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
+                    log.debug("frequently question list = {}", frquList);
+
+                    model.addAttribute("frequentlyQuestion", frquList);
+                    break;
             }
             model.addAttribute("pagebar", (String) commonThings.get("pagebar"));
         }catch(Exception e){
@@ -151,6 +166,12 @@ public class CustomerServiceController {
                         model.addAttribute("announce", announce);
                     }
                     break;
+                case FRQU:
+                    if("modify".equals((String) param.get("type"))){
+                        FrequentlyQuestion frequently = customerServiceService.selectOneFrequentlyQuestion(param);
+                        model.addAttribute("frequentlyQuestion", frequently);
+                    }
+                    break;
             }
 
         }catch(Exception e){
@@ -161,7 +182,7 @@ public class CustomerServiceController {
     }
 
     @PostMapping("/modify/{boardId}")
-    public String modifyBoard(@PathVariable(required = true) String boardId, Question question, Proposal proposal, Announcement announcement,
+    public String modifyBoard(@PathVariable(required = true) String boardId, Question question, Proposal proposal, Announcement announcement, FrequentlyQuestion frequence,
                               @RequestParam(name = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr) throws IOException {
         String directory = "";
         Map<String, Object> boardCode = new HashMap<>();
@@ -210,6 +231,27 @@ public class CustomerServiceController {
                     customerServiceService.modifyAnnouncement(announcement);
 
                     redirectAttr.addFlashAttribute("msg", "공지 수정 완료!");
+                    break;
+                case FRQU:
+                    log.debug("frequence = {}", frequence);
+                    directory = application.getRealPath(frquPath);
+                    boardCode.put("code", frequence.getCode());
+                    FrequentlyQuestion oldFrequence = customerServiceService.selectOneFrequentlyQuestion(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldFrequence.getAttachments().isEmpty()){
+                            deleteAttachment(oldFrequence.getAttachments(), frquPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        frequence.setAttachments(newAttachments);
+
+                    customerServiceService.modifyFrequentlyQuestion(frequence);
+
+                    redirectAttr.addFlashAttribute("msg", "자주하는 질문 수정 완료!");
                     break;
             }
         }catch(Exception e){
@@ -265,6 +307,11 @@ public class CustomerServiceController {
                     log.debug("largeProposal", proposal);
                     model.addAttribute("largeProposal", proposal);
                     break;
+                case FRQU:
+                    FrequentlyQuestion frequence = customerServiceService.selectOneFrequentlyQuestion(boardCode);
+                    log.debug("frequence", frequence);
+                    model.addAttribute("frequentlyQuestion", frequence);
+                    break;
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -316,6 +363,13 @@ public class CustomerServiceController {
 
                     redirectAttr.addFlashAttribute("msg", "대량구매 문의 삭제 성공");
                     break;
+                case FRQU:
+                    deleteAttachment(attachments, frquPath);
+
+                    customerServiceService.deleteOneFrequentlyQuestion(boardCode);
+
+                    redirectAttr.addFlashAttribute("msg", "자주하는 문의 삭제 성공");
+                    break;
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -325,7 +379,7 @@ public class CustomerServiceController {
     }
 
     @PostMapping("/enroll/{boardId}")
-    public String enrollBoard(@PathVariable(required = true) String boardId, Proposal proposal, Announcement announcement, Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
+    public String enrollBoard(@PathVariable(required = true) String boardId, Proposal proposal, FrequentlyQuestion frequence, Announcement announcement, Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
                               RedirectAttributes redirectAttr) throws IOException {
         log.debug("proposal = {}", proposal);
         log.debug("announcement = {}", announcement);
@@ -390,6 +444,17 @@ public class CustomerServiceController {
                         proposal.setAttachments(attachments);
                     log.debug("largeProposal + attachments = {}", proposal);
                     customerServiceService.insertLargeProposal(proposal);
+                    break;
+                case FRQU:
+                    log.debug("frequence = {}", frequence);
+                    saveDirectory = application.getRealPath(frquPath);
+
+                    if(upFiles != null && upFiles.length > 0)
+                        attachments = commonAttachment(upFiles, saveDirectory);
+                    if(!attachments.isEmpty())
+                        frequence.setAttachments(attachments);
+                    log.debug("frequently question + attachments = {}", frequence);
+                    customerServiceService.insertFrequentlyQuestion(frequence);
                     break;
             }
             redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");

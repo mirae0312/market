@@ -2,6 +2,7 @@ package com.project.market.customerService.model.dao;
 
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.vo.Announcement;
+import com.project.market.customerService.model.vo.FrequentlyQuestion;
 import com.project.market.customerService.model.vo.Proposal;
 import com.project.market.customerService.model.vo.Question;
 import com.project.market.security.model.vo.Member;
@@ -99,4 +100,22 @@ public interface CustomerServiceDao {
 
     @Insert("insert into mk_large_proposal values(concat('lapr-', seq_mk_large_proposal_no.nextval), #{writer}, #{name}, #{phone}, #{email}, #{receiveDate}, #{delivery}, #{content}, default)")
     void insertLargeProposal(Proposal proposal);
+
+    @Select("select count(*) from mk_frequently_question")
+    int countAllFrequentlyQuestion();
+
+    @Select("select * from mk_frequently_question")
+    List<FrequentlyQuestion> selectAllFrequentlyQuestion(RowBounds rowBounds);
+
+    @Select("select * from mk_frequently_question where code = #{code}")
+    FrequentlyQuestion selectOneFrequentlyQuestion(Map<String, Object> boardCode);
+
+    @Select("update mk_frequently_question set writer = #{writer}, category = #{category}, title = #{title}, content = #{content} reg_date = sysdate where code = #{code}")
+    void updateFrequentlyQuestion(FrequentlyQuestion frequence);
+
+    @Delete("delete from mk_frequently_question where code = #{code}")
+    void deleteOneFrequentlyQuestion(Map<String, Object> boardCode);
+
+    @Insert("insert into mk_frequently_question values(concat('frqu-', seq_mk_frequently_question_no.nextval), #{writer}, #{category}, #{title}, #{content}, default)")
+    void insertFrequentlyQuestion(FrequentlyQuestion frequence);
 }
