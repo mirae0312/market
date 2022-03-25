@@ -21,6 +21,8 @@ public interface ProductDao {
 
 	int deleteCart(Map<String, Object> param);
 
+	List<Product> selectProductOptionsDetail(String pcode);
+
 
 
 }

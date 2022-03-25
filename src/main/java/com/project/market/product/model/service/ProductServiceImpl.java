@@ -28,6 +28,13 @@ public class ProductServiceImpl implements ProductService {
 	public Product selectProductDetail(String pcode) {
 		return productDao.selectProductDetail(pcode);
 	}
+	
+	
+
+	@Override
+	public List<Product> selectProductOptionsDetail(String pcode) {
+		return productDao.selectProductOptionsDetail(pcode);
+	}
 
 	@Override
 	public int insertCart(Map<String, Object> cartInfo) {

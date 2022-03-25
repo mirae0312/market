@@ -96,7 +96,6 @@ th{
 }
 th{
 	padding-top: 20px;
-	
 }
 td{
 	padding: 20px;
