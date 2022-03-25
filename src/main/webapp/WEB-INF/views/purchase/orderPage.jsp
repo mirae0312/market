@@ -141,10 +141,18 @@ dl{
     background: #fafafa;
     border: 1px solid #f2f2f2;
 }
-.guide{
+#guide{
     margin: 0 auto;
     text-align: center;
     padding-top: 50px;
+}
+#slide_btn{
+	cursor: pointer;
+}
+textarea{
+	resize: none;
+	width: 80%;
+	height: 60px;
 }
 </style>
 	<div class="title">
@@ -245,8 +253,8 @@ dl{
 							<td>${address.ADDRESS} ${address.DETAIL_ADDRESS }</td>
 						</tr>
 						<tr>
-							<td class="tbl_sub">상세 정보</td>
-							<td>문 앞에 배달해주세용~</td>
+							<td class="tbl_sub">요청 사항</td>
+							<td><textarea name="" id="" cols="30" rows="10"></textarea></td>
 						</tr>
 					</tbody>
 				</table>
@@ -369,13 +377,22 @@ dl{
 <script>
 	$("#slide_btn").click((e) => {
 		if($(".cart_slide").is(":visible")){
-			$(".cart_slide").slideUp("fast");
+			$(".cart_slide").hide();
 			$(".order_guide").show();
+			$(".slide_img").css("transform", "rotate(180deg)");
 		}
 		else{
-			$(".cart_slide").slideDown();
+			$(".cart_slide").show();
 			$(".order_guide").hide();
+			$(".slide_img").css("transform", "none");
 		}
 	});
+	
+	function popup(){
+	    var url = '${pageContext.request.contextPath}/purchase/deliveryDetail';
+	    var name = "popup test";
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);
+	}
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
