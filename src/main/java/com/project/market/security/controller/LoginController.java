@@ -110,46 +110,49 @@ public class LoginController {
     @GetMapping("/kakaoLogin")
     public String kakaoLogin(@RequestParam(value = "code", required = false) String code, RedirectAttributes redirectAttr){
         Map<String, Object> kakaoUser = new HashMap<>();
+        String type = "";
         try{
             log.debug("kakao code = {}", code);
-            String type = "kakao";
+            type = "kakao";
             kakaoUser = snsService.getSnsAccessToken(code, type);
             log.debug("kakaoUser info = {}", kakaoUser);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
         }
-        return snsLoginCommons(kakaoUser, redirectAttr);
+        return snsLoginCommons(kakaoUser, redirectAttr, type);
     }
 
     @GetMapping("/naverLogin")
     public String naverLogin(@RequestParam(value = "code", required = false) String code, RedirectAttributes redirectAttr){
         Map<String, Object> naverUser = new HashMap<>();
+        String type = "";
         try{
             log.debug("naver code = {}", code);
-            String type = "naver";
+            type = "naver";
             naverUser = snsService.getSnsAccessToken(code, type);
             log.debug("naverUser info = {}", naverUser);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
         }
-        return snsLoginCommons(naverUser, redirectAttr);
+        return snsLoginCommons(naverUser, redirectAttr, type);
     }
 
     @GetMapping("/googleLogin")
     public String googleLogin(@RequestParam(value = "code", required = false) String code, RedirectAttributes redirectAttr){
         Map<String, Object> googleUser = new HashMap<>();
+        String type = "";
         try{
             log.debug("google code = {}", code);
-            String type = "google";
+            type = "google";
             googleUser = snsService.getSnsAccessToken(code, type);
             log.debug("googleUser = {}", googleUser);
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
         }
-        return snsLoginCommons(googleUser, redirectAttr);
+        return snsLoginCommons(googleUser, redirectAttr, type);
     }
 
     @GetMapping("/certifiedNum")
@@ -226,7 +229,7 @@ public class LoginController {
         }
     }
 
-    public String snsLoginCommons(Map<String, Object> userInfoMap, RedirectAttributes redirectAttr){
+    public String snsLoginCommons(Map<String, Object> userInfoMap, RedirectAttributes redirectAttr, String type){
         try{
             // db 확인
             Member member = loginService.selectOneMemberById(userInfoMap);
@@ -237,7 +240,11 @@ public class LoginController {
                 redirectAttr.addFlashAttribute("userInfo", userInfoMap);
                 return "redirect:/login/snsEnroll";
             }else{
-                authenticationPlace(userInfoMap);
+                if(type.equals(member.getLoginType().toString())){
+                    authenticationPlace(userInfoMap);
+                }else{
+                    redirectAttr.addFlashAttribute("msg", "이미 " + member.getLoginType().toString() + "으로 가입된 아이디 입니다.");
+                }
             }
             log.debug("success");
         }catch(Exception e){
