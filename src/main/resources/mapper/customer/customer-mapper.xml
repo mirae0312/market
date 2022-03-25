@@ -6,7 +6,7 @@
 
     <insert id="insertAnnouncement">
         insert into mk_announcement values(concat('anno-',seq_mk_announcement_no.nextval), #{title}, #{writer}, default, default, #{content}, #{announce})
-        <selectKey order="AFTER" resultType="string" keyProperty="an_code">
+        <selectKey order="AFTER" resultType="string" keyProperty="anCode">
             select concat('anno-',seq_mk_announcement_no.currval) from dual
         </selectKey>
     </insert>

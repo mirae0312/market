@@ -2,6 +2,7 @@ package com.project.market.customerService.model.service;
 
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.vo.Announcement;
+import com.project.market.customerService.model.vo.FrequentlyQuestion;
 import com.project.market.customerService.model.vo.Proposal;
 import com.project.market.customerService.model.vo.Question;
 import com.project.market.security.model.vo.Member;
@@ -76,4 +77,16 @@ public interface CustomerServiceService {
     void deleteOneLargeProposal(Map<String, Object> boardCode);
 
     void insertLargeProposal(Proposal proposal);
+
+    int countAllFrequentlyQuestion();
+
+    List<FrequentlyQuestion> selectAllFrequentlyQuestion(RowBounds rowBounds);
+
+    FrequentlyQuestion selectOneFrequentlyQuestion(Map<String, Object> param);
+
+    void modifyFrequentlyQuestion(FrequentlyQuestion frequence);
+
+    void deleteOneFrequentlyQuestion(Map<String, Object> boardCode);
+
+    void insertFrequentlyQuestion(FrequentlyQuestion frequence);
 }
