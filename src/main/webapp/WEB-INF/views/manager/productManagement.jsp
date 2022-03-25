@@ -23,8 +23,10 @@
 <meta charset="UTF-8">
     <title>상품등록페이지</title>
     <h5 class="test">상품 등록폼 (임시)</h5>
-    <form id="productInsertFrm" name="productInsertFrm">
-        <span>브랜드명 : </span><input type="text" name="brandTitle">
+    <form id="productInsertFrm" name="productInsertFrm"
+          method="post" enctype="multipart/form-data" action="/market/manager/insertProduct"
+    >
+        <span>브랜드코드 : </span><input type="text" name="brandCode">
         <label class="largeCategory" for="largeCategory">대분류</label>
         <select class="form-controller" name="largeCategory" id="largeCategory">
             <option>선택</option>
@@ -43,12 +45,13 @@
         <select class="form-controller" name="smallCategory" id="smallCategory">
             <option>선택</option>
         </select>
-        <span>상품명 : </span><input type="text" name="productTitle" placeholder="상품명">
+        <span>상품명 : </span><input type="text" name="productName" placeholder="상품명">
         <span>상품가격 : </span><input type="text" name="price" placeholder="가격">
         <input type="button" onclick="optionAdd()" value="상품옵션추가">
         <div class="productOptionDiv">
         <%--     상품옵션추가       --%>
         </div>
+        <span>타이틀 : </span><input type="text" name="productTitle" placeholder="타이틀">
         <span>상품 부제 : </span><input type="text" name="subTitle">
         <span>상품재고 : </span><input type="text" name="productStock">
         <label class="salesUnit" for="salesUnit">판매단위</label>
@@ -90,6 +93,7 @@
             <input class="upload-name" value="첨부파일" disabled="disabled">
             <input type="file" class="productWriteImgInput" id="productWriteImgInput" name="upFile" accept=".gif, .jpg, .png, .jpeg" />
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <button type="submit">상품등록</button>
     </form>
 <script>
@@ -110,14 +114,13 @@
     }
 
     $(productInsertFrm).submit((e) => {
-        e.preventDefault();
+        //e.preventDefault();
 
         const product = {
             brandCode: $("[name=brandTitle]", e.target).val(),
             largeCategory: $("[name=largeCategory]", e.target).val(),
-            smallCategory: $("[name=smallCategory]", e.target).val()
-        }
-        const productInfo = {
+            smallCategory: $("[name=smallCategory]", e.target).val(),
+
             price: $("[name=price]", e.target).val(),
             title: $("[name=productTitle]", e.target).val(),
             subTitle: $("[name=subTitle]", e.target).val(),
@@ -131,15 +134,15 @@
             allergyInfo: $("[name=allergyInfo]", e.target).val(),
             sugar: $("[name=sugar]", e.target).val(),
             livestockInfo: $("[name=livestockInfo]", e.target).val(),
-            commonInfo: $("[name=commonInfo]", e.target).val()
-        }
-        const productStock = {
-            stock: $("[name=productStock]", e.target).val()
-        }
-        const productAttach = {
+            commonInfo: $("[name=commonInfo]", e.target).val(),
+
+            stock: $("[name=productStock]", e.target).val(),
+
             attachment : $("[name=upFile]", e.target).val()
         }
-        var jArray = [];
+
+        // 상품옵션
+        var optionArray = [];
         var option = $("input[name=productOptionTitle]").length;
         for (var i = 0; i < option; i++){
             const productOption = {};
@@ -148,12 +151,8 @@
             jArray.push(productOption);
         }
 
-        jArray.push(product);
-        jArray.push(productInfo);
-        jArray.push(productStock);
-        jArray.push(productAttach);
-
-        const jsonStr = JSON.stringify(jArray);
+        const JOption = JSON.stringify(optionArray);
+        const JProduct = JSON.stringify(product);
 
         // 403에러방지 csrf토큰 headers
         const csrfToken = $("meta[name='_csrf']").attr("content");
@@ -161,20 +160,21 @@
         const headers = {};
         headers[csrfHeader] = csrfToken;
 
-        $.ajax({
-            url: '/market/manager/product/insertProduct',
-            method: "POST",
-            headers: headers,
-            contentType: "application/json; charset=utf-8",
-            data: jsonStr,
-            dataType: 'JSON',
-            traditional: true,
-            success(resp){
-                console.log(resp);
-                alert("상품등록성공");
-            },
-            error: console.log
-        });
+        // $.ajax({
+        //     url: '/market/manager/product/insertProduct',
+        //     method: "POST",
+        //     headers: headers,
+        //     contentType: false,
+        //     processData: false,
+        //     data: JProduct,
+        //     dataType: 'JSON',
+        //     traditional: true,
+        //     success(resp){
+        //         console.log(resp);
+        //         alert("상품등록성공");
+        //     },
+        //     error: console.log
+        // });
     });
 
 
