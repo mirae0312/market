@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.market.myPage.model.service.MyPageService;
+import com.project.market.myPage.model.vo.Address;
 import com.project.market.myPage.model.vo.UserCoupon;
 import com.project.market.purchase.model.vo.Coupon;
 import com.project.market.security.model.service.LoginService;
 import com.project.market.security.model.vo.Member;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -66,6 +68,17 @@ public class MyPageController {
 		model.addAttribute("addressList", addressList);
 		model.addAttribute("nowDate", nowDate);
 		model.addAttribute("userId", userId);
+	}
+	
+	@GetMapping("/myPageDetail.do")
+	public void myPageDetail(@AuthenticationPrincipal Member member,Model model, @RequestParam Map<String, Object> map) throws ParseException{
+		String no = (String) map.get("no");
+		String userId = member.getId();
+		log.debug("no = {}", no);
+		
+		Address address = myPageService.selectOneAddress(no);
+		log.debug("address = {}", address);
+		model.addAttribute("address", address);
 	}
 	
 	
@@ -184,7 +197,9 @@ public class MyPageController {
 		  try{
 	          
 	            String password = bCryptPasswordEncoder.encode(changePw);
+	            String id = member.getId();
 	            param.put("password", password);
+	            param.put("id", id);
 	            loginService.updatePassword(param);
 	            
 	          

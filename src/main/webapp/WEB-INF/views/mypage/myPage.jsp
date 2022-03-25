@@ -8,6 +8,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="tarr4h main link" name="title"/>
 </jsp:include>
+
 	<h1>화면 구현 전 작업용 링크연결 페이지</h1>
 	
 	
@@ -49,9 +50,9 @@
     
     <span>-----------------------------------------------</span>
     <p>개인 정보 수정</p>
-    <span>아이디</span><input type="text" name="" id="" value="${userId}"/>
+    <span>아이디</span><input type="id" name="" id="" value="${userId}"/>
     <br />
-    <span>비밀번호</span><input type="text" name="" id="changePw"/>
+    <span>비밀번호</span><input type="password" name="" id="changePw"/>
     <br /> 
     <input id="token" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <input type="button" value="확인" id="changePwBtn"/>
@@ -76,31 +77,36 @@
 	<c:forEach var="listaddr" items="${addressList }" varStatus="status">
         <tr>
          
-        	<c:if test="${listaddr.defaultAddress eq 'D'.charAt(0)}">
+        	<c:if test="${listaddr.defaultAddress eq'D'.charAt( 0)}">
         	   <div style="color:gray">
 	           	<td><span>기본 배송지</span></td>
 	           </div>
 	           	<td>${listaddr.zipCode} ${listaddr.address} ${listaddr.detailAddress}</td>
 	            <td>${listaddr.deliveryType }</td>
-	            <td><input type="button" value="수정" class="updateAddr"/></td>
-	            <input type="hidden" class="changeAddr${status.index}" name = "changeAddr" value="${listaddr.detailAddress}" />
+	            <td><a class="movetodetail" href="${pageContext.request.contextPath}/mypage/myPageDetail.do?no=${listaddr.no}" onclick="window.open(this.href, '_blank', 'width=1200,height=800,left=400,top=200,toolbars=no,scrollbars=no,'); return false;">버튼${listaddr.no}</a></td>
+	           
 	            <br/>
             </c:if>
    
 	           <c:if test="${listaddr.defaultAddress eq 'X'.charAt(0)}">
 		           <td>${listaddr.zipCode} ${listaddr.address} ${listaddr.detailAddress}</td>
 	           	   <td>${listaddr.deliveryType }</td>
-	           	   <td><input type="button" value="수정" class="updateAddr"/></td>
-	           	   <input type="hidden" class="changeAddr${status.index}" name = "changeAddr" value="${listaddr.detailAddress}"/>
+	           	   <td><input type="button" value="수정" class="updateAddr" onclick="countIndex(${status.index})" /></td>
+	           	   
 		            <br/>
 	           </c:if>
          
         </tr>
     </c:forEach>
+    <div id="my_modal">
+    <span>모달창</span>
+    <a class="modal_close_btn">닫기</a>
+	</div>
     
 
 
 <script>
+
 
 $("#useCoupon").click((e) => {
 		console.log("쿠폰 등록");
@@ -147,6 +153,11 @@ $("#changePwBtn").click((e) => {
 			changePw: $("#changePw").val()
 		},
 		success(res){
+			if(res == 0){
+				alert("비밀번호 변경 성공!");
+				location.href='${pageContext.request.contextPath}/mypage/myPage';
+			}
+			
 			
 		},
 		error: console.log
@@ -212,23 +223,13 @@ $("#addAddr").click((e) => {
 	}
 });
 
-$(".updateAddr").click((e) => {
-	console.log("배송지 수정");
+
+function countIndex(e){
+	console.log(e);
 	
-	var changeaddr = $(".changeAddr").val();
-	
-	console.log(changeaddr);
-	$.ajax({
-		url: '${pageContext.request.contextPath}/mypage/updateAddr',
-		data : {
-			changeaddr
-		},
-		success(res){
-			
-		},
-		error: console.log
-	});
-});
+}
+
+
 
 
 

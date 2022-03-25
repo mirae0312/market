@@ -23,6 +23,16 @@
 			code = #{code}
 	</select>
 	
+	<select id="selectOneAddress" parameterType="String" resultMap="addressMap">
+			select
+			*
+		from
+			mk_address
+		where
+			no = #{no}
+				
+	</select>
+	
 	<select id="selectmkAddress" parameterType="String" resultMap="addressMap">
 			select
 			*

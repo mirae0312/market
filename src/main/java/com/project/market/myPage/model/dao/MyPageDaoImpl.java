@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.market.myPage.model.vo.Address;
 import com.project.market.purchase.model.vo.Coupon;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,12 @@ public class MyPageDaoImpl implements MyPageDao {
 	public int selectmkAddressCheck(Map<String, Object> checkParam) {
 		
 		return session.selectOne("selectmkAddressCheck",checkParam);
+	}
+
+	@Override
+	public Address selectOneAddress(String no) {
+		
+		return session.selectOne("selectOneAddress",no);
 	}
 
 }

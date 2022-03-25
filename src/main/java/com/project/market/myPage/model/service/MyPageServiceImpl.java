@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.market.myPage.model.dao.MyPageDao;
+import com.project.market.myPage.model.vo.Address;
 import com.project.market.purchase.model.vo.Coupon;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,12 @@ public class MyPageServiceImpl implements MyPageService {
 	public int selectmkAddressCheck(Map<String, Object> checkParam) {
 		
 		return mypageDao.selectmkAddressCheck(checkParam);
+	}
+
+	@Override
+	public Address selectOneAddress(String no) {
+		
+		return mypageDao.selectOneAddress(no);
 	}
 
 	
