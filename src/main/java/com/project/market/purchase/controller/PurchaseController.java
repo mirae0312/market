@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -77,6 +78,34 @@ public class PurchaseController {
 		Map<String, Object> addressMap = customerService.selectUserDefaultAddress(userId);
 		model.addAttribute("address", addressMap);	
 		log.debug("address = {}", addressMap);
+		
+		List<Coupon> couponList = purchaseService.getUserCouponList(userId);
+		log.debug("couponList = {}", couponList);
+		model.addAttribute("couponList", couponList);
+	}
+	
+	@PostMapping("/updateCouponStatus")
+	public ResponseEntity<?> updateCouponStatus(@RequestParam String couponCode) {
+		
+		int result = purchaseService.updateCouponStatus(couponCode);
+		
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping("/addAcc")
+	public ResponseEntity<?> addAcc(@RequestParam String userId, @RequestParam String puid, @RequestParam int amount, @RequestParam String div){
+		log.debug("userId, puid = {}, {}", userId, puid);
+		log.debug("amount, div = {}, {}", amount, div);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		param.put("puid", puid);
+		param.put("amount", amount);
+		param.put("div", div);
+		
+		int result = purchaseService.addAcc(param);
+		
+		return ResponseEntity.ok(result);
 	}
 	
 	@InitBinder

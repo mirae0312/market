@@ -8,10 +8,13 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="tarr4h main link" name="title"/>
 </jsp:include>
+<sec:authentication property="principal" var="loginMember"/>
 	<h1>화면 구현 전 작업용 링크연결 페이지</h1>
 	
 	
 	<p>쿠폰 생성 테스트</p>
+	<span>쿠폰이름</span><input type="text" id="couponName" />
+	<br />
 	<span>할인율</span><input type="text" name="" id="discountRate" />
 	<br />
 	<span>만료일자</span><input type="date" name="" id="expiration" />
@@ -25,15 +28,22 @@
 	<br /><br />
 	
 	<p>카테고리별 상품 리스트 화면</p>
-	<a href="${pageContext.request.contextPath }/product/productList?largeCategory=카테고리1&smallCategory=소분류1">상품 리스트 화면</a>
+	<a href="${pageContext.request.contextPath }/product/productList?largeCategory=F&smallCategory=05f">상품 리스트 화면</a>
 	
 	
 <script>
+
+	$(() => {
+		console.log('${loginMember}');
+		console.log('${loginMember.id}');
+	})
+	
 	$("#createCoupon").click((e) => {
 		console.log("쿠폰 생성");
 		$.ajax({
 			url: '${pageContext.request.contextPath}/purchase/createCoupon',
 			data : {
+				couponName : $("#couponName").val(),
 				discountRate: $("#discountRate").val(),
 				expiration: $("#expiration").val()
 			},

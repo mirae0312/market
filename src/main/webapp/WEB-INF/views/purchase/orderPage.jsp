@@ -9,6 +9,8 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="주문하기" name="title"/>
 </jsp:include>
+
+<sec:authentication property="principal" var="loginMember"/>
 <style>
 .title{
 	overflow: hidden;
@@ -96,6 +98,7 @@ th{
 }
 th{
 	padding-top: 20px;
+	
 }
 td{
 	padding: 20px;
@@ -278,14 +281,15 @@ textarea{
 						<dt class="tit">상품할인금액</dt>
 						<dd class="sale">
 							<span class="minus">-</span>
-							<span>0</span> 원
+							<span id="dcp">0</span> 원
 						</dd>
 					</dl>
 					<dl class="amount">
 						<dt class="tit">배송비</dt>
 						<dd class="price delivery_area">
 							<div id="delivery" style="display: block;">
-								<span class="">0</span> 
+								<span class="delivery_pay">1000</span> 
+							<span>0</span> 원
 							</div>
 						</dd>
 					</dl>
@@ -327,9 +331,14 @@ textarea{
 						<tr>
 							<td class="tbl_sub">쿠폰 적용</td>
 							<td>
-							<select name="" id="">
-								<option value="">1</option>
-								<option value="">2</option>
+							<select name="" id="userCoupon">
+									<option value="0" selected>선택하세요</option>
+								<c:forEach items="${couponList }" var="coupon">
+									<option value="${coupon.code }">
+										${coupon.couponName }
+									</option>									
+									<input type="hidden" name="" id="${coupon.code }" value="${coupon.discountRate }"/>
+								</c:forEach>
 							</select>
 							</td>
 						</tr>
@@ -369,11 +378,32 @@ textarea{
 			</table>
 			</div>
 			<div class="test" style="clear: both;"></div>
-			<button type="submit" class="submit_btn">원 결제하기</button>
+			<button type="button" class="submit_btn" onclick="requestPay();"><span id="btnAmount"></span>원 결제하기</button>
 		</form>
 	</div>
 	<div class="test" style="clear: both;"></div>
+<input type="hidden" name="" id="defaultAmount" />
+<input type="hidden" name="" id="accumVal"/>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script>
+	$(()=> {
+		getAmount();
+	})
+
+	$("#userCoupon").change((e) => {
+		var getCode = $(e.target).val();
+		var getRate = $(`#\${getCode}`).val() * 1;
+		
+		var amount = $("#defaultAmount").val() * 1;
+		var dcByCouponAmount = Math.floor(amount / 100 * getRate);
+		$("#apr_coupon_data").text(dcByCouponAmount);
+		
+		var applyAmount = amount - dcByCouponAmount;
+		$("#amount").text(applyAmount);
+		$("#btnAmount").text(applyAmount);
+	});
+
+
 	$("#slide_btn").click((e) => {
 		if($(".cart_slide").is(":visible")){
 			$(".cart_slide").hide();
@@ -393,5 +423,122 @@ textarea{
 	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
 	    window.open(url, name, option);
 	}
+	
+	//선택 상품 가격
+	function getAmount(){
+		let checkedArr = [];
+		
+		<c:forEach items="${cartList }" var="product">
+			checkedArr.push(`${product.P_CODE}`);
+		</c:forEach>
+		
+		$.ajax({
+			url : '${pageContext.request.contextPath}/product/cart/getPurchaseAmount',
+			data : {
+				checkedArr
+			},
+			success(res){
+				var deliveryPay = $(".delivery_pay").text() * 1;
+				
+				$("#discount_price").text(res.ogp - res.dcp);
+				$("#original_price").text(res.ogp);
+				$("#dcp").text(res.dcp);
+				$("#amount").text(res.ogp - res.dcp + deliveryPay);
+				$("#btnAmount").text(res.ogp - res.dcp + deliveryPay);
+				
+				$("#defaultAmount").val(res.ogp - res.dcp + deliveryPay);
+				$("#accumVal").val(res.acp);
+			},
+			error: console.log
+		})
+	};
+	
+	var IMP = window.IMP; 
+	IMP.init("imp00307901");
+
+	function requestPay() {
+		const date = new Date();
+		let day = String(date.getDate());
+		let hours = String(date.getHours());
+		let minute = String(date.getMinutes());
+		let second = String(date.getSeconds());
+		
+		var address = `${address.ADDRESS} ${address.DETAIL_ADDRESS }`;
+		var name = `${address.RECEIVER}`;
+		var phone = `${fn:substring(address.PHONE, 0,3)}${fn:substring(address.PHONE, 3,7)}${fn:substring(address.PHONE, 7,11)}`;
+		var amount = $("#amount").text() * 1;
+		
+	    IMP.request_pay({
+	        pg: "kakaopay",
+	        pay_method: "kakaopay",
+	        merchant_uid: "market" + day+hours+minute+second,
+	        name: "마켓컬리",
+	        amount: amount,
+	        buyer_name: name,
+	        buyer_tel: phone,
+	        buyer_addr: address
+	    }, function (rsp) {
+	        if (rsp.success) {
+	        	const impUid = rsp.imp_uid;
+	        	const merchantUid = rsp.merchant_uid;
+
+	        	$.ajax({
+	        		url: "${pageContext.request.contextPath}/purchase/payments?${_csrf.parameterName}=${_csrf.token}",
+	        		method: "POST",
+	        		dataType: "json",
+	        		data: {
+	        			impUid,
+	            		merchantUid,
+	            		amountToBePaid: amount
+	        		},
+	        		success(data){
+	        			console.log(data.msg);
+	        			changeCouponStatus();
+	        			accumulation(impUid, amount);
+	        		},
+	        		error : console.log
+	        	});
+	        } else {
+	            alert("결제 실패");
+	        } 
+	    });
+	  }
+	
+	function accumulation(uid){
+		var accVal = $("#accumVal").val();
+		$.ajax({
+			url: '${pageContext.request.contextPath}/purchase/addAcc?${_csrf.parameterName}=${_csrf.token}',
+			method: 'POST',
+			data:{
+				userId : '${loginMember.id}',
+				puid : uid,
+				amount : accVal,
+				div : 'A'
+			},
+			success(res){
+				console.log(res)
+			},
+			error: console.log
+		})
+	}
+	
+	function changeCouponStatus(){
+		console.log($("#userCoupon").val());
+		
+		var couponCode = $("#userCoupon").val();
+		
+		$.ajax({
+			url : '${pageContext.request.contextPath}/purchase/updateCouponStatus?${_csrf.parameterName}=${_csrf.token}',
+			method: 'POST',
+			data:{
+				couponCode
+			},
+			success(res){
+				console.log(res)
+			},
+			error:console.log
+		})
+	}
+	
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
