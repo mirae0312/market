@@ -8,4 +8,5 @@ public interface JoinService {
     Member selectDuplicate(Map<String, Object> param);
 
     void insertMember(Member member);
+
 }

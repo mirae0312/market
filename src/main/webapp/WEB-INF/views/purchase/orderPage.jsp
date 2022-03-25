@@ -281,6 +281,7 @@ textarea{
 						<dt class="tit">상품할인금액</dt>
 						<dd class="sale">
 							<span class="minus">-</span>
+<<<<<<< HEAD
 							<span id="dcp">0</span> 원
 						</dd>
 					</dl>
@@ -289,6 +290,16 @@ textarea{
 						<dd class="price delivery_area">
 							<div id="delivery" style="display: block;">
 								<span class="delivery_pay">1000</span> 
+=======
+							<span>0</span> 원
+						</dd>
+					</dl>
+					<dl class="amount">
+						<dt class="tit">배송비</dt>
+						<dd class="price delivery_area">
+							<div id="delivery" style="display: block;">
+								<span class="">0</span> 
+>>>>>>> branch 'master' of https://github.com/mirae0312/market.git
 							</div>
 						</dd>
 					</dl>
@@ -381,7 +392,6 @@ textarea{
 		</form>
 	</div>
 	<div class="test" style="clear: both;"></div>
-	
 <input type="hidden" name="" id="defaultAmount" />
 <input type="hidden" name="" id="accumVal"/>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
@@ -538,6 +548,23 @@ textarea{
 			},
 			error:console.log
 		})
-	}
+	$("#slide_btn").click((e) => {
+		if($(".cart_slide").is(":visible")){
+			$(".cart_slide").hide();
+			$(".order_guide").show();
+			$(".slide_img").css("transform", "rotate(180deg)");
+		}
+		else{
+			$(".cart_slide").show();
+			$(".order_guide").hide();
+			$(".slide_img").css("transform", "none");
+		}
+	});
+	
+	function popup(){
+	    var url = '${pageContext.request.contextPath}/purchase/deliveryDetail';
+	    var name = "popup test";
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

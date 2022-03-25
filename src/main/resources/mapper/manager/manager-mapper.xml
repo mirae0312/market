@@ -2,10 +2,34 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.market.manager.model.dao.ProductManagemantDao">
+<mapper namespace="com.project.market.manager.model.dao.ProductManagementDao">
 	<insert id="insertProduct">
         INSERT INTO MK_PRODUCT
-        VALUES(concat(#{largeCategory} + #{smallCategory}, seq_mk_product_no.nextval), #{brandCode}, #{largeCategory}, #{smallCategory});
+        VALUES(concat(#{largeCategory}, seq_mk_product_no.nextval), #{brandCode}, #{largeCategory}, #{smallCategory})
+        <selectKey resultType="String" keyProperty="pCode" order="AFTER">
+            select concat(#{largeCategory}, seq_mk_product_no.currval) from dual
+        </selectKey>
+    </insert>
+
+    <insert id="insertProductInfo">
+        insert into mk_product_info
+        values(#{pCode}, #{productTitle}, #{subTitle}, #{salesUnit}, #{weightCapacity}, #{deliveryDiv}, #{origin}, #{packType},
+               #{packTypeSub}, #{expiration}, #{allergyInfo}, #{sugar}, #{livestockInfo}, #{commonInfo}, #{productName})
+    </insert>
+
+    <insert id="insertProductPrice">
+        insert into mk_product_price
+        values(#{pCode}, #{price}, 'Y')
+    </insert>
+
+    <insert id="insertProductStock">
+        insert into mk_product_stock
+        values(#{pCode}, #{productStock})
+    </insert>
+
+    <insert id="insertAttachment">
+        insert into mk_product_attachment
+        values(SEQ_PRODUCT_ATTACHMENT_NO.nextval, #{pCode}, #{originalFilename}, #{renamedFilename}, default)
     </insert>
 </mapper>
 

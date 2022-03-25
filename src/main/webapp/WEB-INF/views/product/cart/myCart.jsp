@@ -159,6 +159,7 @@ width: 100%;
     line-height: 54px;
     border-radius: 6px;
     width: 100%;
+    cursor: pointer;
 }
 .original_price{
 padding-left: 6px;
@@ -260,6 +261,9 @@ display: inline-block;
 }
 .point span{
 	float: none;
+}
+.mycart-container{
+    min-height: 600px;
 }
 </style>
 <div class="title">
