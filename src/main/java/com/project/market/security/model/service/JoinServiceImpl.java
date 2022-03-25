@@ -24,5 +24,7 @@ public class JoinServiceImpl implements JoinService {
     public void insertMember(Member member) {
         joinDao.insertMember(member);
         joinDao.insertRole(member);
+        joinDao.insertGrade(member);
+        joinDao.insertWelcomCoupon(member);
     }
 }

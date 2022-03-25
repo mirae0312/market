@@ -15,4 +15,8 @@ public interface JoinDao {
     void insertMember(Member member);
 
     void insertRole(Member member);
+
+    void insertGrade(Member member);
+
+    void insertWelcomCoupon(Member member);
 }
