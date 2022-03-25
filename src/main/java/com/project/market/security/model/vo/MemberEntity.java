@@ -30,5 +30,6 @@ public class MemberEntity implements Serializable {
 	private boolean enabled;	
 	private Date regDate;
 	private LoginType loginType;
+	private String grade;
 
 }
