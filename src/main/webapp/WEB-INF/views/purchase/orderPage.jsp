@@ -141,6 +141,11 @@ dl{
     background: #fafafa;
     border: 1px solid #f2f2f2;
 }
+.guide{
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 50px;
+}
 </style>
 	<div class="title">
 		<h2>주문서</h2>
@@ -192,7 +197,7 @@ dl{
 						</c:forEach>
 					</tbody>
 				</table>
-				<div>
+				<div class="order_guide">
 				<c:choose>
 					<c:when test="${fn:length(cartList) == 1}">
 						<p id="guide">${cartList[0].P_CODE} 상품을 주문합니다.</p>
@@ -201,7 +206,6 @@ dl{
 						<p id="guide">${cartList[0].P_CODE} 외 ${fn:length(cartList)-1}개 상품을 주문합니다.</p>
 					</c:otherwise>
 				</c:choose>
-					
 				</div>
 			</div>
 			<div class="userInfoTbl">
@@ -363,11 +367,15 @@ dl{
 	</div>
 	<div class="test" style="clear: both;"></div>
 <script>
-$(()=> {
 	$("#slide_btn").click((e) => {
-		$(".cart_slide").slideToggle(); 
+		if($(".cart_slide").is(":visible")){
+			$(".cart_slide").slideUp("fast");
+			$(".order_guide").show();
+		}
+		else{
+			$(".cart_slide").slideDown();
+			$(".order_guide").hide();
+		}
 	});
-})
-	
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
