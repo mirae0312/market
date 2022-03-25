@@ -24,7 +24,7 @@
     <title>상품등록페이지</title>
     <h5 class="test">상품 등록폼 (임시)</h5>
     <form id="productInsertFrm" name="productInsertFrm"
-          method="post" enctype="multipart/form-data" action="/market/manager/insertProduct"
+          method="post" enctype="multipart/form-data" action="/market/manager/product/insertProduct"
     >
         <span>브랜드코드 : </span><input type="text" name="brandCode">
         <label class="largeCategory" for="largeCategory">대분류</label>
