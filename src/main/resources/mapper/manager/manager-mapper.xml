@@ -13,7 +13,7 @@
 
     <insert id="insertProductInfo">
         insert into mk_product_info
-        values(#{pCode}, #{title}, #{subTitle}, #{salesUnit}, #{weightCapacity}, #{deliveryDiv}, #{origin}, #{packType},
+        values(#{pCode}, #{productTitle}, #{subTitle}, #{salesUnit}, #{weightCapacity}, #{deliveryDiv}, #{origin}, #{packType},
                #{packTypeSub}, #{expiration}, #{allergyInfo}, #{sugar}, #{livestockInfo}, #{commonInfo}, #{productName})
     </insert>
 
