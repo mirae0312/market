@@ -21,7 +21,7 @@ public class ProductManagementServiceImpl implements ProductManagementService {
 
     @Override
     public int insertProduct(Map<String, Object> data) {
-        int result = productManagemantDao.insertProduct(data);
+        int result = productManagementDao.insertProduct(data);
         log.debug("pCode = {}", data.get("pCode"));
         String pCode = (String) data.get("pCode");
         result = insertProductInfo(data);
