@@ -79,7 +79,6 @@ public class PurchaseController {
 		log.debug("address = {}", addressMap);
 	}
 	
-	
 	@InitBinder
     public void initBinder(WebDataBinder binder) {
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

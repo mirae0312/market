@@ -10,13 +10,13 @@
 	<jsp:param value="주문하기" name="title"/>
 </jsp:include>
 <style>
-.tit{
+.title{
 	overflow: hidden;
     width: 1050px;
     margin: 0 auto;
     padding: 50px 0 51px;
 }
-.tit h2{
+.title h2{
     font-weight: 700;
     font-size: 28px;
     color: #333;
@@ -111,8 +111,51 @@ td{
 .kakaoPay, .creditCard, .simplePay, .phonePay{
 	padding-bottom: 20px;
 }
+.productTbl thead{
+	position: relative;
+}
+#slide_btn{
+	overflow: hidden;
+    position: absolute;
+    right: 4px;
+    background-color: transparent;
+    border: none;
+    width: 30px;
+}
+.productTbl tbody {
+    display: none;
+}
+dt{
+    float: left;
+}
+dd{
+    float: right;
+    text-align: right;
+}
+dl{
+	padding: 20px;
+}
+#money_info{
+    width: 100%;
+    padding: 17px 16px 18px 18px;
+    background: #fafafa;
+    border: 1px solid #f2f2f2;
+}
+#guide{
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 50px;
+}
+#slide_btn{
+	cursor: pointer;
+}
+textarea{
+	resize: none;
+	width: 80%;
+	height: 60px;
+}
 </style>
-	<div class="tit">
+	<div class="title">
 		<h2>주문서</h2>
 	</div>
 	<div class="main">
@@ -121,11 +164,15 @@ td{
 				<table>
 					<thead>
 						<tr>
-							<th colspan="4">주문상품</th>
+							<th colspan="4">주문상품
+							<button id="slide_btn" type="button">
+							<div><img class="slide_img" src="https://res.kurly.com/pc/service/cart/2007/ico_dropup.svg" style="transform: rotate(180deg);" alt="" /></div>
+							</button>
+						</th>
 						</tr>
 					</thead>
-					<tbody>
-					<tr>
+					<tbody class="cart_slide">
+					<tr >
 						<c:forEach items="${cartList}" var="product">
 							<tr>
 								<td class="tbl_sub">image</td>
@@ -158,8 +205,15 @@ td{
 						</c:forEach>
 					</tbody>
 				</table>
-				<div>
-					<p>${cartList[0].P_CODE} 외 ${fn:length(cartList)-1}개 상품을 주문합니다.</p>
+				<div class="order_guide">
+				<c:choose>
+					<c:when test="${fn:length(cartList) == 1}">
+						<p id="guide">${cartList[0].P_CODE} 상품을 주문합니다.</p>
+					</c:when>
+					<c:otherwise>
+						<p id="guide">${cartList[0].P_CODE} 외 ${fn:length(cartList)-1}개 상품을 주문합니다.</p>
+					</c:otherwise>
+				</c:choose>
 				</div>
 			</div>
 			<div class="userInfoTbl">
@@ -176,7 +230,8 @@ td{
 						</tr>
 						<tr>
 							<td class="tbl_sub">휴대폰</td>
-							<td>${address.PHONE}</td>
+							<td>${fn:substring(address.PHONE, 0,3)}-${fn:substring(address.PHONE, 3,7)}-${fn:substring(address.PHONE, 7,11)}
+							</td>
 						</tr>
 						<!-- <tr>
 							<td class="tbl_sub">이메일</td>
@@ -198,8 +253,8 @@ td{
 							<td>${address.ADDRESS} ${address.DETAIL_ADDRESS }</td>
 						</tr>
 						<tr>
-							<td class="tbl_sub">상세 정보</td>
-							<td>문 앞에 배달해주세용~</td>
+							<td class="tbl_sub">요청 사항</td>
+							<td><textarea name="" id="" cols="30" rows="10"></textarea></td>
 						</tr>
 					</tbody>
 				</table>
@@ -207,8 +262,60 @@ td{
 			<div class="side_bar">
 				<div class="total_price">
 					<h2>결제금액</h2>
-					
+				<div id="money_info">
+					<dl class="amount fst">
+						<dt class="tit">주문금액</dt>
+						<dd class="price">
+							<span id="discount_price">0</span> 원
+						</dd>
+					</dl>
+					<dl class="amount sub">
+						<dt class="tit">상품금액</dt>
+						<dd class="price">
+							<span id="original_price">0</span> 원
+						</dd>
+					</dl>
+					<dl class="amount sub">
+						<dt class="tit">상품할인금액</dt>
+						<dd class="sale">
+							<span class="minus">-</span>
+							<span>0</span> 원
+						</dd>
+					</dl>
+					<dl class="amount">
+						<dt class="tit">배송비</dt>
+						<dd class="price delivery_area">
+							<div id="delivery" style="display: block;">
+								<span class="">0</span> 
+							</div>
+						</dd>
+					</dl>
+					<dl class="amount">
+						<dt class="tit">쿠폰할인금액</dt>
+						<dd class="price coupon_area">
+							<span class="minus">-</span> <span
+								id="apr_coupon_data">0</span> 원 
+						</dd>
+					</dl>
+					<dl class="amount">
+						<dt class="tit">적립금사용</dt>
+						<dd class="price">
+							<span class="minus">-</span>
+							<span class="point" id="point">0 원</span>
+						</dd>
+					</dl>
+					<dl class="amount lst">
+						<dt class="tit">최종결제금액</dt>
+						<dd class="price">
+							<span id="amount">0</span> <span class="won">원</span>
+						</dd>
+					</dl>
+					<!-- <p class="reserve" style="display: block;">
+						<span class="ico">적립</span> 구매 시 <span class="emph"><span
+							id="expectAmount">426</span> 원 (<span class="ratio">5</span>%) 적립</span>
+					</p> -->
 				</div>
+			</div>
 			</div>
 			<div class="couponTbl">
 				<table>
@@ -246,16 +353,16 @@ td{
 						<td class="tbl_sub">결제 수단</td>
 						<td>
 						<div class="kakaoPay">
-							<label ><input type="radio" name="payment">카카오 페이</label>			
+							<label class="p_radio"><input type="radio" name="payment">카카오 페이</label>			
 						</div>
 						<div class="creditCard">
-							<label ><input type="radio" name="payment"/>신용카드</label>						
+							<label  class="p_radio"><input type="radio" name="payment"/>신용카드</label>						
 						</div>
 						<div class="simplePay">
-							<label ><input type="radio" name="payment"/>간편결제</label>						
+							<label class="p_radio" ><input type="radio" name="payment"/>간편결제</label>						
 						</div>
 						<div class="phonePay">
-							<label ><input type="radio" name="payment"/>휴대폰</label>						
+							<label  class="p_radio"><input type="radio" name="payment"/>휴대폰</label>						
 						</div>
 						</td>
 					</tr>
@@ -267,4 +374,25 @@ td{
 		</form>
 	</div>
 	<div class="test" style="clear: both;"></div>
+<script>
+	$("#slide_btn").click((e) => {
+		if($(".cart_slide").is(":visible")){
+			$(".cart_slide").hide();
+			$(".order_guide").show();
+			$(".slide_img").css("transform", "rotate(180deg)");
+		}
+		else{
+			$(".cart_slide").show();
+			$(".order_guide").hide();
+			$(".slide_img").css("transform", "none");
+		}
+	});
+	
+	function popup(){
+	    var url = '${pageContext.request.contextPath}/purchase/deliveryDetail';
+	    var name = "popup test";
+	    var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+	    window.open(url, name, option);
+	}
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
