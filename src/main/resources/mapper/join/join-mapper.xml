@@ -30,5 +30,13 @@
         insert into mk_authority values('ROLE_USER', #{id})
     </insert>
 
+    <insert id="insertGrade">
+        insert into mk_grade values(mk_grade_no.nextval, #{id}, 'A')
+    </insert>
+
+    <insert id="insertWelcomCoupon">
+        insert into user_coupon values(#{id}, 'WELCOME', 'N')
+    </insert>
+
 </mapper>
 
