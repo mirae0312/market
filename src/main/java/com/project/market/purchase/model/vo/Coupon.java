@@ -16,7 +16,9 @@ public class Coupon implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private String couponName;
 	private String code;
 	private int discountRate;
 	private Date expiration;
+	private String used;
 }

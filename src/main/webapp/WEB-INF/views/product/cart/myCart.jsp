@@ -676,6 +676,7 @@ display: inline-block;
 					checkedArr
 				},
 				success(res){
+					console.log(res.acp);
 					$("#allAmount").val(res.ogp);
 					$("#dcAmount").val(res.dcp);
 					$("#purchaseAmount").val(res.ogp - res.dcp);

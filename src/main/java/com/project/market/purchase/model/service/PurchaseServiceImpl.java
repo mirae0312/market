@@ -1,5 +1,8 @@
 package com.project.market.purchase.model.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,24 @@ public class PurchaseServiceImpl implements PurchaseService {
 		
 		return result;
 	}
+
+	@Override
+	public List<Coupon> getUserCouponList(String userId) {
+		return purchaseDao.getUserCouponList(userId);
+	}
+
+	@Override
+	public int updateCouponStatus(String couponCode) {
+		return purchaseDao.updateCouponStatus(couponCode);
+	}
+
+	@Override
+	public int addAcc(Map<String, Object> param) {
+		return purchaseDao.addAcc(param);
+	}
+
+	
+	
 	
 	
 }

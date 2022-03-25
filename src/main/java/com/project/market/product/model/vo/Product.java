@@ -1,6 +1,7 @@
 package com.project.market.product.model.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,4 +39,8 @@ public class Product extends ProductEntity implements Serializable {
 	private int discountRate;
 	private int price;
 	private String accumulationStatus;
+	
+	private String originalFilename;
+	private String renamedFilename;
+	private Date regDate;
 }

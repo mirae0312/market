@@ -13,6 +13,10 @@
 <sec:authentication property="principal" var="loginMember"/>
 	<h1>상품상세화면입니다.</h1>
 	
+	<span>이미지</span>
+	<br />
+	<span>${product.renamedFilename }</span>
+	<br />
 	<span>${product.title }</span>
 	<br />
 	<span>${product.subTitle }</span>

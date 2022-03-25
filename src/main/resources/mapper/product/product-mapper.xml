@@ -6,14 +6,17 @@
 	
 	
 	<select id="selectProductListByCategory" parameterType="product" resultType="product">
-		select
+				select
 		    p.*,
 		    i.*,
 		    b.title "brandTitle",
 		    b.sub_title "brandSubTitle",
 		    b.content "brandContent",
 		    d.discount_rate,
-		    pp.price
+		    pp.price,
+            a.original_filename,
+            a.renamed_filename,
+            a.reg_date
 		from
 		    mk_product p inner join mk_product_info i
 		    on p.p_code = i.p_code
@@ -23,14 +26,12 @@
 		    on p.p_code = d.p_code
 		    left join mk_product_price pp
 		    on p.p_code = pp.p_code
-            left join mk_product_option o
-            on p.p_code = o.p_code
+            left join mk_product_attachment a
+            on p.p_code = a.p_code
 		where
 			p.large_category = #{largeCategory}
 			and
 			p.small_category = #{smallCategory}
-			and
-            o.show = 'T'
 	</select>
 	
 	<select id="selectProductDetail" parameterType="string" resultType="product">
@@ -42,7 +43,10 @@
 		    b.title "brandTitle",
 		    b.sub_title "brandSubTitle",
 		    b.content "brandContent",
-		    pp.accumulation_status
+		    pp.accumulation_status,
+            a.original_filename,
+            a.renamed_filename,
+            a.reg_date
 		from
 		    mk_product p inner join mk_product_info i
 		    on p.p_code = i.p_code
@@ -52,6 +56,8 @@
 		    on p.p_code = d.p_code
 		    left join mk_product_price pp
 		    on p.p_code = pp.p_code
+            left join mk_product_attachment a
+            on p.p_code = a.p_code
 		where
 		    p.p_code = #{pcode}
 	</select>
