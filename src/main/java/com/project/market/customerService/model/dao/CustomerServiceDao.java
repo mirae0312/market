@@ -1,10 +1,7 @@
 package com.project.market.customerService.model.dao;
 
 import com.project.market.common.vo.Attachment;
-import com.project.market.customerService.model.vo.Announcement;
-import com.project.market.customerService.model.vo.FrequentlyQuestion;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.RowBounds;
@@ -50,7 +47,6 @@ public interface CustomerServiceDao {
     @Update("update mk_question set title = #{title}, question_category = #{questionCategory}, receive_email = #{receiveEmail}, receive_phone = #{receivePhone}, content = #{content}, reg_date = sysdate where q_code = #{qCode}")
     void updateQuestion(Question question);
 
-    @Insert("insert into mk_question values(concat('ques-', seq_mk_question_no.nextval), #{title}, #{questionCategory}, null, #{writer}, #{phone}, #{email}, #{receiveEmail}, #{receivePhone}, #{content}, default, null, null, null, null)")
     void insertQuestion(Question question);
 
     @Delete("delete from mk_question where q_code = #{code}")
@@ -68,7 +64,6 @@ public interface CustomerServiceDao {
     @Delete("delete from mk_product_proposal where code = #{code}")
     void deleteOneProductProposal(Map<String, Object> boardCode);
 
-    @Insert("insert into mk_product_proposal values(concat('prpr-', seq_mk_product_proposal_no.nextval), #{category}, #{title}, #{writer}, #{content}, default)")
     void insertProductProposal(Proposal productProposal);
 
     @Select("select count(*) from mk_echo_proposal")
@@ -83,7 +78,6 @@ public interface CustomerServiceDao {
     @Delete("delete from mk_echo_proposal where code = #{code}")
     void deleteOneEchoProposal(Map<String, Object> boardCode);
 
-    @Insert("insert into mk_echo_proposal values(concat('ecpr-', seq_mk_echo_proposal_no.nextval), #{category}, #{title}, #{writer}, #{content}, default)")
     void insertEchoProposal(Proposal proposal);
 
     @Select("select count(*) from mk_large_proposal")
@@ -98,7 +92,6 @@ public interface CustomerServiceDao {
     @Delete("delete from mk_large_proposal where code = #{code}")
     void deleteOneLargeProposal(Map<String, Object> boardCode);
 
-    @Insert("insert into mk_large_proposal values(concat('lapr-', seq_mk_large_proposal_no.nextval), #{writer}, #{name}, #{phone}, #{email}, #{receiveDate}, #{delivery}, #{content}, default)")
     void insertLargeProposal(Proposal proposal);
 
     @Select("select count(*) from mk_frequently_question")
@@ -116,7 +109,6 @@ public interface CustomerServiceDao {
     @Delete("delete from mk_frequently_question where code = #{code}")
     void deleteOneFrequentlyQuestion(Map<String, Object> boardCode);
 
-    @Insert("insert into mk_frequently_question values(concat('frqu-', seq_mk_frequently_question_no.nextval), #{writer}, #{category}, #{title}, #{content}, default)")
     void insertFrequentlyQuestion(FrequentlyQuestion frequence);
 
     @Update("update mk_product_proposal set category = #{category}, title = #{title}, content = #{content} reg_date = sysdate where code = #{code}")
@@ -139,4 +131,8 @@ public interface CustomerServiceDao {
 
     @Select("select count(*) from mk_echo_proposal where writer = #{id}")
     int countAllMyEchoProposal(Member member);
+
+
+
+
 }

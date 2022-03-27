@@ -1,10 +1,7 @@
 package com.project.market.customerService.model.service;
 
 import com.project.market.common.vo.Attachment;
-import com.project.market.customerService.model.vo.Announcement;
-import com.project.market.customerService.model.vo.FrequentlyQuestion;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.session.RowBounds;
 
@@ -103,4 +100,5 @@ public interface CustomerServiceService {
     int countAllMyProductProposal(Member member);
 
     int countAllMyEchoProposal(Member member);
+
 }
