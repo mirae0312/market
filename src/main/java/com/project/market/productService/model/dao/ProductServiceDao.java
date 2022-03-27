@@ -1,10 +1,7 @@
 package com.project.market.productService.model.dao;
 
 import com.project.market.productService.model.vo.ProductReview;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -49,4 +46,10 @@ public interface ProductServiceDao {
 
     @Select("select count(*) from mk_review_likes where no = #{no}")
     int countBoardLikes(int no);
+
+    @Insert("insert into mk_review_likes values(seq_mk_review_likes_no.nextval, #{no}, #{id})")
+    void insertProductReviewLikes(Map<String, Object> param);
+
+    @Delete("delete from mk_reivew_likes where review_no = #{no} and id = #{id}")
+    void deleteProductReviewLikes(Map<String, Object> param);
 }

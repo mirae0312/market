@@ -280,11 +280,14 @@ public class ProductServiceController {
     }
 
     @PostMapping("/review/likes")
-    public ResponseEntity<?> reviewLikes(@RequestParam Map<String, Object> param){
+    public ResponseEntity<?> reviewLikes(@RequestParam Map<String, Object> param, @AuthenticationPrincipal Member member){
         try{
             log.debug("param = {}", param);
-
-            productServiceService.updateProductReviewPlusLikes(param);
+            param.put("id", member.getId());
+            if("1".equals((String)param.get("type")))
+                productServiceService.insertProductReviewLikes(param);
+            else
+                productServiceService.deleteProductReviewLikes(param);
 
         }catch(Exception e){
             log.error(e.getMessage(), e);

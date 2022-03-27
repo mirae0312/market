@@ -126,9 +126,15 @@ public class ProductServiceServiceImpl implements ProductServiceService {
     }
 
     @Override
-    public void updateProductReviewPlusLikes(Map<String, Object> param) {
-        productServiceDao.updateProductReviewPlusLikes(param);
+    public void insertProductReviewLikes(Map<String, Object> param) {
+        productServiceDao.insertProductReviewLikes(param);
     }
+
+    @Override
+    public void deleteProductReviewLikes(Map<String, Object> param) {
+        productServiceDao.deleteProductReviewLikes(param);
+    }
+
 
     private void commonAttachInsert(String code, List<Attachment> attachments){
         if(attachments != null){

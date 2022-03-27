@@ -28,5 +28,7 @@ public interface ProductServiceService {
 
     void deleteProductReview(Map<String, Object> boardCode);
 
-    void updateProductReviewPlusLikes(Map<String, Object> param);
+    void insertProductReviewLikes(Map<String, Object> param);
+
+    void deleteProductReviewLikes(Map<String, Object> param);
 }
