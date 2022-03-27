@@ -40,7 +40,16 @@
             },
             error: console.log
         });
-
+    });
+    $(() => {
+       $.ajax({
+          url: '${pageContext.request.contextPath}/service/select/productReview',
+           data: {code:'test'},
+          success(resp) {
+              console.log(resp);
+          },
+           error: console.log
+       });
     });
 
 </script>

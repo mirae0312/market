@@ -12,9 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.project.market.customerService.model.vo.FrequentlyQuestion;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.session.RowBounds;
@@ -32,7 +30,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.project.market.common.Utils.MarketUtils;
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.service.CustomerServiceService;
-import com.project.market.customerService.model.vo.Announcement;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,23 +76,57 @@ public class CustomerServiceController {
     public void test(){}
 
     @GetMapping("/select/{boardId}")
-    public ResponseEntity<?> requestList(@PathVariable(required = true) String boardId, @RequestParam(defaultValue = "1") int cPage, HttpServletRequest request, @AuthenticationPrincipal Member member){
+    public ResponseEntity<?> requestList(@PathVariable(required = true) String boardId, @RequestParam(defaultValue = "1") int cPage,
+                                         @RequestParam Map<String, Object> boardCode,
+                                         HttpServletRequest request, @AuthenticationPrincipal Member member){
         Map<String, Object> param = new HashMap<>();
+        log.debug("boardCode = {}", boardCode);
         try{
             int totalContent = 0;
             Map<String, Object> commonThings = new HashMap<>();
 
             switch (boardId){
                 case PRRE:
-                    totalContent = customerServiceService.countAllMyQuestion(member);
-                    log.debug("totalContent = {}", totalContent);
+                    String readCount = "T";
+                    ProductReview best = customerServiceService.selectBestProductReview(boardCode);
+                    if(best.getReadCount() == 0){
+                        readCount = "F";
+                    }
+                    boardCode.put("bool", readCount);
+                    boardCode.put("no", best.getNo());
+                    List<ProductReview> firstList = customerServiceService.selectFirstPageProductReview(boardCode);
+                    log.debug("firstList = {}", firstList);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
-                    List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
-                    log.debug("questionList = {}", questionList);
+                    if(cPage == 1){
+                        List<ProductReview> announce = customerServiceService.selectProductReviewAnnounce();
+                        log.debug("announce = {}", announce);
 
-                    param.put("total", totalContent);
-                    param.put("question", questionList);
+                        param.put("announce", announce);
+                        param.put("best", best);
+                        param.put("productReview", firstList);
+                    }else if(cPage > 1){
+                        List<Integer> firstPage = new ArrayList<>();
+                        if("T".equals(readCount))
+                            firstPage.add(best.getNo());
+                        for(ProductReview pr : firstList){
+                            firstPage.add(pr.getNo());
+                        }
+                        boardCode.put("firstPage", firstPage);
+                        totalContent = customerServiceService.countAllProductReview(boardCode);
+                        log.debug("totalContent = {}", totalContent);
+                        param.put("totalContent", totalContent);
+                    }
+
+
+//                    totalContent = customerServiceService.countAllMyQuestion(member);
+//                    log.debug("totalContent = {}", totalContent);
+//
+//                    commonThings = commonUtils(cPage, totalContent, request);
+//                    List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
+//                    log.debug("questionList = {}", questionList);
+//
+//                    param.put("total", totalContent);
+//                    param.put("question", questionList);
                     break;
                 case FRQU:
                     totalContent = customerServiceService.countAllFrequentlyQuestion();

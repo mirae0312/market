@@ -2,10 +2,7 @@ package com.project.market.customerService.model.service;
 
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.dao.CustomerServiceDao;
-import com.project.market.customerService.model.vo.Announcement;
-import com.project.market.customerService.model.vo.FrequentlyQuestion;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.security.model.vo.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -321,6 +319,27 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     @Override
     public int countAllMyEchoProposal(Member member) {
         return customerServiceDao.countAllMyEchoProposal(member);
+    }
+
+    @Override
+    public List<ProductReview> selectFirstPageProductReview(Map<String, Object> boardCode) {
+        log.debug("boardCode = {}", boardCode);
+        return customerServiceDao.selectFirstPageProductReview(boardCode);
+    }
+
+    @Override
+    public ProductReview selectBestProductReview(Map<String, Object> boardCode) {
+        return customerServiceDao.selectBestProductReview(boardCode);
+    }
+
+    @Override
+    public List<ProductReview> selectProductReviewAnnounce() {
+        return customerServiceDao.selectProductReviewAnnounce();
+    }
+
+    @Override
+    public int countAllProductReview(Map<String, Object> boardCode) {
+        return customerServiceDao.countAllProductReview(boardCode);
     }
 
     private void commonAttachInsert(String code, List<Attachment> attachments){

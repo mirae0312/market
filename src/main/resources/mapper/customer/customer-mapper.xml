@@ -67,5 +67,68 @@
     	where
     		id = #{userId}
     </select>
+
+    <select id="selectBestProductReview" resultType="productReview">
+        select
+            *
+        from(
+            select
+                *
+            from
+                mk_product_review
+            where
+                p_code = #{code}
+            order by
+                read_count desc, likes desc, reg_date desc
+                )
+        where
+            rownum = 1
+    </select>
+
+    <select id="selectFirstPageProductReview" resultType="productReview">
+        select
+            *
+        from(
+            select
+                *
+            from
+                mk_product_review
+            where
+                announce = 'D'
+                and
+                p_code = #{code}
+                <if test='bool == "T"'>
+                and
+                not no = #{no}
+                </if>
+            order by
+                reg_date desc)
+        <where>
+            <if test='bool == "F"'>
+                rownum between 1 and 5
+            </if>
+            <if test='bool == "T"'>
+                rownum between 1 and 4
+            </if>
+        </where>
+    </select>
+
+    <select id="countAllProductReview" resultType="int">
+        select
+            count(*)
+        from
+            mk_product_review
+        where
+            announce = 'D'
+            and
+            p_code = #{code}
+            and
+            not no in
+            <foreach collection="firstPage" index="index" item="no" open="(" separator="," close=")">
+                #{no}
+            </foreach>
+    </select>
+
+
 </mapper>
 

@@ -1,10 +1,7 @@
 package com.project.market.customerService.model.dao;
 
 import com.project.market.common.vo.Attachment;
-import com.project.market.customerService.model.vo.Announcement;
-import com.project.market.customerService.model.vo.FrequentlyQuestion;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.RowBounds;
@@ -139,4 +136,13 @@ public interface CustomerServiceDao {
 
     @Select("select count(*) from mk_echo_proposal where writer = #{id}")
     int countAllMyEchoProposal(Member member);
+
+    @Select("select * from mk_product_review where announce = 'A' order by reg_date desc")
+    List<ProductReview> selectProductReviewAnnounce();
+
+    ProductReview selectBestProductReview(Map<String, Object> boardCode);
+
+    List<ProductReview> selectFirstPageProductReview(Map<String, Object> boardCode);
+
+    int countAllProductReview(Map<String, Object> boardCode);
 }
