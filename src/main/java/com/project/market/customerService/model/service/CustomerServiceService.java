@@ -101,11 +101,4 @@ public interface CustomerServiceService {
 
     int countAllMyEchoProposal(Member member);
 
-    List<ProductReview> selectFirstPageProductReview(Map<String, Object> boardCode);
-
-    ProductReview selectBestProductReview(Map<String, Object> boardCode);
-
-    List<ProductReview> selectProductReviewAnnounce();
-
-    int countAllProductReview(Map<String, Object> boardCode);
 }

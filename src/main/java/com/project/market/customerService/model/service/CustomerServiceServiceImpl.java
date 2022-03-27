@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -321,27 +322,6 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         return customerServiceDao.countAllMyEchoProposal(member);
     }
 
-    @Override
-    public List<ProductReview> selectFirstPageProductReview(Map<String, Object> boardCode) {
-        log.debug("boardCode = {}", boardCode);
-        return customerServiceDao.selectFirstPageProductReview(boardCode);
-    }
-
-    @Override
-    public ProductReview selectBestProductReview(Map<String, Object> boardCode) {
-        return customerServiceDao.selectBestProductReview(boardCode);
-    }
-
-    @Override
-    public List<ProductReview> selectProductReviewAnnounce() {
-        return customerServiceDao.selectProductReviewAnnounce();
-    }
-
-    @Override
-    public int countAllProductReview(Map<String, Object> boardCode) {
-        return customerServiceDao.countAllProductReview(boardCode);
-    }
-
     private void commonAttachInsert(String code, List<Attachment> attachments){
         if(attachments != null){
             for(Attachment attach : attachments){
@@ -350,6 +330,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
             }
         }
     }
+
 
 
 }

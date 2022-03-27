@@ -1,20 +1,22 @@
-package com.project.market.customerService.model.vo;
+package com.project.market.productService.model.vo;
 
+import com.project.market.common.vo.Attachment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductQuestion implements Serializable {
+public class ProductReview implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String code;
+    private int no;
     private String pCode;
     private String writer;
     private String name;
@@ -22,10 +24,8 @@ public class ProductQuestion implements Serializable {
     private String announce;
     private String title;
     private String content;
+    private int likes;
+    private int readCount;
     private Date regDate;
-    private String aTitle;
-    private String aContent;
-    private Date aRegDate;
-    private String secret;
-
+    private List<Attachment> attachments;
 }

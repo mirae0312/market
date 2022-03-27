@@ -33,6 +33,8 @@ import com.project.market.customerService.model.service.CustomerServiceService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.project.market.common.Utils.MarketUtils.commonUtils;
+
 @Controller
 @Slf4j
 @RequestMapping("/service")
@@ -74,79 +76,6 @@ public class CustomerServiceController {
 
     @GetMapping("/view/test")
     public void test(){}
-
-    @GetMapping("/select/{boardId}")
-    public ResponseEntity<?> requestList(@PathVariable(required = true) String boardId, @RequestParam(defaultValue = "1") int cPage,
-                                         @RequestParam Map<String, Object> boardCode,
-                                         HttpServletRequest request, @AuthenticationPrincipal Member member){
-        Map<String, Object> param = new HashMap<>();
-        log.debug("boardCode = {}", boardCode);
-        try{
-            int totalContent = 0;
-            Map<String, Object> commonThings = new HashMap<>();
-
-            switch (boardId){
-                case PRRE:
-                    String readCount = "T";
-                    ProductReview best = customerServiceService.selectBestProductReview(boardCode);
-                    if(best.getReadCount() == 0){
-                        readCount = "F";
-                    }
-                    boardCode.put("bool", readCount);
-                    boardCode.put("no", best.getNo());
-                    List<ProductReview> firstList = customerServiceService.selectFirstPageProductReview(boardCode);
-                    log.debug("firstList = {}", firstList);
-
-                    if(cPage == 1){
-                        List<ProductReview> announce = customerServiceService.selectProductReviewAnnounce();
-                        log.debug("announce = {}", announce);
-
-                        param.put("announce", announce);
-                        param.put("best", best);
-                        param.put("productReview", firstList);
-                    }else if(cPage > 1){
-                        List<Integer> firstPage = new ArrayList<>();
-                        if("T".equals(readCount))
-                            firstPage.add(best.getNo());
-                        for(ProductReview pr : firstList){
-                            firstPage.add(pr.getNo());
-                        }
-                        boardCode.put("firstPage", firstPage);
-                        totalContent = customerServiceService.countAllProductReview(boardCode);
-                        log.debug("totalContent = {}", totalContent);
-                        param.put("totalContent", totalContent);
-                    }
-
-
-//                    totalContent = customerServiceService.countAllMyQuestion(member);
-//                    log.debug("totalContent = {}", totalContent);
-//
-//                    commonThings = commonUtils(cPage, totalContent, request);
-//                    List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
-//                    log.debug("questionList = {}", questionList);
-//
-//                    param.put("total", totalContent);
-//                    param.put("question", questionList);
-                    break;
-                case FRQU:
-                    totalContent = customerServiceService.countAllFrequentlyQuestion();
-                    log.debug("totalContent = {}", totalContent);
-
-                    commonThings = commonUtils(cPage, totalContent, request);
-                    List<FrequentlyQuestion> frquList = customerServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
-                    log.debug("frequently question list = {}", frquList);
-
-
-                    param.put("fr", frquList);
-                    break;
-            }
-            param.put("pagebar", (String) commonThings.get("pagebar"));
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return ResponseEntity.ok(param);
-    }
 
     @GetMapping("/view/{boardId}")
     public String boardSelect(@PathVariable(required = true) String boardId
@@ -601,26 +530,26 @@ public class CustomerServiceController {
 
     // common-------------------------------------
 
-    private Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
-        Map<String, Object> param = new HashMap<>();
-        try{
-            int limit = 10;
-            int offset = (cPage - 1) * limit;
+//    private Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
+//        Map<String, Object> param = new HashMap<>();
+//        try{
+//            int limit = 10;
+//            int offset = (cPage - 1) * limit;
+//
+//            RowBounds rowBounds = new RowBounds(offset, limit);
+//            param.put("rowBounds", rowBounds);
+//
+//            String url = request.getRequestURI();
+//            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
+//            param.put("pagebar", pagebar);
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//        return param;
+//    }
 
-            RowBounds rowBounds = new RowBounds(offset, limit);
-            param.put("rowBounds", rowBounds);
-
-            String url = request.getRequestURI();
-            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
-            param.put("pagebar", pagebar);
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return param;
-    }
-
-    private List<Attachment> commonAttachment(MultipartFile[] upFiles, String saveDirectory) throws IOException {
+    public static List<Attachment> commonAttachment(MultipartFile[] upFiles, String saveDirectory) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
         try{
             for(int i = 0; i < upFiles.length; i++){

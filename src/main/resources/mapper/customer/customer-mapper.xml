@@ -11,6 +11,41 @@
         </selectKey>
     </insert>
 
+    <insert id="insertQuestion">
+        insert into mk_question values(concat('ques-', seq_mk_question_no.nextval), #{title}, #{questionCategory}, null, #{writer}, #{phone}, #{email}, #{receiveEmail}, #{receivePhone}, #{content}, default, null, null, null, null)
+        <selectKey order="AFTER" resultType="string" keyProperty="qCode">
+            select concat('ques-',seq_mk_question_no.currval) from dual
+        </selectKey>
+    </insert>
+
+    <insert id="insertProductProposal">
+        insert into mk_product_proposal values(concat('prpr-', seq_mk_product_proposal_no.nextval), #{category}, #{title}, #{writer}, #{content}, default)
+        <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('prpr-',seq_mk_product_proposal_no.currval) from dual
+        </selectKey>
+    </insert>
+
+    <insert id="insertEchoProposal">
+        insert into mk_echo_proposal values(concat('ecpr-', seq_mk_echo_proposal_no.nextval), #{category}, #{title}, #{writer}, #{content}, default)
+        <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('ecpr-',seq_mk_echo_proposal_no.currval) from dual
+        </selectKey>
+    </insert>
+
+    <insert id="insertLargeProposal">
+        insert into mk_large_proposal values(concat('lapr-', seq_mk_large_proposal_no.nextval), #{writer}, #{name}, #{phone}, #{email}, #{receiveDate}, #{delivery}, #{content}, default)
+        <selectKey order="AFTER" resultType="string" keyProperty="lapr">
+            select concat('ecpr-',seq_mk_large_proposal_no.currval) from dual
+        </selectKey>
+    </insert>
+
+    <insert id="insertFrequentlyQuestion">
+        insert into mk_frequently_question values(concat('frqu-', seq_mk_frequently_question_no.nextval), #{writer}, #{category}, #{title}, #{content}, default)
+        <selectKey order="AFTER" resultType="string" keyProperty="frqu">
+            select concat('ecpr-',seq_mk_frequently_question_no.currval) from dual
+        </selectKey>
+    </insert>
+
     <insert id="insertAttachment">
         insert into mk_attachment values(seq_mk_attachment_no.nextval, #{code}, #{originalFilename}, #{renamedFilename})
     </insert>
@@ -68,66 +103,6 @@
     		id = #{userId}
     </select>
 
-    <select id="selectBestProductReview" resultType="productReview">
-        select
-            *
-        from(
-            select
-                *
-            from
-                mk_product_review
-            where
-                p_code = #{code}
-            order by
-                read_count desc, likes desc, reg_date desc
-                )
-        where
-            rownum = 1
-    </select>
-
-    <select id="selectFirstPageProductReview" resultType="productReview">
-        select
-            *
-        from(
-            select
-                *
-            from
-                mk_product_review
-            where
-                announce = 'D'
-                and
-                p_code = #{code}
-                <if test='bool == "T"'>
-                and
-                not no = #{no}
-                </if>
-            order by
-                reg_date desc)
-        <where>
-            <if test='bool == "F"'>
-                rownum between 1 and 5
-            </if>
-            <if test='bool == "T"'>
-                rownum between 1 and 4
-            </if>
-        </where>
-    </select>
-
-    <select id="countAllProductReview" resultType="int">
-        select
-            count(*)
-        from
-            mk_product_review
-        where
-            announce = 'D'
-            and
-            p_code = #{code}
-            and
-            not no in
-            <foreach collection="firstPage" index="index" item="no" open="(" separator="," close=")">
-                #{no}
-            </foreach>
-    </select>
 
 
 </mapper>
