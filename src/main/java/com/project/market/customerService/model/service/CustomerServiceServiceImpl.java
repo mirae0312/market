@@ -278,6 +278,51 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         commonAttachInsert(code, attachments);
     }
 
+    @Override
+    public void modifyProductProposal(Proposal proposal) {
+        customerServiceDao.updateProductProposal(proposal);
+        if(!proposal.getAttachments().isEmpty()){
+            String code = proposal.getCode();
+            List<Attachment> attachments = proposal.getAttachments();
+            commonAttachInsert(code, attachments);
+        }
+    }
+
+    @Override
+    public void modifyEchoProposal(Proposal proposal) {
+        customerServiceDao.updateEchoProposal(proposal);
+        if(!proposal.getAttachments().isEmpty()){
+            String code = proposal.getCode();
+            List<Attachment> attachments = proposal.getAttachments();
+            commonAttachInsert(code, attachments);
+        }
+    }
+
+    @Override
+    public List<Proposal> selectAllMyProductProposal(Member member, RowBounds rowBounds) {
+        return customerServiceDao.selectAllMyProductProposal(member, rowBounds);
+    }
+
+    @Override
+    public List<Proposal> selectAllMyEchoProposal(Member member, RowBounds rowBounds) {
+        return customerServiceDao.selectAllMyEchoProposal(member, rowBounds);
+    }
+
+    @Override
+    public List<Announcement> selectAllAnnounceAnnouncement(RowBounds rowBounds) {
+        return customerServiceDao.selectAllAnnounceAnnouncement(rowBounds);
+    }
+
+    @Override
+    public int countAllMyProductProposal(Member member) {
+        return customerServiceDao.countAllMyProductProposal(member);
+    }
+
+    @Override
+    public int countAllMyEchoProposal(Member member) {
+        return customerServiceDao.countAllMyEchoProposal(member);
+    }
+
     private void commonAttachInsert(String code, List<Attachment> attachments){
         if(attachments != null){
             for(Attachment attach : attachments){

@@ -28,7 +28,7 @@
     </select>
 
     <select id="selectAllAnnouncement" resultType="announcement">
-        select * from mk_announcement order by reg_date desc
+        select * from mk_announcement where announce = 'D' order by reg_date desc
     </select>
 
     <select id="countAllAnnouncement" resultType="_int">
