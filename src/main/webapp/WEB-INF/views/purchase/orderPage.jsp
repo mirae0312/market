@@ -288,8 +288,7 @@ textarea{
 						<dt class="tit">배송비</dt>
 						<dd class="price delivery_area">
 							<div id="delivery" style="display: block;">
-								<span class="delivery_pay">1000</span> 
-							<span>0</span> 원
+								<span class="delivery_pay">1000</span> 원
 							</div>
 						</dd>
 					</dl>
@@ -334,10 +333,9 @@ textarea{
 							<select name="" id="userCoupon">
 									<option value="0" selected>선택하세요</option>
 								<c:forEach items="${couponList }" var="coupon">
-									<option value="${coupon.code }">
+									<option value="${coupon.code }" name="${coupon.discountRate }">
 										${coupon.couponName }
 									</option>									
-									<input type="hidden" name="" id="${coupon.code }" value="${coupon.discountRate }"/>
 								</c:forEach>
 							</select>
 							</td>
@@ -392,15 +390,28 @@ textarea{
 
 	$("#userCoupon").change((e) => {
 		var getCode = $(e.target).val();
-		var getRate = $(`#\${getCode}`).val() * 1;
+		console.log(getCode);
+		/* var getRate = $(`#\${getCode}`).val() * 1; */
+		var getRate = $("#userCoupon option:selected").attr("name") * 1;
+		console.log(getRate);
 		
 		var amount = $("#defaultAmount").val() * 1;
+		console.log(amount);
 		var dcByCouponAmount = Math.floor(amount / 100 * getRate);
-		$("#apr_coupon_data").text(dcByCouponAmount);
-		
+		console.log(dcByCouponAmount);
 		var applyAmount = amount - dcByCouponAmount;
-		$("#amount").text(applyAmount);
-		$("#btnAmount").text(applyAmount);
+		console.log(applyAmount);		
+		if(getCode == 0){
+			$("#apr_coupon_data").text(0);
+			
+			$("#amount").text(amount);
+			$("#btnAmount").text(amount);
+		}
+		else{
+			$("#apr_coupon_data").text(dcByCouponAmount);
+			$("#amount").text(applyAmount);
+			$("#btnAmount").text(applyAmount);
+		}
 	});
 
 
