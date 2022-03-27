@@ -21,6 +21,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,6 +73,49 @@ public class CustomerServiceController {
     private final String LAPR = "largeProposal";
     private final String FRQU = "frequentlyQuestion";
     private final String PRRE = "productReview";
+    private final String PRQU = "productQuestion";
+
+    @GetMapping("/view/test")
+    public void test(){}
+
+    @GetMapping("/select/{boardId}")
+    public ResponseEntity<?> requestList(@PathVariable(required = true) String boardId, @RequestParam(defaultValue = "1") int cPage, HttpServletRequest request, @AuthenticationPrincipal Member member){
+        Map<String, Object> param = new HashMap<>();
+        try{
+            int totalContent = 0;
+            Map<String, Object> commonThings = new HashMap<>();
+
+            switch (boardId){
+                case PRRE:
+                    totalContent = customerServiceService.countAllMyQuestion(member);
+                    log.debug("totalContent = {}", totalContent);
+
+                    commonThings = commonUtils(cPage, totalContent, request);
+                    List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
+                    log.debug("questionList = {}", questionList);
+
+                    param.put("total", totalContent);
+                    param.put("question", questionList);
+                    break;
+                case FRQU:
+                    totalContent = customerServiceService.countAllFrequentlyQuestion();
+                    log.debug("totalContent = {}", totalContent);
+
+                    commonThings = commonUtils(cPage, totalContent, request);
+                    List<FrequentlyQuestion> frquList = customerServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
+                    log.debug("frequently question list = {}", frquList);
+
+
+                    param.put("fr", frquList);
+                    break;
+            }
+            param.put("pagebar", (String) commonThings.get("pagebar"));
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return ResponseEntity.ok(param);
+    }
 
     @GetMapping("/view/{boardId}")
     public String boardSelect(@PathVariable(required = true) String boardId
@@ -96,26 +140,29 @@ public class CustomerServiceController {
 
                     commonThings = commonUtils(cPage, totalContent, request);
                     List<Announcement> announceList = customerServiceService.selectAllAnnouncement((RowBounds) commonThings.get("rowBounds"));
+                    List<Announcement> announceannounceList = customerServiceService.selectAllAnnounceAnnouncement((RowBounds) commonThings.get("rowBounds"));
                     log.debug("announceList = {}", announceList);
+                    log.debug("announceannounceList = {}", announceannounceList);
 
                     model.addAttribute("announceList", announceList);
+                    model.addAttribute("announceannounceList", announceannounceList);
                     break;
                 case PRPR:
-                    totalContent = customerServiceService.countAllProductProposal();
+                    totalContent = customerServiceService.countAllMyProductProposal(member);
                     log.debug("totalContent = {}", totalContent);
 
                     commonThings = commonUtils(cPage, totalContent, request);
-                    List<Proposal> prprList = customerServiceService.selectAllProductProposal((RowBounds) commonThings.get("rowBounds"));
+                    List<Proposal> prprList = customerServiceService.selectAllMyProductProposal(member, (RowBounds) commonThings.get("rowBounds"));
                     log.debug("productProposal = {}", prprList);
 
                     model.addAttribute("productProposalList", prprList);
                     break;
                 case ECPR:
-                    totalContent = customerServiceService.countAllEchoProposal();
+                    totalContent = customerServiceService.countAllMyEchoProposal(member);
                     log.debug("totalContent = {}", totalContent);
 
                     commonThings = commonUtils(cPage, totalContent, request);
-                    List<Proposal> ecprList = customerServiceService.selectAllEchoProposal((RowBounds) commonThings.get("rowBounds"));
+                    List<Proposal> ecprList = customerServiceService.selectAllMyEchoProposal(member, (RowBounds) commonThings.get("rowBounds"));
                     log.debug("echoProposal = {}", ecprList);
 
                     model.addAttribute("echoProposal", ecprList);
@@ -153,6 +200,7 @@ public class CustomerServiceController {
     public String enrollBoard(@PathVariable(required = true) String boardId, @RequestParam Map<String, Object> param, Model model){
         try{
             log.debug("param = {}", param);
+            Proposal proposal = new Proposal();
             switch (boardId){
                 case QUES:
                     if("modify".equals((String) param.get("type"))){
@@ -172,6 +220,18 @@ public class CustomerServiceController {
                         model.addAttribute("frequentlyQuestion", frequently);
                     }
                     break;
+                case PRPR:
+                    if("modify".equals((String) param.get("type"))){
+                        proposal = customerServiceService.selectOneProductProposal(param);
+                        model.addAttribute("productProposal", proposal);
+                    }
+                    break;
+                case ECPR:
+                    if("modify".equals((String) param.get("type"))){
+                        proposal = customerServiceService.selectOneEchoProposal(param);
+                        model.addAttribute("echoProposal", proposal);
+                    }
+                    break;
             }
 
         }catch(Exception e){
@@ -187,6 +247,7 @@ public class CustomerServiceController {
         String directory = "";
         Map<String, Object> boardCode = new HashMap<>();
         List<Attachment> newAttachments = new ArrayList<>();
+        Proposal oldProposal = new Proposal();
         try{
             log.debug("boardId = {}", boardId);
             switch (boardId){
@@ -252,6 +313,48 @@ public class CustomerServiceController {
                     customerServiceService.modifyFrequentlyQuestion(frequence);
 
                     redirectAttr.addFlashAttribute("msg", "자주하는 질문 수정 완료!");
+                    break;
+                case PRPR:
+                    log.debug("proposal = {}", proposal);
+                    directory = application.getRealPath(prprPath);
+                    boardCode.put("code", proposal.getCode());
+                    oldProposal = customerServiceService.selectOneProductProposal(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldProposal.getAttachments().isEmpty()){
+                            deleteAttachment(oldProposal.getAttachments(), prprPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        proposal.setAttachments(newAttachments);
+
+                    customerServiceService.modifyProductProposal(proposal);
+
+                    redirectAttr.addFlashAttribute("msg", "상품제안 수정 완료!");
+                    break;
+                case ECPR:
+                    log.debug("proposal = {}", proposal);
+                    directory = application.getRealPath(ecprPath);
+                    boardCode.put("code", proposal.getCode());
+                    oldProposal = customerServiceService.selectOneEchoProposal(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldProposal.getAttachments().isEmpty()){
+                            deleteAttachment(oldProposal.getAttachments(), ecprPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        proposal.setAttachments(newAttachments);
+
+                    customerServiceService.modifyEchoProposal(proposal);
+
+                    redirectAttr.addFlashAttribute("msg", "에코포장 수정 완료!");
                     break;
             }
         }catch(Exception e){
@@ -472,6 +575,7 @@ public class CustomerServiceController {
         try{
             int limit = 10;
             int offset = (cPage - 1) * limit;
+
             RowBounds rowBounds = new RowBounds(offset, limit);
             param.put("rowBounds", rowBounds);
 

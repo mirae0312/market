@@ -89,4 +89,18 @@ public interface CustomerServiceService {
     void deleteOneFrequentlyQuestion(Map<String, Object> boardCode);
 
     void insertFrequentlyQuestion(FrequentlyQuestion frequence);
+
+    void modifyProductProposal(Proposal proposal);
+
+    void modifyEchoProposal(Proposal proposal);
+
+    List<Proposal> selectAllMyProductProposal(Member member, RowBounds rowBounds);
+
+    List<Proposal> selectAllMyEchoProposal(Member member, RowBounds rowBounds);
+
+    List<Announcement> selectAllAnnounceAnnouncement(RowBounds rowBounds);
+
+    int countAllMyProductProposal(Member member);
+
+    int countAllMyEchoProposal(Member member);
 }
