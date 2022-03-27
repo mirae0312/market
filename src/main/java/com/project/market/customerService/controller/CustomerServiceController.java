@@ -12,9 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.project.market.customerService.model.vo.FrequentlyQuestion;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.session.RowBounds;
@@ -32,9 +30,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.project.market.common.Utils.MarketUtils;
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.service.CustomerServiceService;
-import com.project.market.customerService.model.vo.Announcement;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static com.project.market.common.Utils.MarketUtils.commonUtils;
 
 @Controller
 @Slf4j
@@ -77,45 +76,6 @@ public class CustomerServiceController {
 
     @GetMapping("/view/test")
     public void test(){}
-
-    @GetMapping("/select/{boardId}")
-    public ResponseEntity<?> requestList(@PathVariable(required = true) String boardId, @RequestParam(defaultValue = "1") int cPage, HttpServletRequest request, @AuthenticationPrincipal Member member){
-        Map<String, Object> param = new HashMap<>();
-        try{
-            int totalContent = 0;
-            Map<String, Object> commonThings = new HashMap<>();
-
-            switch (boardId){
-                case PRRE:
-                    totalContent = customerServiceService.countAllMyQuestion(member);
-                    log.debug("totalContent = {}", totalContent);
-
-                    commonThings = commonUtils(cPage, totalContent, request);
-                    List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
-                    log.debug("questionList = {}", questionList);
-
-                    param.put("total", totalContent);
-                    param.put("question", questionList);
-                    break;
-                case FRQU:
-                    totalContent = customerServiceService.countAllFrequentlyQuestion();
-                    log.debug("totalContent = {}", totalContent);
-
-                    commonThings = commonUtils(cPage, totalContent, request);
-                    List<FrequentlyQuestion> frquList = customerServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
-                    log.debug("frequently question list = {}", frquList);
-
-
-                    param.put("fr", frquList);
-                    break;
-            }
-            param.put("pagebar", (String) commonThings.get("pagebar"));
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return ResponseEntity.ok(param);
-    }
 
     @GetMapping("/view/{boardId}")
     public String boardSelect(@PathVariable(required = true) String boardId
@@ -570,26 +530,26 @@ public class CustomerServiceController {
 
     // common-------------------------------------
 
-    private Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
-        Map<String, Object> param = new HashMap<>();
-        try{
-            int limit = 10;
-            int offset = (cPage - 1) * limit;
+//    private Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
+//        Map<String, Object> param = new HashMap<>();
+//        try{
+//            int limit = 10;
+//            int offset = (cPage - 1) * limit;
+//
+//            RowBounds rowBounds = new RowBounds(offset, limit);
+//            param.put("rowBounds", rowBounds);
+//
+//            String url = request.getRequestURI();
+//            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
+//            param.put("pagebar", pagebar);
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//        return param;
+//    }
 
-            RowBounds rowBounds = new RowBounds(offset, limit);
-            param.put("rowBounds", rowBounds);
-
-            String url = request.getRequestURI();
-            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
-            param.put("pagebar", pagebar);
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return param;
-    }
-
-    private List<Attachment> commonAttachment(MultipartFile[] upFiles, String saveDirectory) throws IOException {
+    public static List<Attachment> commonAttachment(MultipartFile[] upFiles, String saveDirectory) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
         try{
             for(int i = 0; i < upFiles.length; i++){
