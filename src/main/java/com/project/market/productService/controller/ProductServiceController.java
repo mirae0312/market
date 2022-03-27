@@ -177,7 +177,7 @@ public class ProductServiceController {
                 case PRRE:
                     if("modify".equals((String) param.get("type"))){
                         ProductReview productReview = productServiceService.selectOneProductReview(param);
-                        param.put("question", productReview);
+                        param.put("productReview", productReview);
                         return ResponseEntity.ok(param);
                     }
                 case PRQU:
