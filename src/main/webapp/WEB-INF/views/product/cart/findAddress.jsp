@@ -9,32 +9,15 @@
 <meta charset="UTF-8">
 <title>주소찾기</title>
 <style>
-.layer_prev p {
-    text-align: center;
-    padding-top: 50px;
-}
-.purple{
-    color: #5f0080;
-}
-.purple, .basic{
-	font-weight: 600;
-	font-size: x-large;
-}
+
 </style>
 <div class="address_search" style="display: block;">
 	<div class="layer_prev">
+		<form action="">
 		<c:if test="${address != null }">
-			<p>
-				<span class="purple">${address.DELIVERY_TYPE}</span>
-				<span class="basic">지역입니다.</span>
-				<br />
-				<span>매일 아침, 문 앞까지 신선함을 전해드려요.</span>
-			</p>
-		</c:if>
-		<c:if test="${address != null }">
-				<input type="text" id="address" placeholder="주소" value="${address.ADDRESS}">
-				<input type="button" onclick="execDaumPostcode()" value="주소 검색"><br>
-				<input type="text" id="detailAddress" placeholder="상세주소" value="${address.DETAIL_ADDRESS}">
+			<input type="text" id="address" placeholder="주소" value="${address.ADDRESS}">
+			<input type="button" onclick="execDaumPostcode()" value="주소 검색"><br>
+			<input type="text" id="detailAddress" placeholder="상세주소" value="${address.DETAIL_ADDRESS}">
 		</c:if>
 		<c:if test="${address == null }">
 			<input type="text" id="address" placeholder="주소" value="">
@@ -45,11 +28,37 @@
 			<img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
 		</div>
 		<br />
-		<button>저장</button>
+		<button class="submit_btn">저장</button>
+		</form>
 	</div>
 </div>
-
-
+<script>
+	$(".submit_btn").click((e) => {
+		const type = "email";
+		const email = $("#email").val();
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/join/checkDuplicate",
+			data:{
+				type: type,
+				email: email
+			},
+			success(resp){
+				console.log(resp);
+				const {available} = resp;
+				
+				if(available){
+					alert("사용가능한 이메일입니다.");
+					$("#emailVal").val(1);
+				}
+				else{
+					alert("이미 가입한 이메일입니다.");
+				}
+			},
+			error: console.log
+		});
+	});
+</script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     // 우편번호 찾기 찾기 화면을 넣을 element
