@@ -24,4 +24,8 @@ public interface MyPageService {
 
 	Address selectOneAddress(String no);
 
+	int updateAddress(Map<String, Object> param);
+
+	int updateAddressDA(Map<String, Object> check);
+
 }

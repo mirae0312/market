@@ -62,5 +62,17 @@ public class MyPageServiceImpl implements MyPageService {
 		return mypageDao.selectOneAddress(no);
 	}
 
+	@Override
+	public int updateAddress(Map<String, Object> param) {
+		
+		return mypageDao.updateAddress(param);
+	}
+
+	@Override
+	public int updateAddressDA(Map<String, Object> check) {
+		
+		return mypageDao.updateAddressDA(check);
+	}
+
 	
 }

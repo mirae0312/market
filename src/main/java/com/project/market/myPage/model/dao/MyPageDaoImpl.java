@@ -62,4 +62,16 @@ public class MyPageDaoImpl implements MyPageDao {
 		return session.selectOne("selectOneAddress",no);
 	}
 
+	@Override
+	public int updateAddress(Map<String, Object> param) {
+		
+		return session.update("updateAddress",param);
+	}
+
+	@Override
+	public int updateAddressDA(Map<String, Object> check) {
+		
+		return session.update("updateAddressDA",check);
+	}
+
 }

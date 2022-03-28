@@ -83,13 +83,47 @@ public class MyPageController {
 	}
 	
 	@PostMapping("/updateAddress.do")
-	public String updateAddress(@AuthenticationPrincipal Member member,Model model, RedirectAttributes redirectAttr) throws ParseException{
+	public ResponseEntity<?> updateAddress(@RequestParam Map<String, Object> form,@AuthenticationPrincipal Member member) throws ParseException{
+		int result = 0;
+		log.debug("form = {}", form);
+		Map<String, Object> param = new HashMap<>();
+		Map<String, Object> check = new HashMap<>();
+		String detailAddress = (String) form.get("detailAddress");
+		String receiver = (String) form.get("receiver");
+		String phone = (String) form.get("phone");
+		String zipCode = (String) form.get("zipCode");
+		String address = (String) form.get("address");
+		String checkAddress = (String) form.get("checkAddress");
+		log.debug("phone = {}", phone);
+		String id = member.getId();
 		
+		char defAdd1 = 'X';
+		char defAdd2 = 'D';
 		
-		String msg = "배송지가 변경되었습니다.";
-		redirectAttr.addFlashAttribute("msg", msg);
+		if(checkAddress != null)
+		{
+			check.put("id", id);
+			check.put("defaultAddressbefore", defAdd2);
+			check.put("defaultAddressafter", defAdd1);
+			int updateCheckAddress = myPageService.updateAddressDA(check);
+			log.debug("updateAddress = {}", updateCheckAddress);
+			param.put("defaultAddress", defAdd2);
+		}
+		else {
+			param.put("defaultAddress", defAdd1);
+		}
 		
-		return "redirect:/mypage/myPage";
+		param.put("id", id);
+		param.put("zipCode", zipCode);
+		param.put("address", address);
+		param.put("detailAddress", detailAddress);
+		param.put("receiver", receiver);
+		param.put("phone", phone);
+		log.debug("param = {}", param);
+		int updateAddress = myPageService.updateAddress(param);
+		log.debug("updateAddress = {}", updateAddress);
+		
+		return ResponseEntity.ok(result);
 	}
 	
 	
@@ -190,14 +224,7 @@ public class MyPageController {
 		return ResponseEntity.ok(insertresult);
 	}
 	
-	@GetMapping("/updateAddr")
-	public ResponseEntity<?> updateAddr(@RequestParam String changeaddr, @AuthenticationPrincipal Member member) throws ParseException
-	{
-		int result = 0;
-		log.debug("changeaddr = {}", changeaddr);
-		
-		return ResponseEntity.ok(result);
-	}
+	
 	
 	@PostMapping("/changePw")
 	public ResponseEntity<?> changePw(@RequestParam String changePw, @AuthenticationPrincipal Member member) throws ParseException
