@@ -16,30 +16,38 @@
 	           	<td><span>기본 배송지</span></td>
 	           </div>
 	           <td>${address.zipCode} ${address.address} ${address.detailAddress}</td>
-	           <form action="">
-	           
+	           <form method="POST" action="${pageContext.request.contextPath}/mypage/updateAddress.do">
+	           <input type="text" id="detailAddress" value="${address.detailAddress }" placeholder="나머지 주소를 입력해주세요" required/>
+	           <br />
+	           <span>받으실 분</span>
+	           <br />
+	           <input type="text" value="${address.receiver }" placeholder="이름을 입력해주세요" required/>
+	           <br />
+	           <span>휴대폰</span>
+	           <br />
+	           <input type="text" value="${address.phone }" placeholder="번호를 입력해주세요" required/>
+	           <br />
+	          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	           <button type="submit" id="submit-btn">등록</button>
 	           </form>
-	           <td>${address.deliveryType }</td>        	
+	         
 	            <br/>
     </c:if>
    
 	<c:if test="${address.defaultAddress eq 'X'.charAt(0)}">
-		           <td>${address.zipCode} ${address.address} ${address.detailAddress}</td>
-	           	   <td>${address.deliveryType }</td>
-	           	   <td><input type="button" value="수정" class="updateAddr" onclick="countIndex(${status.index})" /></td>
-	           	   
-		            <br/>
+		          <td>${address.zipCode} ${address.address} ${address.detailAddress}</td>
+	           <form method="POST" action="${pageContext.request.contextPath}/mypage/updateAddress.do">
+	           <input type="text" id="detailAddress" value="${address.detailAddress }" placeholder="나머지 주소를 입력해주세요" required/>
+	           <span>받으실 분</span>
+	           <input type="text" value="${address.receiver }" placeholder="이름을 입력해주세요" required/>
+	           <span>휴대폰</span>
+	           <input type="text" value="${address.phone }" placeholder="번호를 입력해주세요" required/>
+	           <button type="submit" id="submit-btn">등록</button>
+	           </form>
+	         
+	            <br/>
 	</c:if>
-	<p>회원 쿠폰 등록</p>
-	<span>쿠폰입력란</span><input type="text" name="" id="writeCoupon" />
-	<br />
-	<span>쿠폰등록</span><input type="button" value="useCoupon" id="useCoupon"/>
-	<br />
 	
-	<span>-----------------------------------------------</span>
-	<br />
-	<span>내 쿠폰</span>
-	<br />
 	
     
 

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.market.myPage.model.service.MyPageService;
 import com.project.market.myPage.model.vo.Address;
@@ -79,6 +80,16 @@ public class MyPageController {
 		Address address = myPageService.selectOneAddress(no);
 		log.debug("address = {}", address);
 		model.addAttribute("address", address);
+	}
+	
+	@PostMapping("/updateAddress.do")
+	public String updateAddress(@AuthenticationPrincipal Member member,Model model, RedirectAttributes redirectAttr) throws ParseException{
+		
+		
+		String msg = "배송지가 변경되었습니다.";
+		redirectAttr.addFlashAttribute("msg", msg);
+		
+		return "redirect:/mypage/myPage";
 	}
 	
 	
