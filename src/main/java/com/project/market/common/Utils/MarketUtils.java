@@ -75,10 +75,9 @@ public class MarketUtils {
         return pagebar.toString();
     }
 
-    public static Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
+    public static Map<String, Object> commonUtils(int limit, int cPage, int totalContent, HttpServletRequest request){
         Map<String, Object> param = new HashMap<>();
         try{
-            int limit = 10;
             int offset = (cPage - 1) * limit;
 
             RowBounds rowBounds = new RowBounds(offset, limit);
