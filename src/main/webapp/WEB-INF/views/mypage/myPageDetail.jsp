@@ -16,6 +16,9 @@
 	           	<td><span>기본 배송지</span></td>
 	           </div>
 	           <td>${address.zipCode} ${address.address} ${address.detailAddress}</td>
+	           <form action="">
+	           
+	           </form>
 	           <td>${address.deliveryType }</td>        	
 	            <br/>
     </c:if>
