@@ -98,10 +98,7 @@
          
         </tr>
     </c:forEach>
-    <div id="my_modal">
-    <span>모달창</span>
-    <a class="modal_close_btn">닫기</a>
-	</div>
+    
     
 
 

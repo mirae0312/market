@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.market.myPage.model.service.MyPageService;
 import com.project.market.myPage.model.vo.Address;
+import com.project.market.myPage.model.vo.AddressSub;
 import com.project.market.myPage.model.vo.UserCoupon;
 import com.project.market.purchase.model.vo.Coupon;
 import com.project.market.security.model.service.LoginService;
@@ -83,46 +84,53 @@ public class MyPageController {
 	}
 	
 	@PostMapping("/updateAddress.do")
-	public ResponseEntity<?> updateAddress(@RequestParam Map<String, Object> form,@AuthenticationPrincipal Member member) throws ParseException{
+	public ResponseEntity<?> updateAddress(AddressSub form,@AuthenticationPrincipal Member member) throws ParseException{
 		int result = 0;
-		log.debug("form = {}", form);
-		Map<String, Object> param = new HashMap<>();
-		Map<String, Object> check = new HashMap<>();
-		String detailAddress = (String) form.get("detailAddress");
-		String receiver = (String) form.get("receiver");
-		String phone = (String) form.get("phone");
-		String zipCode = (String) form.get("zipCode");
-		String address = (String) form.get("address");
-		String checkAddress = (String) form.get("checkAddress");
-		log.debug("phone = {}", phone);
-		String id = member.getId();
-		
-		char defAdd1 = 'X';
-		char defAdd2 = 'D';
-		
-		if(checkAddress != null)
-		{
-			check.put("id", id);
-			check.put("defaultAddressbefore", defAdd2);
-			check.put("defaultAddressafter", defAdd1);
-			int updateCheckAddress = myPageService.updateAddressDA(check);
-			log.debug("updateAddress = {}", updateCheckAddress);
-			param.put("defaultAddress", defAdd2);
+		try {
+			
+			log.debug("form = {}", form);
+			Map<String, Object> param = new HashMap<>();
+			Map<String, Object> check = new HashMap<>();
+			String detailAddress =  form.getDetailAddress();
+			String receiver = form.getReceiver();
+			String phone = form.getPhone();
+			String zipCode = form.getZipCode();
+			String address = form.getAddress();
+			String checkAddress = form.getCheckAddress();
+			log.debug("checkAddress = {}", checkAddress);
+			String id = member.getId();
+			
+			char defAdd1 = 'X';
+			char defAdd2 = 'D';
+			
+			if(checkAddress != null)
+			{
+				check.put("id", id);
+				check.put("defaultAddressbefore", defAdd2);
+				check.put("defaultAddressafter", defAdd1);
+				int updateCheckAddress = myPageService.updateAddressDA(check);
+				log.debug("updateAddress = {}", updateCheckAddress);
+				param.put("defaultAddress", defAdd2);
+			}
+			else {
+				param.put("defaultAddress", defAdd1);
+			}
+			
+			param.put("id", id);
+			param.put("zipCode", zipCode);
+			param.put("address", address);
+			param.put("detailAddress", detailAddress);
+			param.put("receiver", receiver);
+			param.put("phone", phone);
+			log.debug("param = {}", param);
+			int updateAddress = myPageService.updateAddress(param);
+			log.debug("updateAddress = {}", updateAddress);
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else {
-			param.put("defaultAddress", defAdd1);
-		}
-		
-		param.put("id", id);
-		param.put("zipCode", zipCode);
-		param.put("address", address);
-		param.put("detailAddress", detailAddress);
-		param.put("receiver", receiver);
-		param.put("phone", phone);
-		log.debug("param = {}", param);
-		int updateAddress = myPageService.updateAddress(param);
-		log.debug("updateAddress = {}", updateAddress);
-		
 		return ResponseEntity.ok(result);
 	}
 	

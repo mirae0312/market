@@ -16,7 +16,7 @@
 	           	<td><span>기본 배송지</span></td>
 	           </div>
 	           <td>${address.zipCode} ${address.address} ${address.detailAddress}</td>
-	           <form method="POST" name="updateAd" >
+	           <form method="POST" class="updateAd" >
 	           <input type="text" id="detailAddress" name="detailAddress" value="${address.detailAddress }" placeholder="나머지 주소를 입력해주세요" required/>
 	           <br />
 	           <span>받으실 분</span>
@@ -76,20 +76,21 @@ headers[csrfHeader] = csrfToken;
 
 $(".update-Add").click((e) => {
 
-	var form = $("#updateAd").serialize();
+	var $form = $(".updateAd").serialize();
+	console.log($form);
 	
 	$.ajax({
 		url: '${pageContext.request.contextPath}/mypage/updateAddress.do',
 		method: "POST",
 		headers : headers,
-		dataType : "json",
-		data : JSON.stringify(form),
-		contentType : "application/json; charset=UTF-8",
+		data : $form,
+		dataType: 'JSON',
 		success(res){
 			
-		
-		
-			
+			opener.document.location.href="${pageContext.request.contextPath}/mypage/myPage"
+			self.close();
+
+
 		},
 		error: console.log
 	});
