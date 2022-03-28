@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">
+
+	<select id="selectuserCoupon" parameterType="String" resultType="coupon">
+		select
+			*
+		from
+			coupon a join user_coupon b 
+			on a.code = b.code
+		where
+			id = #{id}
+	</select>
+	
+	<select id="selectCoupon" parameterType="String" resultType="coupon">
+		select
+			*
+		from
+			coupon
+		where
+			code = #{code}
+	</select>
+	
+	<select id="selectOneAddress" parameterType="String" resultMap="addressMap">
+			select
+			*
+		from
+			mk_address
+		where
+			no = #{no}
+				
+	</select>
+	
+	<select id="selectmkAddress" parameterType="String" resultMap="addressMap">
+			select
+			*
+		from
+			mk_address
+		where
+			id = #{id}
+		order by default_address asc , no asc
+	</select>
+	
+	<select id="selectmkAddressCheck" parameterType="map" resultType="int">
+			select
+			count(*)
+		from
+			mk_address
+		where
+			id = #{id} and default_address = #{defaultAddress}
+	</select>
+
+	<insert id="insertUserCoupon" parameterType="map">
+		insert into user_coupon
+		values(#{id}, #{code})
+	</insert>
+	
+	<insert id="insertAddress" parameterType="map">
+		insert into mk_address
+		values(mk_address_no.nextval, #{id}, #{zipCode}, #{address}, #{detailAddress}, #{deliveryType}, #{receiver}, #{phone}, #{defaultAddress})
+	</insert>
+	
+	<update id="updateAddressDA" parameterType="map">
+		update mk_address
+		set
+			default_address = #{defaultAddressafter} 
+		where
+			id = #{id}
+			and
+			default_address = #{defaultAddressbefore}
+	</update>
+	
+	
+	<update id="updateAddress" parameterType="map">
+		update mk_address
+		set
+			detail_address = #{detailAddress} , 
+			receiver = #{receiver}, 
+			phone= #{phone},
+			default_address = #{defaultAddress} 
+		where
+			id = #{id}
+			and
+			zip_code = #{zipCode}
+			and
+			address = #{address}
+	</update>
+	
+	
+	
+	<resultMap type="address" id="addressMap">
+		<id column="no" property="no"/>
+		<result column="id" property="id"/>
+		<result column="zip_code" property="zipCode"/>
+		<result column="address" property="address"/>
+		<result column="detail_address" property="detailAddress"/>
+		<result column="delivery_type" property="deliveryType"/>
+		<result column="receiver" property="receiver"/>
+		<result column="phone" property="phone"/>
+		<result column="default_address" property="defaultAddress"/>
+	</resultMap>
+	
+	
+	
+</mapper>
