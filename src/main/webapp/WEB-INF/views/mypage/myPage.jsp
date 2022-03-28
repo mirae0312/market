@@ -80,14 +80,15 @@
         	<c:if test="${listaddr.defaultAddress eq'D'.charAt( 0)}">
         	   <div style="color:gray">
 	           	<td><span>기본 배송지</span></td>
+	     
 	           </div>
 	           	<td>${listaddr.zipCode} ${listaddr.address} ${listaddr.detailAddress}</td>
 	            <td>${listaddr.deliveryType }</td>
 	             <td><input type="button" value="배송지수정" id="addAddr" onclick="window.open('${pageContext.request.contextPath}/mypage/myPageDetail.do?no=${listaddr.no}', '_blank', 'width=1200,height=800,left=400,top=200,toolbars=no,scrollbars=no,'); return false;"/></td>
-	           
+	           <br/>
 	            <br/>
             </c:if>
-   
+ 
 	           <c:if test="${listaddr.defaultAddress eq 'X'.charAt(0)}">
 		           <td>${listaddr.zipCode} ${listaddr.address} ${listaddr.detailAddress}</td>
 	           	   <td>${listaddr.deliveryType }</td>
