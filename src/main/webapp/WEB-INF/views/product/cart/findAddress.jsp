@@ -32,33 +32,6 @@
 		</form>
 	</div>
 </div>
-<script>
-	$(".submit_btn").click((e) => {
-		const type = "email";
-		const email = $("#email").val();
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/join/checkDuplicate",
-			data:{
-				type: type,
-				email: email
-			},
-			success(resp){
-				console.log(resp);
-				const {available} = resp;
-				
-				if(available){
-					alert("사용가능한 이메일입니다.");
-					$("#emailVal").val(1);
-				}
-				else{
-					alert("이미 가입한 이메일입니다.");
-				}
-			},
-			error: console.log
-		});
-	});
-</script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     // 우편번호 찾기 찾기 화면을 넣을 element
