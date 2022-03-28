@@ -120,7 +120,7 @@ public interface CustomerServiceDao {
     @Select("select * from mk_product_proposal where writer = #{id} order by reg_date desc")
     List<Proposal> selectAllMyProductProposal(Member member, RowBounds rowBounds);
 
-    @Select("select * from mk_echo_proposel where writer = #{id} order by reg_date desc")
+    @Select("select * from mk_echo_proposal where writer = #{id} order by reg_date desc")
     List<Proposal> selectAllMyEchoProposal(Member member, RowBounds rowBounds);
 
     @Select("select * from mk_announcement where announce = 'A' order by reg_date desc")
