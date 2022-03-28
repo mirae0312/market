@@ -9,154 +9,8 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="주문하기" name="title"/>
 </jsp:include>
-
 <sec:authentication property="principal" var="loginMember"/>
-<style>
-.title{
-	overflow: hidden;
-    width: 1050px;
-    margin: 0 auto;
-    padding: 50px 0 51px;
-}
-.title h2{
-    font-weight: 700;
-    font-size: 28px;
-    color: #333;
-    line-height: 35px;
-    text-align: center;
-    letter-spacing: -1px;
-}
-table{
-	width: 100%;
-}
-/* table, td, th{
-	border: 2px solid black;
-	border-collapse: collapse;
-} */
-.userInfoTbl, .deliveryTbl, .couponTbl, .paymentTbl{
-	padding-top: 74px;
-}
-.couponTbl, .paymentTbl{
-    float: left;
-    width: 742px;
-}
-th{
-    text-align: left;
-    font-size: 20px;
-    padding-bottom: 16px;
-        border-bottom: 1px solid black;
-}
-.p_price{
-	text-align: end;
-}
-.original_price{
-	padding-left: 6px;
-    font-size: 14px;
-    color: #999;
-    line-height: 20px;
-    word-break: break-all;
-    text-decoration: line-through;
-    vertical-align: 1px;
-    display: block;
-    padding-top: 4px;
-    line-height: 24px;
-    text-align: right;
-}
-.p_title{
-    width: 50%;
-}
-.p_count{
-    width: 20%;
-    text-align: end;
-}
-.submit_btn{
-    display: block;
-    width: 240px;
-    height: 56px;
-    margin: 40px auto 0;
-    padding-bottom: 2px;
-    border: 0 none;
-    border-radius: 3px;
-    background-color: #5f0080;
-    font-weight: 700;
-    font-size: 16px;
-    color: #fff;
-}
-.side_bar{
-	position: relative;
-    float: right;
-    width: 284px;
-    height: 0;
-}
-.total_price h2{
-    padding: 74px 0 16px;
-    font-weight: bold;
-    font-size: 20px;
-    color: #333;
-    line-height: 29px;
-    clear: both;
-}
-th{
-	padding-top: 20px;
-	
-}
-td{
-	padding: 20px;
-}
-.tbl_sub{
-	width: 190px;
-    padding: 8px 0 0;
-    color: #333;
-    line-height: 24px;
-    letter-spacing: -0.32px;
-}
-.kakaoPay, .creditCard, .simplePay, .phonePay{
-	padding-bottom: 20px;
-}
-.productTbl thead{
-	position: relative;
-}
-#slide_btn{
-	overflow: hidden;
-    position: absolute;
-    right: 4px;
-    background-color: transparent;
-    border: none;
-    width: 30px;
-}
-.productTbl tbody {
-    display: none;
-}
-dt{
-    float: left;
-}
-dd{
-    float: right;
-    text-align: right;
-}
-dl{
-	padding: 20px;
-}
-#money_info{
-    width: 100%;
-    padding: 17px 16px 18px 18px;
-    background: #fafafa;
-    border: 1px solid #f2f2f2;
-}
-#guide{
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 50px;
-}
-#slide_btn{
-	cursor: pointer;
-}
-textarea{
-	resize: none;
-	width: 80%;
-	height: 60px;
-}
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product/orderPage.css" /> 
 	<div class="title">
 		<h2>주문서</h2>
 	</div>
@@ -272,13 +126,13 @@ textarea{
 						</dd>
 					</dl>
 					<dl class="amount sub">
-						<dt class="tit">상품금액</dt>
+						<dt class="tit" id="dt_img">상품금액</dt>
 						<dd class="price">
 							<span id="original_price">0</span> 원
 						</dd>
 					</dl>
 					<dl class="amount sub">
-						<dt class="tit">상품할인금액</dt>
+						<dt class="tit" id="dt_img">상품할인금액</dt>
 						<dd class="sale">
 							<span class="minus">-</span>
 							<span id="dcp">0</span> 원
@@ -288,8 +142,7 @@ textarea{
 						<dt class="tit">배송비</dt>
 						<dd class="price delivery_area">
 							<div id="delivery" style="display: block;">
-								<span class="delivery_pay">1000</span> 
-							<span>0</span> 원
+								<span class="delivery_pay">1000</span> 원
 							</div>
 						</dd>
 					</dl>
@@ -307,9 +160,9 @@ textarea{
 							<span class="point" id="point">0 원</span>
 						</dd>
 					</dl>
-					<dl class="amount lst">
-						<dt class="tit">최종결제금액</dt>
-						<dd class="price">
+					<dl class="amount lst" >
+						<dt class="tit" >최종결제금액</dt>
+						<dd class="price" style="font-weight: 700;">
 							<span id="amount">0</span> <span class="won">원</span>
 						</dd>
 					</dl>
@@ -334,10 +187,9 @@ textarea{
 							<select name="" id="userCoupon">
 									<option value="0" selected>선택하세요</option>
 								<c:forEach items="${couponList }" var="coupon">
-									<option value="${coupon.code }">
+									<option value="${coupon.code }" name="${coupon.discountRate }">
 										${coupon.couponName }
 									</option>									
-									<input type="hidden" name="" id="${coupon.code }" value="${coupon.discountRate }"/>
 								</c:forEach>
 							</select>
 							</td>
@@ -392,15 +244,24 @@ textarea{
 
 	$("#userCoupon").change((e) => {
 		var getCode = $(e.target).val();
-		var getRate = $(`#\${getCode}`).val() * 1;
+		/* var getRate = $(`#\${getCode}`).val() * 1; */
+		var getRate = $("#userCoupon option:selected").attr("name") * 1;
 		
 		var amount = $("#defaultAmount").val() * 1;
 		var dcByCouponAmount = Math.floor(amount / 100 * getRate);
-		$("#apr_coupon_data").text(dcByCouponAmount);
-		
 		var applyAmount = amount - dcByCouponAmount;
-		$("#amount").text(applyAmount);
-		$("#btnAmount").text(applyAmount);
+		
+		if(getCode == 0){
+			$("#apr_coupon_data").text(0);
+			
+			$("#amount").text(amount);
+			$("#btnAmount").text(amount);
+		}
+		else{
+			$("#apr_coupon_data").text(dcByCouponAmount);
+			$("#amount").text(applyAmount);
+			$("#btnAmount").text(applyAmount);
+		}
 	});
 
 
