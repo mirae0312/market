@@ -1,5 +1,6 @@
 package com.project.market.productService.model.dao;
 
+import com.project.market.productService.model.vo.ProductQuestion;
 import com.project.market.productService.model.vo.ProductReview;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.RowBounds;
@@ -24,7 +25,7 @@ public interface ProductServiceDao {
 
     List<ProductReview> selectAllProductReview(Map<String, Object> boardCode, RowBounds rowBounds);
 
-    @Update("update mk_product_review set read_count = read_count + 1 where no = #{code}")
+    @Update("update mk_product_review set read_count = read_count + 1 where no = #{no}")
     void updateProductReviewReadCount(Map<String, Object> boardCode);
 
     @Select("select * from mk_product_review where announce = 'A' order by reg_date desc")
@@ -52,4 +53,24 @@ public interface ProductServiceDao {
 
     @Delete("delete from mk_reivew_likes where review_no = #{no} and id = #{id}")
     void deleteProductReviewLikes(Map<String, Object> param);
+
+    @Select("select * from mk_product_question where announce = 'A' order by reg_date desc")
+    List<ProductQuestion> selectProductQuestionAnnounce(Map<String, Object> boardCode);
+
+    List<ProductQuestion> selectFirstPageProductQuestion(Map<String, Object> boardCode);
+
+    int countAllProductQuestion(Map<String, Object> boardCode);
+
+    List<ProductQuestion> selectAllProductQuestion(Map<String, Object> boardCode, RowBounds rowBounds);
+
+    @Select("select * from mk_product_question where code = #{code}")
+    ProductQuestion selectOneProductQuestion(Map<String, Object> boardCode);
+
+    void insertProductQuestion(ProductQuestion productQuestion);
+
+    @Update("update mk_product_question set title = #{title}, content = #{content}, reg_date = sysdate secret = #{secret} where code = #{code}")
+    void updateProductQuestion(ProductQuestion productQuestion);
+
+    @Delete("delete from mk_product_question where code = #{code}")
+    void deleteProductQuestion(Map<String, Object> boardCode);
 }

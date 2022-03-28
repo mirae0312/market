@@ -75,6 +75,7 @@ public class ProductServiceController {
             }
             Cookie cookie = new Cookie("prreCount", value);
             cookie.setMaxAge(60 * 60 * 24 * 30);
+            cookie.setPath(request.getContextPath() + "/product/productDetail");
             response.addCookie(cookie);
 
         }catch(Exception e){
@@ -92,6 +93,9 @@ public class ProductServiceController {
         log.debug("boardCode = {}", boardCode);
         try{
             int totalContent = 0;
+            int total = 0;
+            int aTotal = 0;
+            int bTotal = 0;
             Map<String, Object> commonThings = new HashMap<>();
 
             switch (boardId){
@@ -107,8 +111,8 @@ public class ProductServiceController {
                     List<ProductReview> announce = productServiceService.selectProductReviewAnnounce();
                     log.debug("announce = {}", announce);
 
-                    int total = 7;
-                    int aTotal = announce.size();
+                    total = 7;
+                    aTotal = announce.size();
                     int totalContentPlus = 0;
 
                     if("T".equals(readCount)){
@@ -117,7 +121,7 @@ public class ProductServiceController {
                         totalContentPlus += 1;
                     }
 
-                    int bTotal = total - aTotal;
+                    bTotal = total - aTotal;
                     boardCode.put("bTotal", bTotal);
 
                     totalContentPlus += bTotal;
@@ -135,7 +139,7 @@ public class ProductServiceController {
                     totalContent = productServiceService.countAllProductReview(boardCode);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(total, cPage, totalContent, request);
 
                     if(cPage == 0){
                         for(ProductReview pr : firstList){
@@ -150,15 +154,37 @@ public class ProductServiceController {
                     param.put("totalContent", totalContent + totalContentPlus);
                     break;
                 case PRQU:
-//                    totalContent = productServiceService.countAllFrequentlyQuestion();
-//                    log.debug("totalContent = {}", totalContent);
-//
-//                    commonThings = commonUtils(cPage, totalContent, request);
-//                    List<FrequentlyQuestion> frquList = productServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
-//                    log.debug("frequently question list = {}", frquList);
-//
-//
-//                    param.put("fr", frquList);
+                    List<ProductQuestion> productQuestionAnnounce = productServiceService.selectProductQuestionAnnounce(boardCode);
+                    total = 10;
+                    aTotal = productQuestionAnnounce.size();
+                    bTotal = total - aTotal;
+                    boardCode.put("bTotal", bTotal);
+                    log.debug("total = {}, announce = {}", bTotal, productQuestionAnnounce);
+
+                    List<ProductQuestion> FirstPageProductQuestion = productServiceService.selectFirstPageProductQuestion(boardCode);
+                    log.debug("FirstPageProductQuestion = {}", FirstPageProductQuestion);
+
+                    List<String> firstPageCode = new ArrayList<>();
+                    for(ProductQuestion pq : FirstPageProductQuestion)
+                        firstPageCode.add(pq.getCode());
+                    log.debug("firstPageCode = {}", firstPageCode);
+                    boardCode.put("firstPage", firstPageCode);
+
+                    totalContent = productServiceService.countAllProductQuestion(boardCode);
+                    log.debug("totalContent = {}", totalContent);
+
+                    commonThings = commonUtils(total, cPage, totalContent, request);
+
+                    if(cPage == 0){
+                        for(ProductQuestion pq : FirstPageProductQuestion)
+                            productQuestionAnnounce.add(pq);
+                        param.put("productQuestion", productQuestionAnnounce);
+                    }else if(cPage > 0){
+                        List<ProductQuestion> productQuestionList = productServiceService.selectAllProductQuestion(boardCode, (RowBounds) commonThings.get("rowBounds"));
+                        log.debug("productQuestionList = {}", productQuestionList);
+                        param.put("productQuestion", productQuestionList);
+                    }
+                    param.put("totalContent", totalContent);
                     break;
             }
             param.put("pagebar", (String) commonThings.get("pagebar"));
@@ -175,21 +201,24 @@ public class ProductServiceController {
         try{
             switch(boardId){
                 case PRRE:
+                    // 상품후기는 상품을 구매하고 배송완료된 회원 중 한 달 내 작성 가능
                     if("modify".equals((String) param.get("type"))){
                         ProductReview productReview = productServiceService.selectOneProductReview(param);
                         param.put("productReview", productReview);
-                        return ResponseEntity.ok(param);
                     }
+                    break;
                 case PRQU:
-
+                    if("modify".equals((String) param.get("type"))){
+                        ProductQuestion productQuestion = productServiceService.selectOneProductQuestion(param);
+                        param.put("productQuestion", productQuestion);
+                    }
                     break;
             }
-
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
         }
-        return ResponseEntity.ok(1);
+        return ResponseEntity.ok(param);
     }
 
     @PostMapping("/enroll/{boardId}")
@@ -211,10 +240,17 @@ public class ProductServiceController {
                     productServiceService.insertProductReview(productReview);
                     break;
                 case PRQU:
+                    log.debug("productQuestion = {}", productQuestion);
+                    saveDirectory = application.getRealPath(prquPath);
 
+                    if(upFiles != null && upFiles.length > 0)
+                        attachments = commonAttachment(upFiles, saveDirectory);
+                    if(!attachments.isEmpty())
+                        productQuestion.setAttachments(attachments);
+                    log.debug("productQuestion + attach = {}", productQuestion);
+                    productServiceService.insertProductQuestion(productQuestion);
                     break;
             }
-
         }catch(Exception e){
             log.error(e.getMessage(), e);
             throw e;
@@ -250,6 +286,24 @@ public class ProductServiceController {
 
                     productServiceService.modifyProductReview(productReview);
                     break;
+                case PRQU:
+                    log.debug("productQuestion = {}", productQuestion);
+                    directory = application.getRealPath(prquPath);
+                    boardCode.put("code", productQuestion.getCode());
+                    ProductQuestion oldProductQuestion = productServiceService.selectOneProductQuestion(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldProductQuestion.getAttachments().isEmpty()){
+                            deleteAttachment(oldProductQuestion.getAttachments(), prquPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        productQuestion.setAttachments(newAttachments);
+
+                    productServiceService.modifyProductQuestion(productQuestion);
+                    break;
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -270,6 +324,12 @@ public class ProductServiceController {
                     deleteAttachment(attachments, prrePath);
 
                     productServiceService.deleteProductReview(boardCode);
+                    break;
+                case PRQU:
+                    attachments = customerServiceService.selectAllAttachments(boardCode);
+                    deleteAttachment(attachments, prquPath);
+
+                    productServiceService.deleteProductQuestion(boardCode);
                     break;
             }
         }catch(Exception e){

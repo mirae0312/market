@@ -3,6 +3,7 @@ package com.project.market.productService.model.service;
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.dao.CustomerServiceDao;
 import com.project.market.productService.model.dao.ProductServiceDao;
+import com.project.market.productService.model.vo.ProductQuestion;
 import com.project.market.productService.model.vo.ProductReview;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
@@ -133,6 +134,83 @@ public class ProductServiceServiceImpl implements ProductServiceService {
     @Override
     public void deleteProductReviewLikes(Map<String, Object> param) {
         productServiceDao.deleteProductReviewLikes(param);
+    }
+
+    @Override
+    public List<ProductQuestion> selectProductQuestionAnnounce(Map<String, Object> boardCode) {
+        return productServiceDao.selectProductQuestionAnnounce(boardCode);
+    }
+
+    @Override
+    public List<ProductQuestion> selectFirstPageProductQuestion(Map<String, Object> boardCode) {
+        List<ProductQuestion> pqList = productServiceDao.selectFirstPageProductQuestion(boardCode);
+        for(ProductQuestion pq : pqList){
+            Map<String, Object> param = selectNameAndGrade(pq.getWriter());
+            if(param.get("name") != null && param.get("grade") != null){
+                pq.setName((String) param.get("name"));
+                pq.setGrade((String) param.get("grade"));
+            }
+            param.put("code", pq.getCode());
+            List<Attachment> attachments = customerServiceDao.selectAllAttachments(param);
+            pq.setAttachments(attachments);
+        }
+        return pqList;
+    }
+
+    @Override
+    public int countAllProductQuestion(Map<String, Object> boardCode) {
+        return productServiceDao.countAllProductQuestion(boardCode);
+    }
+
+    @Override
+    public List<ProductQuestion> selectAllProductQuestion(Map<String, Object> boardCode, RowBounds rowBounds) {
+        List<ProductQuestion> pqList = productServiceDao.selectAllProductQuestion(boardCode, rowBounds);
+        for(ProductQuestion pq : pqList){
+            Map<String, Object> param = selectNameAndGrade(pq.getWriter());
+            if(param.get("name") != null && param.get("grade") != null){
+                pq.setName((String) param.get("name"));
+                pq.setGrade((String) param.get("grade"));
+            }
+            param.put("code", pq.getCode());
+            List<Attachment> attachments = customerServiceDao.selectAllAttachments(param);
+            pq.setAttachments(attachments);
+        }
+        return pqList;
+    }
+
+    @Override
+    public ProductQuestion selectOneProductQuestion(Map<String, Object> boardCode) {
+        ProductQuestion pq = productServiceDao.selectOneProductQuestion(boardCode);
+        Map<String, Object> param = selectNameAndGrade(pq.getWriter());
+        if(param.get("name") != null && param.get("grade") != null){
+            pq.setName((String) param.get("name"));
+            pq.setGrade((String) param.get("grade"));
+        }
+        param.put("code", pq.getCode());
+        List<Attachment> attachments = customerServiceDao.selectAllAttachments(param);
+        pq.setAttachments(attachments);
+        return pq;
+    }
+
+    @Override
+    public void insertProductQuestion(ProductQuestion productQuestion) {
+        productServiceDao.insertProductQuestion(productQuestion);
+        List<Attachment> attachments = productQuestion.getAttachments();
+        commonAttachInsert(productQuestion.getCode(), attachments);
+    }
+
+    @Override
+    public void modifyProductQuestion(ProductQuestion productQuestion) {
+        productServiceDao.updateProductQuestion(productQuestion);
+        if(!productQuestion.getAttachments().isEmpty()){
+            List<Attachment> attachments = productQuestion.getAttachments();
+            commonAttachInsert(productQuestion.getCode(), attachments);
+        }
+    }
+
+    @Override
+    public void deleteProductQuestion(Map<String, Object> boardCode) {
+        productServiceDao.deleteProductQuestion(boardCode);
     }
 
 

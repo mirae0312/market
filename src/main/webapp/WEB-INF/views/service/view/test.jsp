@@ -32,7 +32,7 @@
         $.ajax({
             url: `${pageContext.request.contextPath}/product/service/productReview?cPage=\${cPage}`,
             method: 'GET',
-            data: {code:'test'},
+            data: {pCode:'test'},
             success(resp){
                 console.log(resp);
                 // $(resp.fr).each((i, {code, writer, category, title, content, regDate}) => {
@@ -66,7 +66,7 @@
 
        $.ajax({
           url: '${pageContext.request.contextPath}/product/service/productReview?cPage=0',
-           data: {code:'test'},
+           data: {pCode:'test'},
           success(resp) {
               console.log(resp);
               $(resp.productReview).each((i, {no, writer, name, grade, announce, title, content, likes, pcode, regDate, readCount}) => {
@@ -82,10 +82,10 @@
                  $(testArea).append(txt);
               });
               $(".cook").click((e) => {
-                  var code = $(e.target).parent().find('div.no').text();
+                  var no = $(e.target).parent().find('div.no').text();
                   $.ajax({
                      url: '${pageContext.request.contextPath}/product/cookie/productReview',
-                      data: {code},
+                      data: {no},
                       success(resp){
                          console.log(resp);
                       },
