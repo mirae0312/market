@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.market.productService.model.dao.ProductServiceDao">
+    <select id="selectBestProductReview" resultType="productReview">
+        select
+            *
+        from(
+                select
+                    *
+                from
+                    mk_product_review
+                where
+                    p_code = #{pCode}
+                order by
+                    read_count desc, reg_date desc
+            )
+        where
+            rownum = 1
+    </select>
+
+    <select id="selectFirstPageProductReview" resultType="productReview">
+        select
+        *
+        from(
+        select
+        *
+        from
+        mk_product_review
+        where
+        announce = 'D'
+        and
+        p_code = #{pCode}
+        <if test='bool == "T"'>
+            and
+            not no = #{no}
+        </if>
+        order by
+        reg_date desc)
+        where
+        rownum between 1 and #{bTotal}
+    </select>
+
+    <select id="countAllProductReview" resultType="int">
+        select
+        count(*)
+        from
+        mk_product_review
+        where
+        announce = 'D'
+        and
+        p_code = #{pCode}
+        and
+        not no in
+        <foreach collection="firstPage" index="index" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </select>
+
+    <select id="selectAllProductReview" resultType="productReview">
+        select
+        *
+        from
+        mk_product_review
+        where
+        announce = 'D'
+        and
+        p_code = #{pCode}
+        and
+        not no in
+        <foreach collection="firstPage" index="index" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </select>
+
+    <insert id="insertProductReview">
+        insert into mk_product_review values(seq_mk_announcement_no.nextval, #{pCode}, #{writer}, default, #{title}, #{content}, default, default)
+        <selectKey order="AFTER" resultType="int" keyProperty="no">
+            select seq_mk_product_review_no.currval from dual
+        </selectKey>
+    </insert>
+
+    <select id="selectFirstPageProductQuestion" resultType="productQuestion">
+        select
+            *
+        from(
+            select
+                *
+            from
+                mk_product_question
+            where
+                announce = 'D'
+                and
+                p_code = #{pCode}
+                <if test='bool == "T"'>
+                    and
+                    not code = #{code}
+                </if>
+            order by
+                reg_date desc)
+        where
+        rownum between 1 and #{bTotal}
+    </select>
+
+    <select id="countAllProductQuestion" resultType="int">
+        select
+            count(*)
+        from
+            mk_product_question
+        where
+            announce = 'D'
+            and
+            p_code = #{pCode}
+            and
+            not code in
+            <foreach collection="firstPage" index="index" item="code" open="(" separator="," close=")">
+                #{code}
+            </foreach>
+    </select>
+
+    <select id="selectAllProductQuestion" resultType="productQuestion">
+        select
+            *
+        from
+            mk_product_question
+        where
+            announce = 'D'
+            and
+            p_code = #{pCode}
+            and
+            not code in
+            <foreach collection="firstPage" index="index" item="code" open="(" separator="," close=")">
+                #{code}
+            </foreach>
+    </select>
+
+    <insert id="insertProductQuestion">
+        insert into mk_product_question values(concat('prqu-',seq_mk_product_question_no.nextval), #{pCode}, #{writer}, default, #{title}, #{content}, default, null, null, null, #{secret})
+        <selectKey order="AFTER" resultType="string" keyProperty="code">
+            select concat('prqu-',seq_mk_product_question_no.currval) from dual
+        </selectKey>
+    </insert>
+</mapper>
+

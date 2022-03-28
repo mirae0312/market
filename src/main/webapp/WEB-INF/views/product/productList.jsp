@@ -25,7 +25,9 @@
 		<tbody>
 			<c:forEach items="${pdtList }" var="product" varStatus="vs">
 				<tr>
-					<td></td>
+					<td>
+						${product.renamedFilename }
+					</td>
 					<td>
 						${product.brandTitle }
 					</td>

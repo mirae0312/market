@@ -17,7 +17,31 @@
 	
 	<insert id="insertCoupon" parameterType="coupon">
 		insert into coupon
-		values(#{code}, #{discountRate}, #{expiration})
+		values(#{code}, #{discountRate}, #{expiration}, 'N', #{couponName})
+	</insert>
+	
+	<select id="getUserCouponList" parameterType="string" resultType="coupon">
+		select
+		    *
+		from
+		    coupon c inner join user_coupon u
+		    on c.code = u.code
+		where
+		    c.used = 'N'
+		    and
+		    u.id = #{userId}
+	</select>
+	
+	<update id="updateCouponStatus" parameterType="string">
+		update coupon
+		set used = 'Y'
+		where
+			code = #{couponCode}
+	</update>
+	
+	<insert id="addAcc" parameterType="map">
+		insert into accumulate_history
+		values(#{userId}, #{puid}, #{amount}, #{div}, default)
 	</insert>
 </mapper>
 

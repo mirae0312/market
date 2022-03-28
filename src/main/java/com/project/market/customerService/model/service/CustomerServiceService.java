@@ -1,9 +1,7 @@
 package com.project.market.customerService.model.service;
 
 import com.project.market.common.vo.Attachment;
-import com.project.market.customerService.model.vo.Announcement;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.session.RowBounds;
 
@@ -76,4 +74,31 @@ public interface CustomerServiceService {
     void deleteOneLargeProposal(Map<String, Object> boardCode);
 
     void insertLargeProposal(Proposal proposal);
+
+    int countAllFrequentlyQuestion();
+
+    List<FrequentlyQuestion> selectAllFrequentlyQuestion(RowBounds rowBounds);
+
+    FrequentlyQuestion selectOneFrequentlyQuestion(Map<String, Object> param);
+
+    void modifyFrequentlyQuestion(FrequentlyQuestion frequence);
+
+    void deleteOneFrequentlyQuestion(Map<String, Object> boardCode);
+
+    void insertFrequentlyQuestion(FrequentlyQuestion frequence);
+
+    void modifyProductProposal(Proposal proposal);
+
+    void modifyEchoProposal(Proposal proposal);
+
+    List<Proposal> selectAllMyProductProposal(Member member, RowBounds rowBounds);
+
+    List<Proposal> selectAllMyEchoProposal(Member member, RowBounds rowBounds);
+
+    List<Announcement> selectAllAnnounceAnnouncement(RowBounds rowBounds);
+
+    int countAllMyProductProposal(Member member);
+
+    int countAllMyEchoProposal(Member member);
+
 }

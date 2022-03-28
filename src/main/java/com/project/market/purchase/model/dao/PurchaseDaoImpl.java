@@ -1,5 +1,8 @@
 package com.project.market.purchase.model.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,6 +27,22 @@ public class PurchaseDaoImpl implements PurchaseDao{
 	public int insertCoupon(Coupon coupon) {
 		return session.insert("purchase.insertCoupon", coupon);
 	}
+
+	@Override
+	public List<Coupon> getUserCouponList(String userId) {
+		return session.selectList("purchase.getUserCouponList", userId);
+	}
+
+	@Override
+	public int updateCouponStatus(String couponCode) {
+		return session.update("purchase.updateCouponStatus", couponCode);
+	}
+
+	@Override
+	public int addAcc(Map<String, Object> param) {
+		return session.insert("purchase.addAcc", param);
+	}
+	
 	
 	
 }

@@ -1,9 +1,16 @@
 package com.project.market.common.Utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.session.RowBounds;
+
+import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 public class MarketUtils {
 
     public static String renamePolicy(String originalFilename){
@@ -66,5 +73,25 @@ public class MarketUtils {
         );
 
         return pagebar.toString();
+    }
+
+    public static Map<String, Object> commonUtils(int limit, int cPage, int totalContent, HttpServletRequest request){
+        Map<String, Object> param = new HashMap<>();
+        try{
+            int offset = (cPage - 1) * limit;
+
+            RowBounds rowBounds = new RowBounds(offset, limit);
+            param.put("rowBounds", rowBounds);
+
+            String url = request.getRequestURI();
+            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
+            param.put("pagebar", pagebar);
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw e;
+        }
+        return param;
+
+
     }
 }

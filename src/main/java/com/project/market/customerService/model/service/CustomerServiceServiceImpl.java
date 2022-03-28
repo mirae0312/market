@@ -2,9 +2,7 @@ package com.project.market.customerService.model.service;
 
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.dao.CustomerServiceDao;
-import com.project.market.customerService.model.vo.Announcement;
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.security.model.vo.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
@@ -12,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -235,6 +235,93 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         commonAttachInsert(code, attachments);
     }
 
+    @Override
+    public int countAllFrequentlyQuestion() {
+        return customerServiceDao.countAllFrequentlyQuestion();
+    }
+
+    @Override
+    public List<FrequentlyQuestion> selectAllFrequentlyQuestion(RowBounds rowBounds) {
+        return customerServiceDao.selectAllFrequentlyQuestion(rowBounds);
+    }
+
+    @Override
+    public FrequentlyQuestion selectOneFrequentlyQuestion(Map<String, Object> boardCode) {
+        FrequentlyQuestion frequentlyQuestion = customerServiceDao.selectOneFrequentlyQuestion(boardCode);
+        List<Attachment> attachments = customerServiceDao.selectAllAttachments(boardCode);
+        frequentlyQuestion.setAttachments(attachments);
+        return frequentlyQuestion;
+    }
+
+    @Override
+    public void modifyFrequentlyQuestion(FrequentlyQuestion frequence) {
+        customerServiceDao.updateFrequentlyQuestion(frequence);
+        if(!frequence.getAttachments().isEmpty()){
+            String code = frequence.getCode();
+            List<Attachment> attachments = frequence.getAttachments();
+            commonAttachInsert(code, attachments);
+        }
+    }
+
+    @Override
+    public void deleteOneFrequentlyQuestion(Map<String, Object> boardCode) {
+        customerServiceDao.deleteOneFrequentlyQuestion(boardCode);
+    }
+
+    @Override
+    public void insertFrequentlyQuestion(FrequentlyQuestion frequence) {
+        customerServiceDao.insertFrequentlyQuestion(frequence);
+        log.debug("code = {}", frequence.getCode());
+        String code = frequence.getCode();
+        List<Attachment> attachments = frequence.getAttachments();
+        commonAttachInsert(code, attachments);
+    }
+
+    @Override
+    public void modifyProductProposal(Proposal proposal) {
+        customerServiceDao.updateProductProposal(proposal);
+        if(!proposal.getAttachments().isEmpty()){
+            String code = proposal.getCode();
+            List<Attachment> attachments = proposal.getAttachments();
+            commonAttachInsert(code, attachments);
+        }
+    }
+
+    @Override
+    public void modifyEchoProposal(Proposal proposal) {
+        customerServiceDao.updateEchoProposal(proposal);
+        if(!proposal.getAttachments().isEmpty()){
+            String code = proposal.getCode();
+            List<Attachment> attachments = proposal.getAttachments();
+            commonAttachInsert(code, attachments);
+        }
+    }
+
+    @Override
+    public List<Proposal> selectAllMyProductProposal(Member member, RowBounds rowBounds) {
+        return customerServiceDao.selectAllMyProductProposal(member, rowBounds);
+    }
+
+    @Override
+    public List<Proposal> selectAllMyEchoProposal(Member member, RowBounds rowBounds) {
+        return customerServiceDao.selectAllMyEchoProposal(member, rowBounds);
+    }
+
+    @Override
+    public List<Announcement> selectAllAnnounceAnnouncement(RowBounds rowBounds) {
+        return customerServiceDao.selectAllAnnounceAnnouncement(rowBounds);
+    }
+
+    @Override
+    public int countAllMyProductProposal(Member member) {
+        return customerServiceDao.countAllMyProductProposal(member);
+    }
+
+    @Override
+    public int countAllMyEchoProposal(Member member) {
+        return customerServiceDao.countAllMyEchoProposal(member);
+    }
+
     private void commonAttachInsert(String code, List<Attachment> attachments){
         if(attachments != null){
             for(Attachment attach : attachments){
@@ -243,6 +330,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
             }
         }
     }
+
 
 
 }

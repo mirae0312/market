@@ -60,6 +60,28 @@ public class ProductController {
 			model.addAttribute("accAmount", accAmount);
 		}
 		
+		List<Product> hasOption = productService.selectProductOptionsDetail(pcode);
+		
+		if(hasOption.size() != 0) {
+			List<Map<String, Object>> optionList = new ArrayList<>();
+			
+			for(Product optPdt : hasOption) {
+				Map<String, Object> option = new HashMap<>();
+				option.put("brand", optPdt.getBrandTitle());
+				option.put("title", optPdt.getTitle());
+				option.put("price", optPdt.getPrice());
+				option.put("pcode", optPdt.getPcode());
+				
+				int dcPrice = optPdt.getPrice()/100 * (100 - optPdt.getDiscountRate());
+				option.put("dcPrice", dcPrice);
+				
+				log.debug("option = {}", option);
+				optionList.add(option);
+			}
+			
+			model.addAttribute("optionList", optionList);
+		}
+		
 		model.addAttribute("product", pdt);
 	}
 	
@@ -87,7 +109,8 @@ public class ProductController {
 			model.addAttribute("ogp", ogp);
 			model.addAttribute("dcp", dcp);
 			model.addAttribute("acp", accAmountAll);
-			model.addAttribute("address", addressMap);			
+			model.addAttribute("address", addressMap);		
+			log.debug("acc AMount = {}", accAmountAll );
 		}
 		
 	}
@@ -197,6 +220,7 @@ public class ProductController {
 	}
 	
 	public int calculateAccumulateAmount(List<Map<String, Object>> pdtList, int accumulationRate) {
+		log.debug("accRate = {}", accumulationRate);
 		int accAmountAll = 0;
 		for(Map<String, Object> list : pdtList) {
 			if(String.valueOf(list.get("ACCUMULATION_STATUS")).equals("Y")) {				
@@ -205,7 +229,9 @@ public class ProductController {
 				if(list.get("DISCOUNT_RATE") != null) {
 					int dcRate = Integer.parseInt(String.valueOf(list.get("DISCOUNT_RATE")));
 					int dcPrice = price/100 * (100 - dcRate) * count;
+					log.debug("dcPrice = {}", dcPrice);
 					int accAmount = (int) Math.ceil(dcPrice / 100 * accumulationRate);
+					log.debug("accAmount = {}", accAmount);
 					accAmountAll += accAmount;					
 				} else {
 					int accAmount = (int) Math.ceil(price / 100 * accumulationRate * count);
@@ -213,7 +239,7 @@ public class ProductController {
 				}
 			}
 		}
-		
+		log.debug("accAMount = {}", accAmountAll);
 		return accAmountAll;
 	}
 

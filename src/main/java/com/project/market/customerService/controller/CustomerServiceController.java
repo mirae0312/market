@@ -12,14 +12,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.project.market.customerService.model.vo.Proposal;
-import com.project.market.customerService.model.vo.Question;
+import com.project.market.customerService.model.vo.*;
 import com.project.market.product.model.vo.Product;
 import com.project.market.security.model.vo.Member;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,9 +30,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.project.market.common.Utils.MarketUtils;
 import com.project.market.common.vo.Attachment;
 import com.project.market.customerService.model.service.CustomerServiceService;
-import com.project.market.customerService.model.vo.Announcement;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static com.project.market.common.Utils.MarketUtils.commonUtils;
 
 @Controller
 @Slf4j
@@ -61,17 +62,27 @@ public class CustomerServiceController {
     @Value("${board.lapr.path}")
     private String laprPath;
 
+    @Value("${board.frqu.path}")
+    private String frquPath;
+
     private final String QUES = "question";
     private final String ANNO = "announcement";
     private final String PRPR = "productProposal";
     private final String ECPR = "echoProposal";
     private final String LAPR = "largeProposal";
+    private final String FRQU = "frequentlyQuestion";
     private final String PRRE = "productReview";
+    private final String PRQU = "productQuestion";
+
+    @GetMapping("/view/test")
+    public void test(){}
 
     @GetMapping("/view/{boardId}")
     public String boardSelect(@PathVariable(required = true) String boardId
             , @RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request, @AuthenticationPrincipal Member member){
+
         try{
+            int limit = 10;
             int totalContent = 0;
             Map<String, Object> commonThings = new HashMap<>();
             switch (boardId){
@@ -79,7 +90,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllMyQuestion(member);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
                     log.debug("questionList = {}", questionList);
 
@@ -89,28 +100,31 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllAnnouncement();
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Announcement> announceList = customerServiceService.selectAllAnnouncement((RowBounds) commonThings.get("rowBounds"));
+                    List<Announcement> announceannounceList = customerServiceService.selectAllAnnounceAnnouncement((RowBounds) commonThings.get("rowBounds"));
                     log.debug("announceList = {}", announceList);
+                    log.debug("announceannounceList = {}", announceannounceList);
 
                     model.addAttribute("announceList", announceList);
+                    model.addAttribute("announceannounceList", announceannounceList);
                     break;
                 case PRPR:
-                    totalContent = customerServiceService.countAllProductProposal();
+                    totalContent = customerServiceService.countAllMyProductProposal(member);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
-                    List<Proposal> prprList = customerServiceService.selectAllProductProposal((RowBounds) commonThings.get("rowBounds"));
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
+                    List<Proposal> prprList = customerServiceService.selectAllMyProductProposal(member, (RowBounds) commonThings.get("rowBounds"));
                     log.debug("productProposal = {}", prprList);
 
                     model.addAttribute("productProposalList", prprList);
                     break;
                 case ECPR:
-                    totalContent = customerServiceService.countAllEchoProposal();
+                    totalContent = customerServiceService.countAllMyEchoProposal(member);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
-                    List<Proposal> ecprList = customerServiceService.selectAllEchoProposal((RowBounds) commonThings.get("rowBounds"));
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
+                    List<Proposal> ecprList = customerServiceService.selectAllMyEchoProposal(member, (RowBounds) commonThings.get("rowBounds"));
                     log.debug("echoProposal = {}", ecprList);
 
                     model.addAttribute("echoProposal", ecprList);
@@ -119,11 +133,21 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllLargeProposal();
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Proposal> laprList = customerServiceService.selectAllLargeProposal((RowBounds) commonThings.get("rowBounds"));
                     log.debug("largeProposal = {}", laprList);
 
                     model.addAttribute("largeProposal", laprList);
+                    break;
+                case FRQU:
+                    totalContent = customerServiceService.countAllFrequentlyQuestion();
+                    log.debug("totalContent = {}", totalContent);
+
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
+                    List<FrequentlyQuestion> frquList = customerServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
+                    log.debug("frequently question list = {}", frquList);
+
+                    model.addAttribute("frequentlyQuestion", frquList);
                     break;
             }
             model.addAttribute("pagebar", (String) commonThings.get("pagebar"));
@@ -138,6 +162,7 @@ public class CustomerServiceController {
     public String enrollBoard(@PathVariable(required = true) String boardId, @RequestParam Map<String, Object> param, Model model){
         try{
             log.debug("param = {}", param);
+            Proposal proposal = new Proposal();
             switch (boardId){
                 case QUES:
                     if("modify".equals((String) param.get("type"))){
@@ -151,6 +176,24 @@ public class CustomerServiceController {
                         model.addAttribute("announce", announce);
                     }
                     break;
+                case FRQU:
+                    if("modify".equals((String) param.get("type"))){
+                        FrequentlyQuestion frequently = customerServiceService.selectOneFrequentlyQuestion(param);
+                        model.addAttribute("frequentlyQuestion", frequently);
+                    }
+                    break;
+                case PRPR:
+                    if("modify".equals((String) param.get("type"))){
+                        proposal = customerServiceService.selectOneProductProposal(param);
+                        model.addAttribute("productProposal", proposal);
+                    }
+                    break;
+                case ECPR:
+                    if("modify".equals((String) param.get("type"))){
+                        proposal = customerServiceService.selectOneEchoProposal(param);
+                        model.addAttribute("echoProposal", proposal);
+                    }
+                    break;
             }
 
         }catch(Exception e){
@@ -161,11 +204,12 @@ public class CustomerServiceController {
     }
 
     @PostMapping("/modify/{boardId}")
-    public String modifyBoard(@PathVariable(required = true) String boardId, Question question, Proposal proposal, Announcement announcement,
+    public String modifyBoard(@PathVariable(required = true) String boardId, Question question, Proposal proposal, Announcement announcement, FrequentlyQuestion frequence,
                               @RequestParam(name = "upFile", required = false) MultipartFile[] upFiles, RedirectAttributes redirectAttr) throws IOException {
         String directory = "";
         Map<String, Object> boardCode = new HashMap<>();
         List<Attachment> newAttachments = new ArrayList<>();
+        Proposal oldProposal = new Proposal();
         try{
             log.debug("boardId = {}", boardId);
             switch (boardId){
@@ -210,6 +254,69 @@ public class CustomerServiceController {
                     customerServiceService.modifyAnnouncement(announcement);
 
                     redirectAttr.addFlashAttribute("msg", "공지 수정 완료!");
+                    break;
+                case FRQU:
+                    log.debug("frequence = {}", frequence);
+                    directory = application.getRealPath(frquPath);
+                    boardCode.put("code", frequence.getCode());
+                    FrequentlyQuestion oldFrequence = customerServiceService.selectOneFrequentlyQuestion(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldFrequence.getAttachments().isEmpty()){
+                            deleteAttachment(oldFrequence.getAttachments(), frquPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        frequence.setAttachments(newAttachments);
+
+                    customerServiceService.modifyFrequentlyQuestion(frequence);
+
+                    redirectAttr.addFlashAttribute("msg", "자주하는 질문 수정 완료!");
+                    break;
+                case PRPR:
+                    log.debug("proposal = {}", proposal);
+                    directory = application.getRealPath(prprPath);
+                    boardCode.put("code", proposal.getCode());
+                    oldProposal = customerServiceService.selectOneProductProposal(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldProposal.getAttachments().isEmpty()){
+                            deleteAttachment(oldProposal.getAttachments(), prprPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        proposal.setAttachments(newAttachments);
+
+                    customerServiceService.modifyProductProposal(proposal);
+
+                    redirectAttr.addFlashAttribute("msg", "상품제안 수정 완료!");
+                    break;
+                case ECPR:
+                    log.debug("proposal = {}", proposal);
+                    directory = application.getRealPath(ecprPath);
+                    boardCode.put("code", proposal.getCode());
+                    oldProposal = customerServiceService.selectOneEchoProposal(boardCode);
+                    if(upFiles != null && upFiles.length > 0){
+                        if(!oldProposal.getAttachments().isEmpty()){
+                            deleteAttachment(oldProposal.getAttachments(), ecprPath);
+                            customerServiceService.deleteAttachments(boardCode);
+                        }
+
+                        newAttachments = commonAttachment(upFiles, directory);
+                    }
+
+                    if(!newAttachments.isEmpty())
+                        proposal.setAttachments(newAttachments);
+
+                    customerServiceService.modifyEchoProposal(proposal);
+
+                    redirectAttr.addFlashAttribute("msg", "에코포장 수정 완료!");
                     break;
             }
         }catch(Exception e){
@@ -265,6 +372,11 @@ public class CustomerServiceController {
                     log.debug("largeProposal", proposal);
                     model.addAttribute("largeProposal", proposal);
                     break;
+                case FRQU:
+                    FrequentlyQuestion frequence = customerServiceService.selectOneFrequentlyQuestion(boardCode);
+                    log.debug("frequence", frequence);
+                    model.addAttribute("frequentlyQuestion", frequence);
+                    break;
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -316,6 +428,13 @@ public class CustomerServiceController {
 
                     redirectAttr.addFlashAttribute("msg", "대량구매 문의 삭제 성공");
                     break;
+                case FRQU:
+                    deleteAttachment(attachments, frquPath);
+
+                    customerServiceService.deleteOneFrequentlyQuestion(boardCode);
+
+                    redirectAttr.addFlashAttribute("msg", "자주하는 문의 삭제 성공");
+                    break;
             }
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -325,7 +444,7 @@ public class CustomerServiceController {
     }
 
     @PostMapping("/enroll/{boardId}")
-    public String enrollBoard(@PathVariable(required = true) String boardId, Proposal proposal, Announcement announcement, Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
+    public String enrollBoard(@PathVariable(required = true) String boardId, Proposal proposal, FrequentlyQuestion frequence, Announcement announcement, Question question, @RequestParam(name="upFile", required = false) MultipartFile[] upFiles,
                               RedirectAttributes redirectAttr) throws IOException {
         log.debug("proposal = {}", proposal);
         log.debug("announcement = {}", announcement);
@@ -391,6 +510,17 @@ public class CustomerServiceController {
                     log.debug("largeProposal + attachments = {}", proposal);
                     customerServiceService.insertLargeProposal(proposal);
                     break;
+                case FRQU:
+                    log.debug("frequence = {}", frequence);
+                    saveDirectory = application.getRealPath(frquPath);
+
+                    if(upFiles != null && upFiles.length > 0)
+                        attachments = commonAttachment(upFiles, saveDirectory);
+                    if(!attachments.isEmpty())
+                        frequence.setAttachments(attachments);
+                    log.debug("frequently question + attachments = {}", frequence);
+                    customerServiceService.insertFrequentlyQuestion(frequence);
+                    break;
             }
             redirectAttr.addFlashAttribute("msg", "게시물 등록 성공!");
         }catch(Exception e){
@@ -402,25 +532,26 @@ public class CustomerServiceController {
 
     // common-------------------------------------
 
-    private Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
-        Map<String, Object> param = new HashMap<>();
-        try{
-            int limit = 10;
-            int offset = (cPage - 1) * limit;
-            RowBounds rowBounds = new RowBounds(offset, limit);
-            param.put("rowBounds", rowBounds);
+//    private Map<String, Object> commonUtils(int cPage, int totalContent, HttpServletRequest request){
+//        Map<String, Object> param = new HashMap<>();
+//        try{
+//            int limit = 10;
+//            int offset = (cPage - 1) * limit;
+//
+//            RowBounds rowBounds = new RowBounds(offset, limit);
+//            param.put("rowBounds", rowBounds);
+//
+//            String url = request.getRequestURI();
+//            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
+//            param.put("pagebar", pagebar);
+//        }catch(Exception e){
+//            log.error(e.getMessage(), e);
+//            throw e;
+//        }
+//        return param;
+//    }
 
-            String url = request.getRequestURI();
-            String pagebar = MarketUtils.getAnnouncePagebar(cPage, limit, totalContent, url);
-            param.put("pagebar", pagebar);
-        }catch(Exception e){
-            log.error(e.getMessage(), e);
-            throw e;
-        }
-        return param;
-    }
-
-    private List<Attachment> commonAttachment(MultipartFile[] upFiles, String saveDirectory) throws IOException {
+    public static List<Attachment> commonAttachment(MultipartFile[] upFiles, String saveDirectory) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
         try{
             for(int i = 0; i < upFiles.length; i++){
