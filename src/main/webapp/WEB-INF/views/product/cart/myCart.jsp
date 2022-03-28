@@ -489,21 +489,21 @@ display: inline-block;
 	      <div class="amount-div">
 		      <span>상품금액</span>
 		      <!-- original price -->
-		      <input type="text" name="" id="allAmount" value="${ogp }원" readonly>
+		      <input type="text" name="" id="allAmount" value="${ogp }" readonly>
 		       <br />
 		      <span>상품할인금액</span>
 		      <!-- discount price -->
-		      <input type="text" name="" id="dcAmount" value="${dcp }원"  readonly/> <br /> 
+		      <input type="text" name="" id="dcAmount" value="${dcp }"  readonly/> <br /> 
 		      <span>배송비</span>
 		      <input type="text" name="" id="deliveryAmount" readonly /><br />
 		      <span>결제예정금액</span>
 		      <!-- 최종결제 금액 original - discount price -->
-		      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }원"  readonly/>
+		      <input type="text" name="" id="purchaseAmount" value="${ogp - dcp }"  readonly/>
 		      <br />
 		      <!-- 로그인했을시 적립 포인트  -->
 		      <sec:authorize access="isAuthenticated()">
 		      <div class="point">
-		         <span>구매 시 <span id="accumulateAmount">${acp }</span> 원 적립</span>
+		         <span>구매 시 <span id="accumulateAmount">${acp }</span> 적립</span>
 		      </div>
 		      </sec:authorize>
 	      </div>
@@ -681,10 +681,10 @@ display: inline-block;
 				},
 				success(res){
 					console.log(res.acp);
-					$("#allAmount").val(res.ogp);
-					$("#dcAmount").val(res.dcp);
-					$("#purchaseAmount").val(res.ogp - res.dcp);
-					$("#accumulateAmount").text(res.acp);
+					$("#allAmount").val(res.ogp + '원');
+					$("#dcAmount").val(res.dcp + '원');
+					$("#purchaseAmount").val(res.ogp - res.dcp + '원');
+					$("#accumulateAmount").text(res.acp + '원');
 				},
 				error: console.log
 			});					

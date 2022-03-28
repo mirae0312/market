@@ -9,7 +9,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="주문하기" name="title"/>
 </jsp:include>
-
 <sec:authentication property="principal" var="loginMember"/>
 <style>
 .title{
@@ -156,6 +155,24 @@ textarea{
 	width: 80%;
 	height: 60px;
 }
+#dt_img{
+    padding-left: 16px;
+    background: url(https://res.kurly.com/pc/service/order/2011/ico_sub_price_dot.svg) no-repeat 0 0;
+    background-size: 16px 20px;
+}
+.amount.sub{
+	font-weight: normal;
+    font-size: 14px;
+    color: #999;
+    line-height: 20px;
+}
+.amount.lst{
+    margin: 17px 0 0 0;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 20px;
+    padding-bottom: 40px;
+}
 </style>
 	<div class="title">
 		<h2>주문서</h2>
@@ -272,13 +289,13 @@ textarea{
 						</dd>
 					</dl>
 					<dl class="amount sub">
-						<dt class="tit">상품금액</dt>
+						<dt class="tit" id="dt_img">상품금액</dt>
 						<dd class="price">
 							<span id="original_price">0</span> 원
 						</dd>
 					</dl>
 					<dl class="amount sub">
-						<dt class="tit">상품할인금액</dt>
+						<dt class="tit" id="dt_img">상품할인금액</dt>
 						<dd class="sale">
 							<span class="minus">-</span>
 							<span id="dcp">0</span> 원
@@ -306,9 +323,9 @@ textarea{
 							<span class="point" id="point">0 원</span>
 						</dd>
 					</dl>
-					<dl class="amount lst">
-						<dt class="tit">최종결제금액</dt>
-						<dd class="price">
+					<dl class="amount lst" >
+						<dt class="tit" >최종결제금액</dt>
+						<dd class="price" style="font-weight: 700;">
 							<span id="amount">0</span> <span class="won">원</span>
 						</dd>
 					</dl>
@@ -390,17 +407,13 @@ textarea{
 
 	$("#userCoupon").change((e) => {
 		var getCode = $(e.target).val();
-		console.log(getCode);
 		/* var getRate = $(`#\${getCode}`).val() * 1; */
 		var getRate = $("#userCoupon option:selected").attr("name") * 1;
-		console.log(getRate);
 		
 		var amount = $("#defaultAmount").val() * 1;
-		console.log(amount);
 		var dcByCouponAmount = Math.floor(amount / 100 * getRate);
-		console.log(dcByCouponAmount);
 		var applyAmount = amount - dcByCouponAmount;
-		console.log(applyAmount);		
+		
 		if(getCode == 0){
 			$("#apr_coupon_data").text(0);
 			

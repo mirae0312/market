@@ -114,5 +114,7 @@ public class PurchaseController {
     	PropertyEditor editor = new CustomDateEditor(sdf, true);
     	binder.registerCustomEditor(Date.class, editor);
     }
-	
+
+	@GetMapping("/orderComplete")
+	public void orderComplete() {}
 }
