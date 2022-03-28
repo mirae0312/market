@@ -80,7 +80,9 @@ public class CustomerServiceController {
     @GetMapping("/view/{boardId}")
     public String boardSelect(@PathVariable(required = true) String boardId
             , @RequestParam(defaultValue = "1") int cPage, Model model, HttpServletRequest request, @AuthenticationPrincipal Member member){
+
         try{
+            int limit = 10;
             int totalContent = 0;
             Map<String, Object> commonThings = new HashMap<>();
             switch (boardId){
@@ -88,7 +90,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllMyQuestion(member);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Question> questionList = customerServiceService.selectAllMyQuestion((RowBounds) commonThings.get("rowBounds"), member);
                     log.debug("questionList = {}", questionList);
 
@@ -98,7 +100,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllAnnouncement();
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Announcement> announceList = customerServiceService.selectAllAnnouncement((RowBounds) commonThings.get("rowBounds"));
                     List<Announcement> announceannounceList = customerServiceService.selectAllAnnounceAnnouncement((RowBounds) commonThings.get("rowBounds"));
                     log.debug("announceList = {}", announceList);
@@ -111,7 +113,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllMyProductProposal(member);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Proposal> prprList = customerServiceService.selectAllMyProductProposal(member, (RowBounds) commonThings.get("rowBounds"));
                     log.debug("productProposal = {}", prprList);
 
@@ -121,7 +123,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllMyEchoProposal(member);
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Proposal> ecprList = customerServiceService.selectAllMyEchoProposal(member, (RowBounds) commonThings.get("rowBounds"));
                     log.debug("echoProposal = {}", ecprList);
 
@@ -131,7 +133,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllLargeProposal();
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<Proposal> laprList = customerServiceService.selectAllLargeProposal((RowBounds) commonThings.get("rowBounds"));
                     log.debug("largeProposal = {}", laprList);
 
@@ -141,7 +143,7 @@ public class CustomerServiceController {
                     totalContent = customerServiceService.countAllFrequentlyQuestion();
                     log.debug("totalContent = {}", totalContent);
 
-                    commonThings = commonUtils(cPage, totalContent, request);
+                    commonThings = commonUtils(limit, cPage, totalContent, request);
                     List<FrequentlyQuestion> frquList = customerServiceService.selectAllFrequentlyQuestion((RowBounds) commonThings.get("rowBounds"));
                     log.debug("frequently question list = {}", frquList);
 
